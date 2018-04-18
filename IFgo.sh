@@ -182,8 +182,8 @@ log4s()                       #$1是级别，$2是内容
 	fi
 	if [ ! -f $log4slog ]
 	then
-		echo "$nowdate $logname不存在，创建log4s日志文件"
-		echo "$nowdate $logname不存在，创建log4s日志文件" >> $log4slog
+		echo "log4s日志不存在，创建log4s日志文件"
+		echo "$nowdate log4s日志不存在，创建log4s日志文件" >> $log4slog
 		chmod 777 $log4slog
 	fi
 	
@@ -862,7 +862,7 @@ InputAndCheck()
 			#priDBSERVERALIASES
 			if [ X$peizhiqueren = XXXXXXX ]
 			then
-				read -p "请输入主机业务实例名，[默认为appdb1] ： " tpriDBSERVERALIASES
+				read -p "请输入主机业务实例名，不能与心跳线实例名相同，[默认为appdb1] ： " tpriDBSERVERALIASES
 			fi
 			if [ X$peizhiqueren != XXXXXXX ]
 			then
@@ -889,7 +889,7 @@ InputAndCheck()
 			#secDBSERVERALIASES
 			if [ X$peizhiqueren = XXXXXXX ]
 			then
-				read -p "请输入备机业务实例名，[默认为appdb2] ： " tsecDBSERVERALIASES
+				read -p "请输入备机业务实例名，不能与心跳线实例名相同，[默认为appdb2] ： " tsecDBSERVERALIASES
 			fi
 			if [ X$peizhiqueren != XXXXXXX ]
 			then
@@ -3010,6 +3010,7 @@ chushihua()
 	bulidsysuserok=`grep "'sysuser' database built successfully." /home/informix/online.log|wc -l|awk '{print $1}'`
 	bulidsysutilsok=`grep "'sysutils' database built successfully." /home/informix/online.log|wc -l|awk '{print $1}'`
 	let buildoknum=bulidsysmasterok+bulidsysadminok+bulidsysuserok+bulidsysutilsok
+	dengdainum=0
 	while [ $buildoknum -lt 4 ]
 	do
 		log4s info "等待系统库创建完成"
@@ -3019,6 +3020,18 @@ chushihua()
 		bulidsysuserok=`grep "'sysuser' database built successfully." /home/informix/online.log|wc -l|awk '{print $1}'`
 		bulidsysutilsok=`grep "'sysutils' database built successfully." /home/informix/online.log|wc -l|awk '{print $1}'`
 		let buildoknum=bulidsysmasterok+bulidsysadminok+bulidsysuserok+bulidsysutilsok
+		let dengdainum=dengdainum+1
+		if [ $dengdainum -gt 10 ]
+		then
+			log4s info "等待时间过长，可能是由于数据库在虚拟机上安装有可能初始化异常，请观察online.log日志"
+			log4s info "如果确定sysmaster，sysadmin，sysuser，sysutils，四个库初始化异常，或者有某个库没有初始化"
+			read -p  "请输入[xiufu]" xiufuflag
+			if [ X$xiufuflag = Xxiufu ]
+			then
+				sh /tmp/IFgo.sh xiufu
+				dengdainum=0
+			fi
+		fi
 	done
 	chmod a+r $idshome/etc/sqlhosts
 	log4s info "数据库初始化完成，开始增加dbs";
