@@ -68,7 +68,7 @@ fi
 log4spath=/ids								#输出日志目录
 log4sechoCategory=info				#输出到屏幕日志级别名称，级别按照debug=0，warn=1，info=2，error=3
 log4swriteCategory=debug			#输出到文件日志级别名称，级别按照debug=0，warn=1，info=2，error=3
-log4slogname=root.log					#输出日志名称
+logs4logname=root.log					#输出日志名称
 isecho=1											#输出到日志的同时是否打印到屏幕，0是不打印，1是打印
 splittype=none								#日志分割方式，none不分割，day按照日期分割后缀名为YYYY-MM-DD，num为按照行模式分割，如果使用num模式则必须填写splitnum参数，这个没思路暂不支持
 splitnum=1000
@@ -106,9 +106,9 @@ log4scheck()
 		echo "log4swriteCategory参数需要配置"
 		exit 1;
 	fi
-	if [ X$log4slogname = X ]
+	if [ X$logs4logname = X ]
 	then
-		echo "log4slogname参数需要配置"
+		echo "logs4logname参数需要配置"
 		exit 1;
 	fi
 	if [ X$isecho = X ]
@@ -168,7 +168,7 @@ log4scheck()
 	esac
 }
 ################log4s代码区#################
-log4slog=${log4spath}/${log4slogname}
+log4slog=${log4spath}/${logs4logname}
 log4scheck;
 log4s()                       #$1是级别，$2是内容
 {
@@ -184,7 +184,6 @@ log4s()                       #$1是级别，$2是内容
 	then
 		echo "$nowdate $logname不存在，创建log4s日志文件"
 		echo "$nowdate $logname不存在，创建log4s日志文件" >> $log4slog
-		chmod 777 $log4slog
 	fi
 	
 	#判断参数个数
@@ -948,7 +947,7 @@ InputAndCheck()
 					log4s info "输入逻辑日志备份方式不能为空，请重新输入"
 					read -p "请输入逻辑日志备份方式，alarmprogram为普通方式，备份使用alarmprogram备份到/dev/null；alarmAPI为使用alarmAPI方式，[默认为alarmprogram]：" templtapedev
 				done
-				while [[ $templtapedev != alarmprogram && $templtapedev != alarmAPI && $templtapedev != alarmapi ]]
+				while [[ $templtapedev != alarmprogram && $templtapedev != alarmAPI ]]
 				do
 					log4s info "输入逻辑日志备份方式输入非法，请重新输入"
 					read -p "请输入逻辑日志备份方式，alarmprogram为普通方式，备份使用alarmprogram备份到/dev/null；alarmAPI为使用alarmAPI方式，[默认为alarmprogram]：" templtapedev
@@ -994,7 +993,7 @@ InputAndCheck()
 			log4s debug "请输入逻辑日志备份方式：         $templtapedev"
 			
 			ltapedev=`echo $templtapedev|tr '[A-Z]' '[a-z]'`
-			if [ X$ltapedev = XALARMAPI ] || [ X$ltapedev = Xalarmapi ] || [ X$ltapedev = XalarmAPI ]
+			if [ X$ltapedev = XALARMAPI ] || [ X$ltapedev = Xalarmapi ]
 			then
 				ltapedev=alarmapi
 			else
@@ -1111,13 +1110,6 @@ InputAndCheck()
 		INFORMIXSERVER=$secINFORMIXSERVER
 		DBSERVERNAME=$secDBSERVERNAME
 		DBSERVERALIASES=$secDBSERVERALIASES
-	fi
-	if [ X$hdrflag = Xonly ]
-	then
-		ONCONFIG=$priONCONFIG
-		INFORMIXSERVER=$priINFORMIXSERVER
-		DBSERVERNAME=$priDBSERVERNAME
-		DBSERVERALIASES=$priDBSERVERALIASES
 	fi
 	#磁盘划分
 		#创建pv
@@ -2046,7 +2038,7 @@ anzhuang()
 	if [ ! -d $idshome ]
 	then
 		mkdir $idshome
-		log4s info "创建安装目录"
+		log4s info "创建安装目录"	
 	fi
 	CheckP;
 	InputAndCheck;
@@ -2093,7 +2085,7 @@ anzhuang()
 		log4s info "创建数据库编译标识文件$alreadyornolog"
 		initflag=0
 	else
-		log4s info "安装标识文件存在"
+		logs4 info "安装标识文件存在"
 		initflag=`grep "alreadyinstall informix" $alreadyornolog|wc -l|awk '{print $1}'`
 	fi
 if [ $initflag = 0 ]
@@ -3225,12 +3217,7 @@ EOF
 	
 }
 
-qinglilv()
-{
-	lvremove $1<<EOF
-y
-EOF
-}
+
 qingli()
 {
 	wai2=`whoami`
@@ -3273,31 +3260,10 @@ qingli()
 		killall nc
 		sleep 1
 		killall nc
-		shifouchuangjianpv=`grep "^shifouchuangjianpv=" tempIFX12.sh |awk -F'=' '{print $2}'`
-		shifouchuangjianvg=`grep "^shifouchuangjianvg=" tempIFX12.sh |awk -F'=' '{print $2}'`
-		shifouchuangjianlv=`grep "^shifouchuangjianlv=" tempIFX12.sh |awk -F'=' '{print $2}'`
+		
 		vgname=`grep "^vgname=" tempIFX12.sh |awk -F'=' '{print $2}'`
 		devname=`grep "^devname=" tempIFX12.sh |awk -F'=' '{print $2}'`
-		if [ X$shifouchuangjianlv = Xy ] && [ X$vgname != X ]
-		then
-			qinglilv /dev/$vgname/rootdbs1;
-			qinglilv /dev/$vgname/tempdbs1;
-			qinglilv /dev/$vgname/tempdbs2;
-			qinglilv /dev/$vgname/logdbs1;
-			qinglilv /dev/$vgname/phydbs1;
-			qinglilv /dev/$vgname/userdbs1;
-			qinglilv /dev/$vgname/userdbs2;
-			qinglilv /dev/$vgname/userdbs3;
-			qinglilv /dev/$vgname/userdbs4;
-			qinglilv /dev/$vgname/userdbs5;
-			qinglilv /dev/$vgname/chargedbs1;
-			qinglilv /dev/$vgname/chargedbs2;
-			qinglilv /dev/$vgname/minfodbs1;
-			qinglilv /dev/$vgname/minfodbs2;
-			qinglilv /dev/$vgname/servdbs1;
-			qinglilv /dev/$vgname/servdbs2;
-		fi
-		if [ X$vgname != X ] && [ X$shifouchuangjianvg = Xy ]
+		if [ X$vgname != X ]
 		then
 			vgremove $vgname <<-EOF
 			y
@@ -3319,7 +3285,7 @@ qingli()
 			y
 EOF
 		fi
-		if [ X$devname != X ] && [ X$shifouchuangjianpv = Xy ]
+		if [ X$devname != X ]
 		then
 			pvremove $devname
 		fi
@@ -3328,27 +3294,7 @@ EOF
 		echo "需要用root账户"
 	fi
 }
-xiufu()
-{
-	wai2=`whoami`
-	if [ X$wai2 = Xinformix ]
-	then
-		log4s info "修改配置文件运行初始化"
-		tempanzhuangwenjian=`grep "^priONCONFIG" /tmp/tempIFX12.sh |awk -F'=' '{print $2}'`
-		peizhi=$idshome/etc/$tempanzhuangwenjian
-		tihuan "^FULL_DISK_INIT.*" "FULL_DISK_INIT  1"
-		log4s info "停止数据库"
-		onmode -ky;
-		log4s info "清空online.log"
-		>/home/informix/online.log
-		sleep 3;
-		log4s info "重新初始化数据库"
-		oninit -ivy 
-	else
-		log4s error "需要用informix账户"
-		exit 1
-	fi
-}
+
 if [ $# = 1 ] && [ $1 = anzhuang ]
 then
 	anzhuang
@@ -3364,8 +3310,4 @@ fi
 if [ $# = 1 ] && [ $1 = client ]
 then
 	client
-fi
-if [ $# = 1 ] && [ $1 = xiufu ]
-then
-	xiufu
 fi

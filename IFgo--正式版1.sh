@@ -64,11 +64,9 @@ fi
 
 
 #############基础函数，不要动###############################
-################log4s配置区#################
-log4spath=/ids								#输出日志目录
-log4sechoCategory=info				#输出到屏幕日志级别名称，级别按照debug=0，warn=1，info=2，error=3
-log4swriteCategory=debug			#输出到文件日志级别名称，级别按照debug=0，warn=1，info=2，error=3
-log4slogname=root.log					#输出日志名称
+log4spath=$idshome								#输出日志目录
+log4sCategory=info				#输出日志级别名称，级别按照debug=0，warn=1，info=2，error=3
+logs4logname=root.log					#输出日志名称
 isecho=1											#输出到日志的同时是否打印到屏幕，0是不打印，1是打印
 splittype=none								#日志分割方式，none不分割，day按照日期分割后缀名为YYYY-MM-DD，num为按照行模式分割，如果使用num模式则必须填写splitnum参数，这个没思路暂不支持
 splitnum=1000
@@ -76,8 +74,7 @@ splitnum=1000
 X86=`uname -m`
 XITONGTEMP=`uname`
 XITONG=`echo $XITONGTEMP|tr '[a-z]' '[A-Z]'`  #系统类型
-xtong=`echo $XITONG|tr '[A-Z]' '[a-z]'`
-XTBANBEN=`lsb_release -a|grep Release|awk '{print $2}'`  #获取系统版本
+XTBANBEN=`cat /etc/issue|head -1|awk '{print $7}'`  #获取系统版本
 tXTBB=$(echo $XTBANBEN |awk '{print $1*100}')
 cpunumtemp=`cat /proc/cpuinfo|grep processor|wc -l`
 let cpunum=cpunumtemp-1
@@ -91,24 +88,23 @@ stty erase ^H;
 ################log4s配置校验并初始化区，单独拿出来是为初始化只需要一次#############
 log4scheck()
 {
+	if [ ! -d $log4spath ]
+	then
+		mkdir $log4spath
+	fi
 	if [ X$log4spath = X ]
 	then
 		echo "log4spath参数需要配置"
 		exit 1;
 	fi
-	if [ X$log4sechoCategory = X ]
+	if [ X$log4sCategory = X ]
 	then
-		echo "log4sechoCategory参数需要配置"
+		echo "log4sCategory参数需要配置"
 		exit 1;
 	fi
-	if [ X$log4swriteCategory = X ]
+	if [ X$logs4logname = X ]
 	then
-		echo "log4swriteCategory参数需要配置"
-		exit 1;
-	fi
-	if [ X$log4slogname = X ]
-	then
-		echo "log4slogname参数需要配置"
+		echo "logs4logname参数需要配置"
 		exit 1;
 	fi
 	if [ X$isecho = X ]
@@ -129,46 +125,27 @@ log4scheck()
 			exit 1;
 		fi
 	fi
-	log4sechoCategoryToU=`echo $log4sechoCategory|tr '[a-z]' '[A-Z]'`
-	log4swriteCategoryToU=`echo $log4swriteCategory|tr '[a-z]' '[A-Z]'`
-
-	case $log4sechoCategoryToU in
+	log4sCategoryToU=`echo $log4sCategory|tr '[a-z]' '[A-Z]'`
+	case $log4sCategoryToU in
 		DEBUG)
-			log4sechoCategorylevel=0
+			log4sCategorylevel=0
 			;;
 		WARN)
-			log4sechoCategorylevel=1
+			log4sCategorylevel=1
 			;;
 		INFO)
-			log4sechoCategorylevel=2
+			log4sCategorylevel=2
 			;;
 		ERROR)
-			log4sechoCategorylevel=3
+			log4sCategorylevel=3
 			;;
 		*)
-			log4sechoCategorylevel=3
-			;;
-	esac
-	case $log4swriteCategoryToU in
-		DEBUG)
-			log4swriteCategorylevel=0
-			;;
-		WARN)
-			log4swriteCategorylevel=1
-			;;
-		INFO)
-			log4swriteCategorylevel=2
-			;;
-		ERROR)
-			log4swriteCategorylevel=3
-			;;
-		*)
-			log4swriteCategorylevel=3
+			log4sCategorylevel=3
 			;;
 	esac
 }
 ################log4s代码区#################
-log4slog=${log4spath}/${log4slogname}
+log4slog=${log4spath}/${logs4logname}
 log4scheck;
 log4s()                       #$1是级别，$2是内容
 {
@@ -177,14 +154,13 @@ log4s()                       #$1是级别，$2是内容
 	#判断目录及日志文件，不自动创建目录，但是会自动创建文件
 	if [ ! -d $log4spath ]
 	then
-		echo "$nowdate log4s配置的目录不存在，请确认配置是否正确"
+		echo "log4s配置的目录不存在，请确认配置是否正确"
 		exit 1;
 	fi
 	if [ ! -f $log4slog ]
 	then
-		echo "$nowdate $logname不存在，创建log4s日志文件"
+		#echo "$nowdate $logname不存在，创建log4s日志文件"
 		echo "$nowdate $logname不存在，创建log4s日志文件" >> $log4slog
-		chmod 777 $log4slog
 	fi
 	
 	#判断参数个数
@@ -251,12 +227,12 @@ log4s()                       #$1是级别，$2是内容
 			log4snowlevel=3
 			;;
 	esac
-	if [ $log4snowlevel -ge $log4sechoCategorylevel ] && [ $isecho = 1 ]
+	if [ $log4snowlevel -ge $log4sCategorylevel ]
 	then
-		echo "$2"
-	fi
-	if [ $log4snowlevel -ge $log4swriteCategorylevel ]
-	then
+		if [ $isecho = 1 ]
+		then
+			echo "$2"
+		fi
 		echo "$nowdate log4s.${log4sinlevel}   $2" >> $log4slog
 	fi
 }
@@ -649,13 +625,12 @@ clientusername=XXXXXX
 clientip=XXXXXX
 clientport=XXXXXX
 clientpeizhiqueren=XXXXXX
-ltapedev=XXXXXX
+
 #############获取系统配置区，单独拿出来为了便于调试#########
 X86=`uname -m`
 XITONGTEMP=`uname`
 XITONG=`echo $XITONGTEMP|tr '[a-z]' '[A-Z]'`  #系统类型
-xtong=`echo $XITONG|tr '[A-Z]' '[a-z]'`
-XTBANBEN=`lsb_release -a|grep Release|awk '{print $2}'`  #获取系统版本
+XTBANBEN=`cat /etc/issue|head -1|awk '{print $7}'`  #获取系统版本
 tXTBB=$(echo $XTBANBEN |awk '{print $1*100}')
 cpunumtemp=`cat /proc/cpuinfo|grep processor|wc -l`
 let cpunum=cpunumtemp-1
@@ -711,11 +686,6 @@ InputAndCheck()
 	while [[ X$hdrflag != Xhdr  && X$hdrflag != Xonly && X$hdrflag != Xsec && X$hdrflag != Xpri && X$hdrflag != Xclient ]]
 	do
 		read -p "请设置安装模式，1、单机模式请输入only；2、主备双机hdr模式，请输入hdr（只在主机执行该脚本即可）；3、安装客户端模式请输入client： " hdrflaginput
-		while [[ X$hdrflaginput != Xhdr && X$hdrflaginput != Xonly && X$hdrflaginput != Xclient ]]
-		do
-			log4s info "输入不符合要求，请按照要求输入"
-			read -p "请设置安装模式，1、单机模式请输入only；2、主备双机hdr模式，请输入hdr（只在主机执行该脚本即可）；3、安装客户端模式请输入client： " hdrflaginput
-		done
 		log4s debug "输入的hdrflaginput参数为：$hdrflaginput"
 		if [ X$hdrflaginput = Xonly ]
 		then
@@ -775,18 +745,14 @@ InputAndCheck()
 			echo "业务实例ip：   $priappip"
 			log4s debug "输入的心跳线ip为$priip"
 			log4s debug "输入的业务ip为$priappip"
-			read -p "配置是否正确，如果正确请输入[y/n]：" peizhiqueren
+			read -p "配置是否正确，如果正确请输入Y/y：" peizhiqueren
 			log4s debug "输入的确认配置为$peizhiqueren"
 		fi
 		#hdr模式
 		if [ X$hdrflaginput = Xhdr ]
 		then
 			log4s info "hdr配置开始"
-			read -p "请输入主备机ssh端口号，一般为19222或者22，[默认为19222]："  sshport
-			if [ X$sshport = X ]
-			then
-				sshport=19222
-			fi
+			read -p "请输入主备机ssh端口号，一般为19222或者22，[无默认值]："  sshport
 			echo "下面开始输入数据库实例名，也就是在sqlhosts中配置的数据库实例名"
 			
 			#priINFORMIXSERVER参数
@@ -919,87 +885,22 @@ InputAndCheck()
 			if [ X$peizhiqueren = XXXXXXX ]
 			then
 				read -p "请输入主机心跳线ip，[无默认值]："	priip
-				while [[ X$priip = X || X$priip = XXXXXXX ]]
-				do
-					log4s info "输入主机心跳线ip不能为空，请重新输入"
-					read -p "请输入主机心跳线ip，[无默认值]：" priip
-				done
 				read -p "请输入备机心跳线ip，[无默认值]："	secip
-				while [[ X$secip = X || X$secip = XXXXXXX ]]
-				do
-					log4s info "输入备机心跳线ip不能为空，请重新输入"
-					read -p "请输入备机心跳线ip，[无默认值]：" secip
-				done
 				read -p "请输入主机业务ip，[无默认值]："		priappip
-				while [[ X$priappip = X || X$priappip = XXXXXXX ]]
-				do
-					log4s info "输入主机业务ip不能为空，请重新输入"
-					read -p "请输入主机业务ip，[无默认值]：" priappip
-				done
 				read -p "请输入备机业务ip，[无默认值]："		secappip
-				while [[ X$secappip = X || X$secappip = XXXXXXX ]]
-				do
-					log4s info "输入备机业务ip不能为空，请重新输入"
-					read -p "请输入备机业务ip，[无默认值]：" secappip
-				done
-				read -p "请输入逻辑日志备份方式，alarmprogram为普通方式，备份使用alarmprogram备份到/dev/null；alarmAPI为使用alarmAPI方式，[默认为alarmprogram]：" templtapedev
-				while [[ X$templtapedev = X || X$templtapedev = XXXXXXX ]]
-				do
-					log4s info "输入逻辑日志备份方式不能为空，请重新输入"
-					read -p "请输入逻辑日志备份方式，alarmprogram为普通方式，备份使用alarmprogram备份到/dev/null；alarmAPI为使用alarmAPI方式，[默认为alarmprogram]：" templtapedev
-				done
-				while [[ $templtapedev != alarmprogram && $templtapedev != alarmAPI && $templtapedev != alarmapi ]]
-				do
-					log4s info "输入逻辑日志备份方式输入非法，请重新输入"
-					read -p "请输入逻辑日志备份方式，alarmprogram为普通方式，备份使用alarmprogram备份到/dev/null；alarmAPI为使用alarmAPI方式，[默认为alarmprogram]：" templtapedev
-				done
 			fi
 			if [ X$peizhiqueren != XXXXXXX ]
 			then
 				read -p "请输入主机心跳线ip，刚才输入的是$priip："		priip
-				while [[ X$priip = X || X$priip = XXXXXXX ]]
-				do
-					log4s info "输入主机心跳线ip不能为空，请重新输入"
-					read -p "请输入主机心跳线ip，刚才输入的是$priip：" priip
-				done
 				read -p "请输入备机心跳线ip，刚才输入的是$secip："		secip
-				while [[ X$secip = X || X$secip = XXXXXXX ]]
-				do
-					log4s info "输入备机心跳线ip不能为空，请重新输入"
-					read -p "请输入备机心跳线ip，刚才输入的是$secip：" secip
-				done
 				read -p "请输入主机业务ip，刚才输入的是$priappip："		priappip
-				while [[ X$priappip = X || X$priappip = XXXXXXX ]]
-				do
-					log4s info "输入主机业务ip不能为空，请重新输入"
-					read -p "请输入主机业务ip，刚才输入的是$priappip：" priappip
-				done
 				read -p "请输入备机业务ip，刚才输入的是$secappip："		secappip
-				while [[ X$secappip = X || X$secappip = XXXXXXX ]]
-				do
-					log4s info "输入备机业务ip不能为空，请重新输入"
-					read -p "请输入备机业务ip，刚才输入的是$secappip：" secappip
-				done
-				read -p "请输入逻辑日志备份方式，刚才输入的是$templtapedev：" templtapedev
-				while [[ X$templtapedev = X || X$templtapedev = XXXXXXX ]]
-				do
-					log4s info "输入逻辑日志备份方式不能为空，请重新输入"
-					read -p "请输入逻辑日志备份方式，刚才输入的是$templtapedev：" templtapedev
-				done
 			fi
 			log4s debug "请输入主机心跳线ip，[无默认值]： $priip"
 			log4s debug "请输入备机心跳线ip，[无默认值]： $secip"
 			log4s debug "请输入主机业务ip，[无默认值]：   $priappip"
 			log4s debug "请输入备机业务ip，[无默认值]：   $secappip"
-			log4s debug "请输入逻辑日志备份方式：         $templtapedev"
 			
-			ltapedev=`echo $templtapedev|tr '[A-Z]' '[a-z]'`
-			if [ X$ltapedev = XALARMAPI ] || [ X$ltapedev = Xalarmapi ] || [ X$ltapedev = XalarmAPI ]
-			then
-				ltapedev=alarmapi
-			else
-				ltapedev=alarmprogram
-			fi
 			echo "下面是刚才输入的配置"
 			echo "主机心跳线实例名：  ${priINFORMIXSERVER}"
 			echo "备机心跳线实例名：  ${secINFORMIXSERVER}"
@@ -1009,19 +910,8 @@ InputAndCheck()
 			echo "备机心跳线ip：      ${secip}"
 			echo "主机业务ip：        ${priappip}"
 			echo "备机业务ip：        ${secappip}"
-			echo "逻辑日志备份方式为：$ltapedev"
 	
-			read -p "配置是否正确，请输入y/n：" peizhiqueren
-			while [[ X$peizhiqueren = X ]]
-			do
-				log4s info "配置确认不能输入空，请重新输入"
-				read -p "配置是否正确，请输入y/n：" peizhiqueren
-			done
-			while [[ $peizhiqueren != [YyNn] ]]
-			do
-				log4s info "配置确认输入非法，请重新输入"
-				read -p "配置是否正确，请输入y/n：" peizhiqueren
-			done
+			read -p "配置是否正确，如果正确请输入Y/y，[默认值为n]：" peizhiqueren
 			log4s debug "输入的确认配置peizhiqueren为：$peizhiqueren"
 			#防止碰巧peizhiqueren=XXXXXX导致回显出问题
 			if [ X$peizhiqueren = XXXXXXX ]
@@ -1041,53 +931,45 @@ InputAndCheck()
 				Psecip=`Pip $secip`
 				Ppriappip=`Pip $priappip`
 				Psecappip=`Pip $secappip`
-				if [ X$ltapedev = Xalarmapi ]
-				then
-					if [ ! -f /tmp/alarmAPI.tar ]
-					then
-						log4s error "配置需要使用alarmAPI，但是在/tmp下没有alarmAPI.tar，所以将使用默认逻辑日志备份配置"
-						ltapedev=alarmprogram
-					fi
-				fi
 				if [ X$PpriINFORMIXSERVER != Xok ]
 				then
-					log4s error "主机心跳线实例名输入有误，请仔细检查"
+					echo "主机心跳线实例名输入有误，请仔细检查"
 					peizhiqueren=N
 				fi
 				if [ X$PsecINFORMIXSERVER != Xok ]
 				then
-					log4s error "备机心跳线实例名输入有误，请仔细检查"
+					echo "备机心跳线实例名输入有误，请仔细检查"
 					peizhiqueren=N
 				fi
 				if [ X$PpriDBSERVERALIASES != Xok ]
 				then
-					log4s error "主机业务实例名输入有误，请仔细检查"
+					echo "主机业务实例名输入有误，请仔细检查"
 					peizhiqueren=N
 				fi
 				if [ X$PsecDBSERVERALIASES != Xok ]
 				then
-					log4s error "备机业务实例名输入有误，请仔细检查"
+					echo "备机业务实例名输入有误，请仔细检查"
 					peizhiqueren=N
 				fi
 				
 				if [ X$Ppriip != Xok ]
 				then
-					log4s error "主机心跳线ip输入有误，请仔细检查"
+					echo "主机心跳线ip输入有误，请仔细检查"
 					peizhiqueren=N
 				fi
 				if [ X$Psecip != Xok ]
 				then
-					log4s error "备机心跳线ip输入有误，请仔细检查"
+					echo "备机心跳线ip输入有误，请仔细检查"
 					peizhiqueren=N
 				fi
 				if [ X$Ppriappip != Xok ]
 				then
-					log4s error "主机业务ip输入有误，请仔细检查"
+					echo "主机业务ip输入有误，请仔细检查"
 					peizhiqueren=N
 				fi
 				if [ X$Psecappip != Xok ]
 				then
-					log4s error "备机业务ip输入有误，请仔细检查"
+					echo "备机业务ip输入有误，请仔细检查"
 					peizhiqueren=N
 				fi
 			fi
@@ -1112,23 +994,11 @@ InputAndCheck()
 		DBSERVERNAME=$secDBSERVERNAME
 		DBSERVERALIASES=$secDBSERVERALIASES
 	fi
-	if [ X$hdrflag = Xonly ]
-	then
-		ONCONFIG=$priONCONFIG
-		INFORMIXSERVER=$priINFORMIXSERVER
-		DBSERVERNAME=$priDBSERVERNAME
-		DBSERVERALIASES=$priDBSERVERALIASES
-	fi
 	#磁盘划分
 		#创建pv
 	while [[ $shifouchuangjianpv != [YyNn] ]]
 	do
-		read -p "是否需要创建PV，如果创建pv，请输入[y/n]：" shifouchuangjianpv;
-		if [ X$shifouchuangjianpv = X ]
-		then
-			#防止while中判断异常
-			shifouchuangjianpv=x
-		fi
+		read -p "是否需要创建PV，如果创建pv，请输入y/n，[默认为N]：" shifouchuangjianpv;
 	done
 	if [ X$shifouchuangjianpv = Xy ] || [ X$shifouchuangjianpv = XY ]
 	then
@@ -1141,22 +1011,7 @@ InputAndCheck()
 			do
 				shifouqueredevname=y
 				read -p "请输入硬盘全路径，比如/dev/sdb，[没有默认值]："  devname
-				while [[ X$devname = X ]]
-				do
-					log4s info "硬盘全路径不能为空，请重新输入"
-					read -p "请输入硬盘全路径，比如/dev/sdb，[没有默认值]：" devname
-				done
-				read -p "请务必确认硬盘路径是否为$devname，如果输入错误将造成不可预知的问题[y/n]：" shifouqueredevname
-				while [[ X$shifouqueredevname = X ]]
-				do
-					log4s info "是否确认硬盘路径不能为空，请重新输入"
-					read -p "请务必确认硬盘路径是否为$devname，如果输入错误将造成不可预知的问题[y/n]：" shifouqueredevname
-				done
-				while [[ $shifouqueredevname != [YyNn] ]]
-				do
-					log4s info "是否确认硬盘路径输入非法，请重新输入"
-					read -p "请务必确认硬盘路径是否为$devname，如果输入错误将造成不可预知的问题[y/n]：" shifouqueredevname
-				done
+				read -p "请务必确认硬盘路径是否为$devname，如果输入错误将造成不可预知的问题[Y/N]，[默认为N]：" shifouqueredevname
 				log4s debug "shifouqueredevname的值为$shifouqueredevname"
 				log4s debug "创建pv的路径为$devname"
 				if [ X$shifouqueredevname != XY ] && [ X$shifouqueredevname != Xy ]
@@ -1172,11 +1027,7 @@ InputAndCheck()
 		#创建vg
 	while [[ $shifouchuangjianvg != [YyNn] ]]
 	do
-		read -p "是否需要创建VG，如果创建vg，请输入y/n ：" shifouchuangjianvg;
-		if [ X$shifouchuangjianvg = X ]
-		then
-			shifouchuangjianvg=x
-		fi
+		read -p "是否需要创建VG，如果创建vg，请输入y/n，[默认为不创建]：" shifouchuangjianvg;
 	done
 	if [ X$shifouchuangjianvg = Xy ] || [ X$shifouchuangjianvg = XY ]
 	then
@@ -1186,30 +1037,10 @@ InputAndCheck()
 			if [ X$devname = XXXXXXX ]
 			then
 				read -p "请输入pv的名称，比如/dev/sdb，[没有默认值]："  devname
-				while [[ X$devname = X ]]
-				do
-					log4s info "pv的名称不能为空，请重新输入"
-					read -p "请输入pv的名称，比如/dev/sdb，[没有默认值]：" devname
-				done 
 				log4s info "pv是手动创建，所以需要输入创建的pv名称，为：$devname"
 			fi
 			read -p "请输入vg的名称，比如dbvg，[没有默认值]：" vgname;
-			while [[ X$vgname = X ]]
-			do
-				log4s info "vg的名称不能为空，请重新输入"
-				read -p "请输入vg的名称，比如dbvg，[没有默认值]：" vgname
-			done 
-			read -p "请务必确认vg名称是否为$vgname，如果输入错误将造成不可预知的问题[Y/N]：" shifouqueredevname1
-			while [[ X$shifouqueredevname1 = X ]]
-			do
-				log4s info "是否确认vg名称，不能为空请重新输入"
-				read -p "请务必确认vg名称是否为$vgname，如果输入错误将造成不可预知的问题[Y/N]：" shifouqueredevname1
-			done
-			while [[ $shifouqueredevname1 != [YyNn] ]]
-			do
-				log4s info "是否确认vg名称，输入非法，请重新输入"
-				read -p "请务必确认vg名称是否为$vgname，如果输入错误将造成不可预知的问题[Y/N]：" shifouqueredevname1
-			done
+			read -p "请务必确认vg名称是否为$vgname，如果输入错误将造成不可预知的问题[Y/N]，[默认为N]：" shifouqueredevname1
 			if [ X$shifouqueredevname1 != XY ] && [ X$shifouqueredevname1 != Xy ]
 			then
 				shifouqueredevname1=N
@@ -1222,10 +1053,10 @@ InputAndCheck()
 	#创建lv
 	while [[ $shifouchuangjianlv != [YyNn] ]]
 	do
-		read -p "是否需要创建LV，如果创建LV，请输入y/n：" shifouchuangjianlv;
-		if [ X$shifouchuangjianlv = X ] || [ X$shifouchuangjianlv = XXXXXXXX ]
+		read -p "是否需要创建LV，如果创建LV，请输入y/n，[默认为不创建]：" shifouchuangjianlv;
+		if [ X$shifouchuangjianlv != XY ] && [ X$shifouchuangjianlv != Xy ]
 		then
-			shifouchuangjianlv=x
+			shifouchuangjianlv=n
 		fi
 	done
 	if [ X$shifouchuangjianlv = Xy ] || [ X$shifouchuangjianlv = XY ]
@@ -1239,34 +1070,14 @@ InputAndCheck()
 				log4s info "备机自动自动读取配置"
 			else
 				read -p "请输入vg名称，比如dbvg，[没有默认值]："  vgname
-				while [[ X$vgname = X ]]
-				do
-					log4s info "vg名称不能为空，请重新输入"
-					read -p "请输入vg名称，比如dbvg，[没有默认值]：" vgname
-				done
 				read -p "请输入pv的名称，比如/dev/sdb，[没有默认值]："  devname
-				while [[ X$devname = X ]]
-				do
-					log4s info "pv名称不能为空，请重新输入"
-					read -p "请输入pv的名称，比如/dev/sdb，[没有默认值]：" devname
-				done
 				log4s info "vg是手动创建的，需要输入vg和pv的名称，vg名称为：$vgname，pv的名称为$devname"
 			fi
 		fi
 		while [[ $shifoutiaozhenglvsize != [YyNn] ]]
 		do
 			echo "默认lv大小为rootdbs=$tsizerootdbs1G,tempdbs1=$tsizetempdbs1G,tempdbs2=$tsizetempdbs2G,logdbs1=$tsizelogdbs1G,phydbs1=$tsizephydbs1G,userdbs1=$tsizeuserdbs1G，单位为G"
-			read -p "是否需要调整lv大小，请输入[y/n] ：" shifoutiaozhenglvsize;
-			while [[ X$shifoutiaozhenglvsize = X ]]
-			do
-				log4s info "是否调整lv大小不能为空，请重新输入"
-				read -p "是否需要调整lv大小，请输入[y/n] ：" shifoutiaozhenglvsize
-			done
-			while [[ $shifoutiaozhenglvsize != [YyNn] ]]
-			do
-				log4s info "是否调整lv大小输入非法，请重新输入"
-				read -p "是否需要调整lv大小，请输入[y/n] ：" shifoutiaozhenglvsize
-			done
+			read -p "是否需要调整lv大小，请输入y/n，[默认为n]：" shifoutiaozhenglvsize;
 			if [ X$shifoutiaozhenglvsize != XY ] && [ X$shifoutiaozhenglvsize != Xy ]
 			then
 				shifoutiaozhenglvsize=n
@@ -1278,48 +1089,18 @@ InputAndCheck()
 			do
 				echo "请输入调整后的大小，单位为G，只需要输入数字即可，请确保硬盘大小可以满足调整后的lv"
 				echo "如果不需要某个dbs则，[默认为0]。"
-				read -p "rootdbs1大小，  [必须创建]："					sizerootdbs1G
-				while [[ X$sizerootdbs1G = X || X$sizerootdbs1G = XN || X$sizerootdbs1G = Xn || X$sizerootdbs1G = X0 ]]
-				do
-					log4s info "rootdbs1大小输入非法，请重新输入"
-					read -p "rootdbs1大小，  [必须创建]：" 			sizerootdbs1G
-				done
-				read -p "tempdbs1大小，  [必须创建]："					sizetempdbs1G
-				while [[ X$sizetempdbs1G = X || X$sizetempdbs1G = XN || X$sizetempdbs1G = Xn || X$sizetempdbs1G = X0 ]]
-				do
-					log4s info "tempdbs1大小输入非法，请重新输入"
-					read -p "tempdbs1大小，  [必须创建]：" 			sizetempdbs1G
-				done
-				read -p "tempdbs2大小，  [必须创建]："					sizetempdbs2G
-				while [[ X$sizetempdbs2G = X || X$sizetempdbs2G = XN || X$sizetempdbs2G = Xn || X$sizetempdbs2G = X0 ]]
-				do
-					log4s info "tempdbs2大小输入非法，请重新输入"
-					read -p "tempdbs2大小，  [必须创建]：" 			sizetempdbs2G
-				done
-				read -p "logdbs1大小，   [必须创建]："					sizelogdbs1G
-				while [[ X$sizelogdbs1G = X || X$sizelogdbs1G = XN || X$sizelogdbs1G = Xn || X$sizelogdbs1G = X0 ]]
-				do
-					log4s info "logdbs1大小输入非法，请重新输入"
-					read -p "logdbs1大小，   [必须创建]：" 			sizelogdbs1G
-				done
-				read -p "phydbs1大小，   [必须创建]："					sizephydbs1G
-				while [[ X$sizephydbs1G = X || X$sizephydbs1G = XN || X$sizephydbs1G = Xn || X$sizephydbs1G = X0 ]]
-				do
-					log4s info "phydbs1大小输入非法，请重新输入"
-					read -p "phydbs1大小，   [必须创建]：" 			sizephydbs1G
-				done
-				read -p "userdbs1大小，  [必须创建]："					sizeuserdbs1G
-				while [[ X$sizeuserdbs1G = X || X$sizeuserdbs1G = XN || X$sizeuserdbs1G = Xn || X$sizeuserdbs1G = X0 ]]
-				do
-					log4s info "userdbs1大小输入非法，请重新输入"
-					read -p "userdbs1大小，  [必须创建]：" 			sizeuserdbs1G
-				done
+				read -p "rootdbs1大小，  [不输入默认为不创建]："		sizerootdbs1G
+				read -p "tempdbs1大小，  [不输入默认为不创建]："		sizetempdbs1G
+				read -p "tempdbs2大小，  [不输入默认为不创建]："		sizetempdbs2G
+				read -p "logdbs1大小，   [不输入默认为不创建]："			sizelogdbs1G
+				read -p "phydbs1大小，   [不输入默认为不创建]："			sizephydbs1G
+				read -p "userdbs1大小，  [不输入默认为不创建]："		sizeuserdbs1G
 				read -p "userdbs2大小，  [不输入默认为不创建]："		sizeuserdbs2G
 				read -p "userdbs3大小，  [不输入默认为不创建]："		sizeuserdbs3G
 				read -p "userdbs4大小，  [不输入默认为不创建]："		sizeuserdbs4G
 				read -p "userdbs5大小，  [不输入默认为不创建]："		sizeuserdbs5G
-				read -p "chargedbs1大小，[不输入默认为不创建]："		sizechargedbs1G
-				read -p "chargedbs2大小，[不输入默认为不创建]："		sizechargedbs2G
+				read -p "chargedbs1大小，[不输入默认为不创建]："	sizechargedbs1G
+				read -p "chargedbs2大小，[不输入默认为不创建]："	sizechargedbs2G
 				read -p "minfodbs1大小， [不输入默认为不创建]："		sizeminfodbs1G
 				read -p "minfodbs2大小， [不输入默认为不创建]："		sizeminfodbs2G
 				read -p "servdbs1大小，  [不输入默认为不创建]："		sizeservdbs1G
@@ -1405,17 +1186,7 @@ InputAndCheck()
 				echo "minfodbs2大小：     $sizeminfodbs2G"
 				echo "sizeservdbs1大小：  $sizeservdbs1G"
 				echo "sizeservdbs2大小：  $sizeservdbs2G"
-				read -p "是否确认调整后的大小，请输入[y/n]：" shifouquerenlvsize
-				while [[ X$shifouquerenlvsize = X ]]
-				do
-					log4s info "是否确认调整后大小，输入不能为空，请重新输入"
-					read -p "是否确认调整后的大小，请输入[y/n]：" shifouquerenlvsize
-				done
-				while [[ $shifouquerenlvsize != [YyNn] ]]
-				do
-					log4s info "是否确认调整后大小，输入非法，请重新输入"
-					read -p "是否确认调整后的大小，请输入[y/n]：" shifouquerenlvsize
-				done
+				read -p "是否确认调整后的大小，请输入y/n，[默认为n]：" shifouquerenlvsize
 				if [ X$shifouquerenlvsize = X ]
 				then
 					shifouquerenlvsize=n
@@ -1527,11 +1298,6 @@ InputAndCheck()
 			if [ $muban = cl ]
 			then
 				read -p "请输入vg名称，比如dbvg，[没有默认值]：" vgname
-				while [[ X$vgname = X ]]
-				do
-					log4s info "vg名称不能为空，请重新输入"
-					read -p "请输入vg名称，比如dbvg，[没有默认值]：" vgname
-				done
 				echo "请根据提示输入各lv的目录，举例/dev/hdvg/rootdbs1"
 				echo "如果没有这个dbs，[默认为不创建]"
 				read -p "rootdbs1的目录，[不输入默认为不创建]："		lvrootdbs1
@@ -1632,17 +1398,7 @@ InputAndCheck()
 				echo "minfodbs2的目录：   $lvminfodbs2"
 				echo "servdbs1的目录：    $lvservdbs1"
 				echo "servdbs2的目录：    $lvservdbs2"
-				read -p "是否确认：[y/n]：" lvmuluqueren
-				while [[ X$lvmuluqueren = X ]]
-				do
-					log4s info "是否确认目录，不能为空，请重新输入"
-					read -p "是否确认：[y/n]：" lvmuluqueren
-				done
-				while [[ $lvmuluqueren != [YyNn] ]]
-				do
-					log4s info "是否确认目录，输入非法，请重新输入"
-					read -p "是否确认：[y/n]：" lvmuluqueren
-				done
+				read -p "是否确认：[y/n]，[默认为n]：" lvmuluqueren
 				if [ X$lvmuluqueren != XY ] && [ X$lvmuluqueren != Xy ]
 				then
 					lvmuluqueren=n
@@ -1771,16 +1527,6 @@ InputAndCheck()
 			echo "sizeservdbs1大小： $sizeservdbs1G"
 			echo "sizeservdbs2大小： $sizeservdbs2G"
 			read -p "是否确认调整后的大小[Y/N]，[默认为n]：" shifouquerenlvsize
-			while [[ X$shifouquerenlvsize = X ]]
-			do
-				log4s info "是否确认调整后的大小，不能为空，请重新输入"
-				read -p "是否确认调整后的大小[Y/N]，[默认为n]：" shifouquerenlvsize
-			done
-			while [[ $shifouquerenlvsize != [YyNn] ]]
-			do
-				log4s info "是否确认调整后的大小，输入非法，请重新输入"
-				read -p "是否确认调整后的大小[Y/N]，[默认为n]：" shifouquerenlvsize
-			done
 			#先判断是否所有大小都是数字
 			Prootdbs1=`Pnum "$sizerootdbs1G"`
 			Ptempdbs1=`Pnum "$sizetempdbs1G"`
@@ -1856,17 +1602,17 @@ ZhanWeiflag()
 		xiugai "hdrflag=XXXXXX"								"hdrflag=sec"
 	fi
 	xiugai "^peizhiqueren=XXXXXX"						"peizhiqueren=$peizhiqueren"
-	xiugai "^priINFORMIXSERVER=XXXXXX"			"priINFORMIXSERVER=$priINFORMIXSERVER"
-	xiugai "^secINFORMIXSERVER=XXXXXX"			"secINFORMIXSERVER=$secINFORMIXSERVER"
+	xiugai "^priINFORMIXSERVER=XXXXXX"				"priINFORMIXSERVER=$priINFORMIXSERVER"
+	xiugai "^secINFORMIXSERVER=XXXXXX"				"secINFORMIXSERVER=$secINFORMIXSERVER"
 	xiugai "^priDBSERVERALIASES=XXXXXX"			"priDBSERVERALIASES=$priDBSERVERALIASES"
 	xiugai "^secDBSERVERALIASES=XXXXXX"			"secDBSERVERALIASES=$secDBSERVERALIASES"
-	xiugai "^priip=XXXXXX"									"priip=$priip"
-	xiugai "^secip=XXXXXX"									"secip=$secip"
+	xiugai "^priip=XXXXXX"										"priip=$priip"
+	xiugai "^secip=XXXXXX"										"secip=$secip"
 	xiugai "^priappip=XXXXXX"								"priappip=$priappip"
 	xiugai "^secappip=XXXXXX"								"secappip=$secappip"
-	xiugai "^priONCONFIG=XXXXXX"						"priONCONFIG=$priONCONFIG"
-	xiugai "^secONCONFIG=XXXXXX"						"secONCONFIG=$secONCONFIG"
-	xiugai "^ltapedev=XXXXXX"								"ltapedev=$ltapedev"
+	xiugai "^priONCONFIG=XXXXXX"							"priONCONFIG=$priONCONFIG"
+	xiugai "^secONCONFIG=XXXXXX"							"secONCONFIG=$secONCONFIG"
+	
 	#第二阶段，硬盘划分占位符修改
 	xiugai "^shifouchuangjianpv=XXXXXX"			"shifouchuangjianpv=$shifouchuangjianpv"
 	xiugai "^shifouqueredevname=XXXXXX"			"shifouqueredevname=$shifouqueredevname"
@@ -2043,17 +1789,16 @@ beijijianting1()
 anzhuang()
 {
 	stty erase ^H;
-	if [ ! -d $idshome ]
-	then
-		mkdir $idshome
-		log4s info "创建安装目录"
-	fi
 	CheckP;
 	InputAndCheck;
 	ZhanWeiflag;
 	startdisk;
 
-
+	if [ ! -d $idshome ]
+	then
+		log4s info "创建安装目录"
+		mkdir $idshome
+	fi
 	peizhi=$idshome/etc/$ONCONFIG
 	wai=`whoami`
 	if [ X$wai != Xroot ]
@@ -2093,7 +1838,7 @@ anzhuang()
 		log4s info "创建数据库编译标识文件$alreadyornolog"
 		initflag=0
 	else
-		log4s info "安装标识文件存在"
+		logs4 info "安装标识文件存在"
 		initflag=`grep "alreadyinstall informix" $alreadyornolog|wc -l|awk '{print $1}'`
 	fi
 if [ $initflag = 0 ]
@@ -2140,20 +1885,16 @@ EOF
 	if [ X$prionly = X1 ] && [ X$hdrflag = Xpri ]
 	then
 		log4s info "正在将脚本和安装包复制到备机，请手动输入密码（需要多次）"
+		echo "正在将脚本和安装包复制到备机，请手动输入密码（需要多次）"
 		mkdir /tmp/scptempdir/
 		cp /tmp/tempIFX12.sh /tmp/scptempdir/$jiaobenming
-		if [ X$ltapedev = Xalarmapi ]
-		then
-			cp /tmp/alarmAPI.tar /tmp/scptempdir/alarmAPI.tar
-		fi
 		mv /tmp/$anzhuangbao /tmp/scptempdir/
 		scp -oPort=$sshport -r /tmp/scptempdir/* root@$secip:/tmp/
 		mv /tmp/scptempdir/$anzhuangbao /tmp/
 		ssh -oPort=$sshport root@$secip "cd /tmp;nohup sh ./$jiaobenming anzhuang >/tmp/anzhuang.log 2>&1 &"
 		log4s info "需要交互的内容结束，后面开始全自动安装，包括编译数据库，搭建HDR，请勿在安装过程中做任何操作"
 		echo "需要交互的内容结束，后面开始全自动安装，包括编译数据库，搭建HDR，请勿在安装过程中做任何操作"
-		echo "需要交互的内容结束，后面开始全自动安装，包括编译数据库，搭建HDR，请勿在安装过程中做任何操作"
-		sleep 10;
+		sleep 3;
 	fi
 
 	
@@ -2179,26 +1920,6 @@ Y
 EOF
 	
 	log4s info "编译完成"
-	if [ X$ltapedev = Xalarmapi ]
-	then
-		cp /tmp/alarmAPI.tar $INFORMIXDIR/
-		cd $INFORMIXDIR
-		ls alarmAPI.tar | xargs -n1 tar xf
-		if [[ ! -d "$INFORMIXDIR/alarmAPI" ]]
-		then
-			log4s error "alarmAPI文件夹不存在，请确保解压后的galarmAPI文件夹在\$INFORMIXDIR中"
-			exit 1
-		fi
-		log4s info "开始编译alarmAPI"
-		cd $INFORMIXDIR/alarmAPI
-		make -f makefile.$xtong
-		if [ $? -eq 0 ]
-		then
-			log4s info "alarmAPI编译成功"
-		else
-			log4s error "alarmAPI编译失败"
-		fi
-	fi
 	log4s info "修改内核参数"
 	kernel_shmmaxnum=`grep "kernel.shmmax = 4398046511104" /etc/sysctl.conf|wc -l`
 	kernel_shmmninum=`grep "kernel.shmmni = 4096" /etc/sysctl.conf|wc -l`
@@ -2374,17 +2095,8 @@ EOF
 	tihuan "^CKPTINTVL 300" "CKPTINTVL 30";
 	tihuan "^TAPEDEV /dev/tapedev" "TAPEDEV /dev/null";
 	tihuan "^TAPEBLK 32" "TAPEBLK 128";
-	if [ X$ltapedev = Xalarmprogram ]
-	then
-		tihuan "^ALARMPROGRAM.*" "ALARMPROGRAM $idshome/etc/alarmprogram.sh"
-		tihuan "^LTAPEDEV.*" "LTAPEDEV /dev/null"
-	fi
-	if [ X$ltapedev = Xalarmapi ]
-	then
-		tihuan "^ALARMPROGRAM.*" "ALARMPROGRAM $idshome/alarmAPI/log_full.sh"
-		tihuan "^LTAPEDEV.*" "LTAPEDEV /dev/null"
-		chmod +x $INFORMIXDIR/alarmAPI/log_full.sh
-	fi
+	tihuan "^ALARMPROGRAM.*" "ALARMPROGRAM $idshome/etc/alarmprogram.sh"
+	tihuan "^LTAPEDEV.*" "LTAPEDEV /dev/null"
 	tihuan "^BAR_ACT_LOG \$INFORMIXDIR/tmp/bar_act.log" "BAR_ACT_LOG /home/informix/bar_act.log";
 	tihuan "^OPTCOMPIND 2" "OPTCOMPIND 0";
 	tihuan "^DRAUTO                  0" "DRAUTO                  2";
@@ -2394,7 +2106,7 @@ EOF
 	tihuan "^LOGBUFF.*"  "LOGBUFF 128"
 	if [ $anquan = 1 ]
 	then
-		tihuan "^LISTEN_TIMEOUT.*" "LISTEN_TIMEOUT 10";
+		tihuan "^LISTEN_TIMEOUT.* " "LISTEN_TIMEOUT 10";
 		#tihuanaao "^ADTMODE.*" "ADTMODE 7"
 	fi
 	if [ $testflag = 1 ]
@@ -2420,7 +2132,7 @@ EOF
 	fi
 	chown informix:informix $idshome/etc/sqlhosts
 	chown informix:informix $idshome/etc/*
-	chmod a+r $idshome/etc/sqlhosts
+	chomod a+r $idshome/etc/sqlhosts
 	if [ -f /etc/hosts.equiv ]
 	then
 		log4s info "更新/etc/hosts.equiv"
@@ -2974,17 +2686,13 @@ hdr()
 	onmode -d primary $secINFORMIXSERVER;
 	rsh $secip "cd /home/informix;. ./.bash_profile ; onmode -d secondary $priINFORMIXSERVER";
 	sleep 1;
-	log4s info "HDR搭建完成，请观察主备机状态"
+	log4s info "HDR搭建完成"
 	while true
 	do
 	zhubeihdrokle=`echo "beijikaishihuifu"|nc $secip $tongxinduankou2`
 		if [ X$zhubeihdrokle = Xbeijidengdaihuifu ]
 		then
 			log4s info "备机恢复rsh等设置"
-			if [ X$ltapedev = Xalarmapi ]
-			then
-				log4s info "因为选择了使用alarmapi，请自己根据实际情况修改$idshome/alarmAPI下相关配置"
-			fi
 			break;
 		fi
 	sleep 1;
@@ -3040,105 +2748,12 @@ chushihua()
 	ontape -s -L 0;
 	sleep 10;
 	onmode -sy;
-	ontape -s -L 0;
-	if [ $testflag = 1 ]
-	then
-		onstat -l;
-	fi
-	onmode -l;
-	onmode -c;
-	onmode -l;
-	onmode -c;
-	onmode -l;
-	onmode -c;
-	onstat -l;
-	if [ $testflag = 1 ]
-	then
-		onstat -l;
-	fi
-	log4s debug "开始删除逻辑日志"
-	if [ $testflag = 1 ]
-	then
-		onstat -l;
-	fi
-	onparams -d -l 1 <<EOF
-y
-EOF
-	if [ $testflag = 1 ]
-	then
-		log4s debug "删除逻辑日志1结束"
-		onstat -l;
-	fi
-	onparams -d -l 2 <<EOF
-y
-EOF
-	if [ $testflag = 1 ]
-	then
-		log4s debug "删除逻辑日志2结束"
-		onstat -l;
-	fi
-	onparams -d -l 3 <<EOF
-y
-EOF
-	if [ $testflag = 1 ]
-	then
-		log4s debug "删除逻辑日志3结束"
-		onstat -l;
-	fi
-	let Msizelogdbs1=sizelogdbs1G*1000
-	let numofllog=Msizelogdbs1/200
-	let beginnumofllog=numofllog-2
-	tempi=1
-	pnumofllog=`Pnum "$Msizelogdbs1"`
-	pbeginnumofllog=`Pnum "$beginnumofllog"`
-	if [ $pnumofllog = ok ] && [ $pbeginnumofllog = ok ]
-	then
-		while [ $tempi -le $beginnumofllog ]
-		do
-			onparams -a -d logdbs -s 200000;
-			let tempi=tempi+1
-			ontape -s -L 0;
-		done
-		log4s debug "增加逻辑日志结束"
-
-		onmode -l;
-		onmode -c;
-		onparams -d -l 4 <<EOF
-y
-EOF
-		if [ $testflag = 1 ]
-		then
-			log4s debug "删除逻辑日志4结束"
-			onstat -l;
-		fi
-		onparams -d -l 5 <<EOF
-y
-EOF
-		if [ $testflag = 1 ]
-		then
-			log4s debug "删除逻辑日志5结束"
-			onstat -l;
-		fi
-		onparams -d -l 6 <<EOF
-y
-EOF
-		if [ $testflag = 1 ]
-		then
-			log4s debug "删除逻辑日志6结束"
-			onstat -l;
-		fi
-	else
 	for i in {1..36}
 	do
 		onparams -a -d logdbs -s 200000;
 		let i+=1
 
 	done
-	onmode -l;
-	onmode -c;
-	onparams -d -l 3 <<EOF
-y
-EOF
 	ontape -s -L 0;
 	onparams -d -l 2 <<EOF
 y
@@ -3194,10 +2809,31 @@ EOF
 	onparams -d -l 6 <<EOF
 y
 EOF
-	fi
-
 	let physize=sizephydbs1*95/100
 	onparams -p -s $physize -d phydbs -y;
+	ontape -s -L 0;
+	onparams -d -l 2 <<EOF
+y
+EOF
+
+	onparams -d -l 3 <<EOF
+y
+EOF
+	onparams -d -l 4 <<EOF
+y
+EOF
+	onparams -d -l 5 <<EOF
+y
+EOF
+	onparams -d -l 6 <<EOF
+y
+EOF
+	for i in {1..6}
+	do
+		onparams -a -d logdbs -s 200000;
+		let i+=1
+
+	done
 	ontape -s -L 0;
 	log4s info "主机安装完成：等待备机安装完成信号。"
 	if [ X$hdrflag != Xonly ]
@@ -3225,12 +2861,7 @@ EOF
 	
 }
 
-qinglilv()
-{
-	lvremove $1<<EOF
-y
-EOF
-}
+
 qingli()
 {
 	wai2=`whoami`
@@ -3273,31 +2904,10 @@ qingli()
 		killall nc
 		sleep 1
 		killall nc
-		shifouchuangjianpv=`grep "^shifouchuangjianpv=" tempIFX12.sh |awk -F'=' '{print $2}'`
-		shifouchuangjianvg=`grep "^shifouchuangjianvg=" tempIFX12.sh |awk -F'=' '{print $2}'`
-		shifouchuangjianlv=`grep "^shifouchuangjianlv=" tempIFX12.sh |awk -F'=' '{print $2}'`
+		
 		vgname=`grep "^vgname=" tempIFX12.sh |awk -F'=' '{print $2}'`
 		devname=`grep "^devname=" tempIFX12.sh |awk -F'=' '{print $2}'`
-		if [ X$shifouchuangjianlv = Xy ] && [ X$vgname != X ]
-		then
-			qinglilv /dev/$vgname/rootdbs1;
-			qinglilv /dev/$vgname/tempdbs1;
-			qinglilv /dev/$vgname/tempdbs2;
-			qinglilv /dev/$vgname/logdbs1;
-			qinglilv /dev/$vgname/phydbs1;
-			qinglilv /dev/$vgname/userdbs1;
-			qinglilv /dev/$vgname/userdbs2;
-			qinglilv /dev/$vgname/userdbs3;
-			qinglilv /dev/$vgname/userdbs4;
-			qinglilv /dev/$vgname/userdbs5;
-			qinglilv /dev/$vgname/chargedbs1;
-			qinglilv /dev/$vgname/chargedbs2;
-			qinglilv /dev/$vgname/minfodbs1;
-			qinglilv /dev/$vgname/minfodbs2;
-			qinglilv /dev/$vgname/servdbs1;
-			qinglilv /dev/$vgname/servdbs2;
-		fi
-		if [ X$vgname != X ] && [ X$shifouchuangjianvg = Xy ]
+		if [ X$vgname != X ]
 		then
 			vgremove $vgname <<-EOF
 			y
@@ -3319,7 +2929,7 @@ qingli()
 			y
 EOF
 		fi
-		if [ X$devname != X ] && [ X$shifouchuangjianpv = Xy ]
+		if [ X$devname != X ]
 		then
 			pvremove $devname
 		fi
@@ -3328,27 +2938,7 @@ EOF
 		echo "需要用root账户"
 	fi
 }
-xiufu()
-{
-	wai2=`whoami`
-	if [ X$wai2 = Xinformix ]
-	then
-		log4s info "修改配置文件运行初始化"
-		tempanzhuangwenjian=`grep "^priONCONFIG" /tmp/tempIFX12.sh |awk -F'=' '{print $2}'`
-		peizhi=$idshome/etc/$tempanzhuangwenjian
-		tihuan "^FULL_DISK_INIT.*" "FULL_DISK_INIT  1"
-		log4s info "停止数据库"
-		onmode -ky;
-		log4s info "清空online.log"
-		>/home/informix/online.log
-		sleep 3;
-		log4s info "重新初始化数据库"
-		oninit -ivy 
-	else
-		log4s error "需要用informix账户"
-		exit 1
-	fi
-}
+
 if [ $# = 1 ] && [ $1 = anzhuang ]
 then
 	anzhuang
@@ -3364,8 +2954,4 @@ fi
 if [ $# = 1 ] && [ $1 = client ]
 then
 	client
-fi
-if [ $# = 1 ] && [ $1 = xiufu ]
-then
-	xiufu
 fi
