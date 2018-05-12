@@ -705,18 +705,6 @@ CheckP()
 		echo "系统版本暂不支持，请联系脚本开发人员"
 		exit 1;
 	fi
-	ncanzhuang=`rpm -q nc|wc -l|awk '{print $1}'`
-	if [ X$ncanzhuang != X1 ]
-	then
-		echo "请安装nc后再执行脚本"
-		exit 1;
-	fi
-	rshanzhuang1=`rpm -q rsh|wc -l|awk '{print $1}'`
-	if [ X$rshanzhuang1 != X1 ] || [ ! -f /etc/xinetd.d/rsh ]
-	then
-		echo "请确认安装rsh后再执行脚本"
-		exit 1;
-	fi
 }
 InputAndCheck()
 {
@@ -2212,7 +2200,7 @@ EOF
 		fi
 	fi
 	log4s info "修改内核参数"
-	kernel_shmmaxnum=`grep "kernel.shmmax = 439,80465,11104" /etc/sysctl.conf|wc -l`
+	kernel_shmmaxnum=`grep "kernel.shmmax = 4398046511104" /etc/sysctl.conf|wc -l`
 	kernel_shmmninum=`grep "kernel.shmmni = 4096" /etc/sysctl.conf|wc -l`
 	kernel_shmallnum=`grep "kernel.shmall = 67108864" /etc/sysctl.conf|wc -l`
 	kernel_semnum=`grep "kernel.sem = 250 32000 32 4096" /etc/sysctl.conf|wc -l`
