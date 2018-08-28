@@ -1,8 +1,7 @@
 #!/bin/sh
 
-version=1.1
-#1.0优化内容：支持fc8和fc10，自动检测，使用最高版本
-#1.1优化内容：更多提示，输入监控前置。本地盘方式支持优化。单机安装优化。内核参数核查机制变更。
+version=1.0
+#支持fc8和fc10，待优化单机和本地盘方式
 
 #架构重置版
 #############################################
@@ -37,9 +36,9 @@ informixgroupid=200
 informixuserid=200
 informixhome=/home/informix		#informix的home目录
 idshome=/ids									#软件安装目录
-INFORMIXDIR=$idshome
-log=$idshome/rizhi.log
-alreadyornolog=$idshome/instalready.log
+INFORMIXDIR=/ids
+log=/ids/rizhi.log
+alreadyornolog=/ids/instalready.log
 banbenlist=("fc8" "fc10")
 declare -A anzhuangbaolist=(["fc8"]="Informix_Enterprise_12.10.FC8W1_LIN-x86_64_IFix.tar" ["fc10"]="Informix_Enterprise_12.10.FC10_LIN-x86_64_Fixpack.tar")
 declare -A filesizelist=(["fc8"]="564142080" ["fc10"]="402227200")
@@ -67,10 +66,23 @@ else
 	tsizeuserdbs1G=50
 fi
 
+#写这里，安装包分辨
+for banbenlisti in ${banbenlist[*]}; do
+	if [ -f ${anzhuangbaolist[$banbenlisti]} ]
+	then
+		anzhuangbao=${anzhuangbaolist[$banbenlisti]}
+		filesize=${filesizelist[$banbenlisti]}
+	fi
+done
+if [ X$anzhuangbao = X ] || [ X$filesize = X ]
+then
+	log4s error "安装包不存在"
+	exit 1;
+fi
 
 #############基础函数，不要动###############################
 ################log4s配置区#################
-log4spath=$idshome								#输出日志目录
+log4spath=/ids								#输出日志目录
 log4sechoCategory=info				#输出到屏幕日志级别名称，级别按照debug=0，warn=1，info=2，error=3
 log4swriteCategory=debug			#输出到文件日志级别名称，级别按照debug=0，warn=1，info=2，error=3
 log4slogname=root.log					#输出日志名称
@@ -79,19 +91,10 @@ splittype=none								#日志分割方式，none不分割，day按照日期分割后缀名为YYYY-MM-
 splitnum=1000
 
 X86=`uname -m`
-releaseBANBEN=`cat /etc/redhat-release |awk '{print $1}'|tr '[a-z]' '[A-Z]'`
 XITONGTEMP=`uname`
 XITONG=`echo $XITONGTEMP|tr '[a-z]' '[A-Z]'`  #系统类型
 xtong=`echo $XITONG|tr '[A-Z]' '[a-z]'`
-if [ X$releaseBANBEN = XRED ]
-then
-	#是红帽系统
-	XTBANBEN=`lsb_release -a|grep Release|awk '{print $2}'`  #获取系统版本
-elif [ X$releaseBANBEN = XCENTOS ]
-then
-	#是centos
-	XTBANBEN=`cat /etc/redhat-release |awk '{print $4}'|awk 'BEGIN{FS=".";OFS="."} {print $1,$2}'` #获取系统版本
-fi
+XTBANBEN=`lsb_release -a|grep Release|awk '{print $2}'`  #获取系统版本
 tXTBB=$(echo $XTBANBEN |awk '{print $1*100}')
 cpunumtemp=`cat /proc/cpuinfo|grep processor|wc -l`
 let cpunum=cpunumtemp-1
@@ -196,7 +199,7 @@ log4s()                       #$1是级别，$2是内容
 	fi
 	if [ ! -f $log4slog ]
 	then
-		#echo "log4s日志不存在，创建log4s日志文件"
+		echo "log4s日志不存在，创建log4s日志文件"
 		echo "$nowdate log4s日志不存在，创建log4s日志文件" >> $log4slog
 		chmod 777 $log4slog
 	fi
@@ -274,24 +277,7 @@ log4s()                       #$1是级别，$2是内容
 		echo "$nowdate log4s.${log4sinlevel}   $2" >> $log4slog
 	fi
 }
-querenanzhuangbao()
-{
-	#安装包分辨
-	for banbenlisti in ${banbenlist[*]}; do
-		if [ -f ${anzhuangbaolist[$banbenlisti]} ]
-		then
-			log4s debug "安装包设置为${anzhuangbaolist[$banbenlisti]}"
-			anzhuangbao=${anzhuangbaolist[$banbenlisti]}
-			filesize=${filesizelist[$banbenlisti]}
-			log4s debug "安装包大小应该为$filesize"
-		fi
-	done
-	if [ X$anzhuangbao = X ] || [ X$filesize = X ]
-	then
-		log4s error "安装包不存在"
-		exit 1;
-	fi
-}
+
 SendAlarm()
 {
 	echo "$1";
@@ -330,8 +316,8 @@ gai65()
 }
 makeonspace()
 {
-	#onspaces -c -d logdbs -p $idshome/dbfiles/logdbs1 -o 0 -s $sizelogdbs1;
-	#$1是logdbs，$2是$idshome/dbfiles/logdbs1，$3是$sizelogdbs1，$4是决定是-c -d 还是-a
+	#onspaces -c -d logdbs -p /ids/dbfiles/logdbs1 -o 0 -s $sizelogdbs1;
+	#$1是logdbs，$2是/ids/dbfiles/logdbs1，$3是$sizelogdbs1，$4是决定是-c -d 还是-a
 	if [ $3 != 0 ]
 	then
 		let onspacetempsize=$3*1000000
@@ -474,8 +460,8 @@ tihuan()
 }
 tihuanaao()
 {
-	log4s debug "将$idshome/aaodir/adtcfg中的\"$1\" 修改为 \"$2\""
-	tihuanbasic "$1" "$2" $idshome/aaodir/adtcfg
+	log4s debug "将/ids/aaodir/adtcfg中的\"$1\" 修改为 \"$2\""
+	tihuanbasic "$1" "$2" /$idshome/aaodir/adtcfg
 }
 xiugai()
 {
@@ -510,9 +496,9 @@ Pip()
 
 Pnum()
 {
-	Pnumtmp1=`echo "$*"|sed s#[[:space:]]##g`
+	Pnumtmp1=`echo $1|sed s#[[:space:]]##g`
 	Pnumtmp2=`echo $Pnumtmp1|sed s#[[:digit:]]##g`
-	Pnumold1=`echo "$*"|wc -L|awk '{print $1}'`
+	Pnumold1=`echo $1|wc -L|awk '{print $1}'`
 	Pnumold2=`echo $Pnumtmp1|wc -L|awk '{print $1}'`
 	Pnumnew=`echo $Pnumtmp2|wc -L|awk '{print $1}'`
 	if [ X$Pnumold1 = X$Pnumold2 ] && [ X0 = X$Pnumnew ] && [ XPnumold1 != X0 ]
@@ -619,9 +605,6 @@ priip=XXXXXX
 secip=XXXXXX
 priappip=XXXXXX
 secappip=XXXXXX
-shifouquerenlvorfs=XXXXXX
-lvorfs=XXXXXX
-shifouquerendbssize=XXXXXX
 lvrootdbs1=XXXXXX
 lvtempdbs1=XXXXXX
 lvtempdbs2=XXXXXX
@@ -729,9 +712,9 @@ CheckP()
 		exit 1;
 	fi
 	FILEsize=`stat -c %s /tmp/$anzhuangbao`
-	if [ X$FILEsize != X$filesize ]
+	if [ X$FILEsize != X564142080 ]
 	then
-		log4s error "文件大小不正确，请核对后再进行，大小应为$filesize字节";
+		log4s error "文件大小不正确，请核对后再进行，大小应为554557440字节";
 		exit 0;
 	fi
 	if [ $tXTBB -le 590 ] || [ $tXTBB -ge 760 ]
@@ -751,15 +734,9 @@ CheckP()
 		echo "请确认安装rsh后再执行脚本"
 		exit 1;
 	fi
-	which nc 1>/dev/null 2>&1
-	if [ $? != 0 ]
-	then
-		echo "当前主机没有nc，请务必确保安装"
-	fi
 }
 InputAndCheck()
 {
-	echo "开始安装，当前版本为$version，每一块输入后都有二次确认，如有输入错误可以选择n，则该模块重新输入"
 	while [[ X$hdrflag != Xhdr  && X$hdrflag != Xonly && X$hdrflag != Xsec && X$hdrflag != Xpri && X$hdrflag != Xclient ]]
 	do
 		read -p "请设置安装模式，1、单机模式请输入only；2、主备双机hdr模式，请输入hdr（只在主机执行该脚本即可）；3、安装客户端模式请输入client： " hdrflaginput
@@ -795,21 +772,21 @@ InputAndCheck()
 		if [ X$hdrflaginput = Xonly ]
 		then
 			log4s info "单机配置开始"
-			echo "下面开始输入数据库主实例名，也就是在onconfig中配置的数据库实例名servername"
-			read -p "请输入主实例名，比如hdr1，[默认为hdr1] ： " priINFORMIXSERVER
-			log4s debug "输入的主实例名为$priINFORMIXSERVER"
+			echo "下面开始输入数据库实例名，也就是在sqlhosts中配置的数据库实例名"
+			read -p "请输入主机实例名，比如hdr1，[默认为hdr1] ： " priINFORMIXSERVER
+			log4s debug "输入的主机实例名为$priINFORMIXSERVER"
 			if [ X$priINFORMIXSERVER = X ]
 			then
 				priINFORMIXSERVER=hdr1
-				log4s debug "主实例名为空，设置主实例名priINFORMIXSERVER为默认值hdr1"
+				log4s debug "主机实例名为空，设置主机实例名priINFORMIXSERVER为默认值hdr1"
 				priONCONFIG=onconfig.$priINFORMIXSERVER
 				log4s debug "设置配置名priONCONFIG为onconfig.$priINFORMIXSERVER"
 			else
 				priONCONFIG=onconfig.${priINFORMIXSERVER}
-				log4s debug "输入的主实例名priINFORMIXSERVER不为空，值为$priINFORMIXSERVER"
+				log4s debug "输入的主机实例名priINFORMIXSERVER不为空，值为$priINFORMIXSERVER"
 				log4s debug "设置配置名priONCONFIG为onconfig.$priINFORMIXSERVER"
 			fi
-			read -p "请输入主机业务实例名，也就是onconfig中的alisename，比如appdb1，务必不能与主实例名相同，[默认为appdb1] ： " priDBSERVERALIASES
+			read -p "请输入主机业务实例名，比如appdb1，[默认为appdb1] ： " priDBSERVERALIASES
 			log4s debug "输入的业务实例名priDBSERVERALIASES为$priDBSERVERALIASES"
 			if [ X$priDBSERVERALIASES = X ]
 			then
@@ -817,29 +794,19 @@ InputAndCheck()
 				log4s debug "输入的业务实例名为空，priDBSERVERALIASES设置为默认值appdb1"
 			fi
 			echo `ifconfig -a|grep "inet addr"|grep -v '127.0.0.1'|awk '{print $2}'|awk -F':' '{print $2}'`
-
-			read -p "请输入主实例对外ip："			priip
-			while [[ X$priip = X ]]
-			do
-				read -p "主实例对外ip，不能为空，请重新输入"  priip
-			done
-			read -p "请输入业务实例对外ip："	priappip
-			while [[ X$priappip = X ]]
-			do
-				read -p "业务实例对外ip，不能为空，请重新输入"  priappip
-			done
+			echo "上面的ip是当前主机的所有ip，请按照提示输入主备机相关ip，备机相关ip请去备机查看"
+			read -p "请输入心跳线ip："			priip
+			read -p "请输入主机业务ip："	priappip
 			echo "下面是刚才输入的配置"
-			echo "主实例名： $priINFORMIXSERVER"
+			echo "心跳线实例名： $priINFORMIXSERVER"
 			echo "业务实例名：   $priDBSERVERALIASES"
-			echo "主实例ip：     $priip"
+			echo "心跳线ip：     $priip"
 			echo "业务实例ip：   $priappip"
-			log4s debug "输入的主实例ip为$priip"
-			log4s debug "输入的业务实例ip为$priappip"
+			log4s debug "输入的心跳线ip为$priip"
+			log4s debug "输入的业务ip为$priappip"
 			read -p "配置是否正确，如果正确请输入[y/n]：" peizhiqueren
 			log4s debug "输入的确认配置为$peizhiqueren"
 		fi
-		#单机模式结束
-		
 		#hdr模式
 		if [ X$hdrflaginput = Xhdr ]
 		then
@@ -1004,11 +971,11 @@ InputAndCheck()
 					log4s info "输入备机业务ip不能为空，请重新输入"
 					read -p "请输入备机业务ip，[无默认值]：" secappip
 				done
-				read -p "请输入逻辑日志备份方式，alarmprogram为普通方式，备份使用alarmprogram备份到/dev/null；alarmAPI为使用alarmAPI方式，[建议为alarmprogram]：" templtapedev
+				read -p "请输入逻辑日志备份方式，alarmprogram为普通方式，备份使用alarmprogram备份到/dev/null；alarmAPI为使用alarmAPI方式，[默认为alarmprogram]：" templtapedev
 				while [[ X$templtapedev = X || X$templtapedev = XXXXXXX ]]
 				do
 					log4s info "输入逻辑日志备份方式不能为空，请重新输入"
-					read -p "请输入逻辑日志备份方式，alarmprogram为普通方式，备份使用alarmprogram备份到/dev/null；alarmAPI为使用alarmAPI方式，[建议为alarmprogram]：" templtapedev
+					read -p "请输入逻辑日志备份方式，alarmprogram为普通方式，备份使用alarmprogram备份到/dev/null；alarmAPI为使用alarmAPI方式，[默认为alarmprogram]：" templtapedev
 				done
 				while [[ $templtapedev != alarmprogram && $templtapedev != alarmAPI && $templtapedev != alarmapi ]]
 				do
@@ -1154,14 +1121,10 @@ InputAndCheck()
 				fi
 			fi
 		fi
-		#hdr模式结束
-		
-		#client模式
 		if [ X$hdrflaginput = Xclient ]
 		then
 			client
 		fi
-		#client模式结束
 	done
 	#设置配置文件
 	if [ X$hdrflag = Xpri ]
@@ -1185,746 +1148,211 @@ InputAndCheck()
 		DBSERVERNAME=$priDBSERVERNAME
 		DBSERVERALIASES=$priDBSERVERALIASES
 	fi
-	
-	while [[ $shifouquerenlvorfs != [Yy] ]]
+	#磁盘划分
+		#创建pv
+	while [[ $shifouchuangjianpv != [YyNn] ]]
 	do
-		read -p "请选择使用裸设备方式还是熟文件方式[裸设备请输入：lv    熟文件请输入：fs]：" lvorfs
-		lvorfs=`echo $lvorfs|tr '[A-Z]' '[a-z]'`
-		if [ X$lvorfs = Xlv ]
+		read -p "是否需要创建PV，如果创建pv，请输入[y/n]：" shifouchuangjianpv;
+		if [ X$shifouchuangjianpv = X ]
 		then
-			read -p "您选择的裸设备方式，是否确认[y/n]：" shifouquerenlvorfs
-		elif [ X$lvorfs = Xfs ]
-		then
-			read -p "您选择的熟文件方式，是否确认[y/n]：" shifouquerenlvorfs
-		else
-			log4s info "您输入的是[$lvorfs]，输入不合法，请重新输入lv或fs"
+			#防止while中判断异常
+			shifouchuangjianpv=x
 		fi
 	done
-	log4s debug "当前输入的dbs方式为$lvorfs"
-	
-	#使用lv方式
-	if [ X$lvorfs = Xlv ]
+	if [ X$shifouchuangjianpv = Xy ] || [ X$shifouchuangjianpv = XY ]
 	then
-		#磁盘划分
-		
-		#创建pv
-		while [[ $shifouchuangjianpv != [YyNn] ]]
-		do
-			read -p "是否需要创建PV，如果创建pv，请输入[y/n]：" shifouchuangjianpv;
-			if [ X$shifouchuangjianpv = X ]
-			then
-				#防止while中判断异常
-				shifouchuangjianpv=x
-			fi
-		done
-		if [ X$shifouchuangjianpv = Xy ] || [ X$shifouchuangjianpv = XY ]
+		#这里的判断devname是为了备机得到的devname是需要创建的devname了，不需要在输入
+		shifouchuangjianpv=y
+		log4s info "需要创建pv"
+		if [ X$devname = XXXXXXX ]
 		then
-			#这里的判断devname是为了备机得到的devname是需要创建的devname了，不需要在输入
-			shifouchuangjianpv=y
-			log4s info "需要创建pv"
+			while [[ $shifouqueredevname != [Yy] ]]
+			do
+				shifouqueredevname=y
+				read -p "请输入硬盘全路径，比如/dev/sdb，[没有默认值]："  devname
+				while [[ X$devname = X ]]
+				do
+					log4s info "硬盘全路径不能为空，请重新输入"
+					read -p "请输入硬盘全路径，比如/dev/sdb，[没有默认值]：" devname
+				done
+				read -p "请务必确认硬盘路径是否为$devname，如果输入错误将造成不可预知的问题[y/n]：" shifouqueredevname
+				while [[ X$shifouqueredevname = X ]]
+				do
+					log4s info "是否确认硬盘路径不能为空，请重新输入"
+					read -p "请务必确认硬盘路径是否为$devname，如果输入错误将造成不可预知的问题[y/n]：" shifouqueredevname
+				done
+				while [[ $shifouqueredevname != [YyNn] ]]
+				do
+					log4s info "是否确认硬盘路径输入非法，请重新输入"
+					read -p "请务必确认硬盘路径是否为$devname，如果输入错误将造成不可预知的问题[y/n]：" shifouqueredevname
+				done
+				log4s debug "shifouqueredevname的值为$shifouqueredevname"
+				log4s debug "创建pv的路径为$devname"
+				if [ X$shifouqueredevname != XY ] && [ X$shifouqueredevname != Xy ]
+				then
+					shifouqueredevname=N
+				fi
+			done
+		fi
+	else
+		shifouchuangjianpv=n
+	fi
+	
+		#创建vg
+	while [[ $shifouchuangjianvg != [YyNn] ]]
+	do
+		read -p "是否需要创建VG，如果创建vg，请输入y/n ：" shifouchuangjianvg;
+		if [ X$shifouchuangjianvg = X ]
+		then
+			shifouchuangjianvg=x
+		fi
+	done
+	if [ X$shifouchuangjianvg = Xy ] || [ X$shifouchuangjianvg = XY ]
+	then
+		log4s info "需要创建vg"
+		while [[ $shifouqueredevname1 != [Yy] ]]
+		do
 			if [ X$devname = XXXXXXX ]
 			then
-				while [[ $shifouqueredevname != [Yy] ]]
+				read -p "请输入pv的名称，比如/dev/sdb，[没有默认值]："  devname
+				while [[ X$devname = X ]]
 				do
-					shifouqueredevname=y
-					read -p "请输入硬盘全路径，比如/dev/sdb，[没有默认值]："  devname
-					while [[ X$devname = X ]]
-					do
-						log4s info "硬盘全路径不能为空，请重新输入"
-						read -p "请输入硬盘全路径，比如/dev/sdb，[没有默认值]：" devname
-					done
-					read -p "请务必确认硬盘路径是否为$devname，如果输入错误将造成不可预知的问题[y/n]：" shifouqueredevname
-					while [[ X$shifouqueredevname = X ]]
-					do
-						log4s info "是否确认硬盘路径不能为空，请重新输入"
-						read -p "请务必确认硬盘路径是否为$devname，如果输入错误将造成不可预知的问题[y/n]：" shifouqueredevname
-					done
-					while [[ $shifouqueredevname != [YyNn] ]]
-					do
-						log4s info "是否确认硬盘路径输入非法，请重新输入"
-						read -p "请务必确认硬盘路径是否为$devname，如果输入错误将造成不可预知的问题[y/n]：" shifouqueredevname
-					done
-					log4s debug "shifouqueredevname的值为$shifouqueredevname"
-					log4s debug "创建pv的路径为$devname"
-					if [ X$shifouqueredevname != XY ] && [ X$shifouqueredevname != Xy ]
-					then
-						shifouqueredevname=N
-					fi
-				done
+					log4s info "pv的名称不能为空，请重新输入"
+					read -p "请输入pv的名称，比如/dev/sdb，[没有默认值]：" devname
+				done 
+				log4s info "pv是手动创建，所以需要输入创建的pv名称，为：$devname"
 			fi
-		else
-			shifouchuangjianpv=n
-		fi
-		#创建pv结束
-		
-		#创建vg
-		while [[ $shifouchuangjianvg != [YyNn] ]]
-		do
-			read -p "是否需要创建VG，如果创建vg，请输入y/n ：" shifouchuangjianvg;
-			if [ X$shifouchuangjianvg = X ]
+			read -p "请输入vg的名称，比如dbvg，[没有默认值]：" vgname;
+			while [[ X$vgname = X ]]
+			do
+				log4s info "vg的名称不能为空，请重新输入"
+				read -p "请输入vg的名称，比如dbvg，[没有默认值]：" vgname
+			done 
+			read -p "请务必确认vg名称是否为$vgname，如果输入错误将造成不可预知的问题[Y/N]：" shifouqueredevname1
+			while [[ X$shifouqueredevname1 = X ]]
+			do
+				log4s info "是否确认vg名称，不能为空请重新输入"
+				read -p "请务必确认vg名称是否为$vgname，如果输入错误将造成不可预知的问题[Y/N]：" shifouqueredevname1
+			done
+			while [[ $shifouqueredevname1 != [YyNn] ]]
+			do
+				log4s info "是否确认vg名称，输入非法，请重新输入"
+				read -p "请务必确认vg名称是否为$vgname，如果输入错误将造成不可预知的问题[Y/N]：" shifouqueredevname1
+			done
+			if [ X$shifouqueredevname1 != XY ] && [ X$shifouqueredevname1 != Xy ]
 			then
-				shifouchuangjianvg=x
+				shifouqueredevname1=N
 			fi
 		done
-		if [ X$shifouchuangjianvg = Xy ] || [ X$shifouchuangjianvg = XY ]
+	else
+	shifouchuangjianvg=n
+	fi
+	
+	#创建lv
+	while [[ $shifouchuangjianlv != [YyNn] ]]
+	do
+		read -p "是否需要创建LV，如果创建LV，请输入y/n：" shifouchuangjianlv;
+		if [ X$shifouchuangjianlv = X ] || [ X$shifouchuangjianlv = XXXXXXXX ]
 		then
-			log4s info "需要创建vg"
-			while [[ $shifouqueredevname1 != [Yy] ]]
-			do
-				if [ X$devname = XXXXXXX ]
-				then
-					read -p "请输入pv的名称，比如/dev/sdb，[没有默认值]："  devname
-					while [[ X$devname = X ]]
-					do
-						log4s info "pv的名称不能为空，请重新输入"
-						read -p "请输入pv的名称，比如/dev/sdb，[没有默认值]：" devname
-					done 
-					log4s info "pv是手动创建，所以需要输入创建的pv名称，为：$devname"
-				fi
-				read -p "请输入vg的名称，比如dbvg，[没有默认值]：" vgname;
+			shifouchuangjianlv=x
+		fi
+	done
+	if [ X$shifouchuangjianlv = Xy ] || [ X$shifouchuangjianlv = XY ]
+	then
+		log4s info "需要创建lv"
+		if [ X$shifouchuangjianvg = XN ] || [ X$shifouchuangjianvg = Xn ]
+		then
+			log4s info "之前没有通过脚本创建vg，需要指定vg名称和devname"
+			if [ X$hdrflag = Xsec ]
+			then
+				log4s info "备机自动自动读取配置"
+			else
+				read -p "请输入vg名称，比如dbvg，[没有默认值]："  vgname
 				while [[ X$vgname = X ]]
 				do
-					log4s info "vg的名称不能为空，请重新输入"
-					read -p "请输入vg的名称，比如dbvg，[没有默认值]：" vgname
-				done 
-				read -p "请务必确认vg名称是否为$vgname，如果输入错误将造成不可预知的问题[Y/N]：" shifouqueredevname1
-				while [[ X$shifouqueredevname1 = X ]]
-				do
-					log4s info "是否确认vg名称，不能为空请重新输入"
-					read -p "请务必确认vg名称是否为$vgname，如果输入错误将造成不可预知的问题[Y/N]：" shifouqueredevname1
+					log4s info "vg名称不能为空，请重新输入"
+					read -p "请输入vg名称，比如dbvg，[没有默认值]：" vgname
 				done
-				while [[ $shifouqueredevname1 != [YyNn] ]]
+				read -p "请输入pv的名称，比如/dev/sdb，[没有默认值]："  devname
+				while [[ X$devname = X ]]
 				do
-					log4s info "是否确认vg名称，输入非法，请重新输入"
-					read -p "请务必确认vg名称是否为$vgname，如果输入错误将造成不可预知的问题[Y/N]：" shifouqueredevname1
+					log4s info "pv名称不能为空，请重新输入"
+					read -p "请输入pv的名称，比如/dev/sdb，[没有默认值]：" devname
 				done
-				if [ X$shifouqueredevname1 != XY ] && [ X$shifouqueredevname1 != Xy ]
-				then
-					shifouqueredevname1=N
-				fi
-			done
-		else
-		shifouchuangjianvg=n
+				log4s info "vg是手动创建的，需要输入vg和pv的名称，vg名称为：$vgname，pv的名称为$devname"
+			fi
 		fi
-		#创建vg结束
-		
-		#创建lv
-		while [[ $shifouchuangjianlv != [YyNn] ]]
+		while [[ $shifoutiaozhenglvsize != [YyNn] ]]
 		do
-			read -p "是否需要创建LV，如果创建LV，请输入y/n：" shifouchuangjianlv;
-			if [ X$shifouchuangjianlv = X ] || [ X$shifouchuangjianlv = XXXXXXXX ]
-			then
-				shifouchuangjianlv=x
-			fi
-		done
-		if [ X$shifouchuangjianlv = Xy ] || [ X$shifouchuangjianlv = XY ]
-		then
-			log4s info "需要创建lv"
-			if [ X$shifouchuangjianvg = XN ] || [ X$shifouchuangjianvg = Xn ]
-			then
-				log4s info "之前没有通过脚本创建vg，需要指定vg名称和devname"
-				if [ X$hdrflag = Xsec ]
-				then
-					log4s info "备机自动自动读取配置"
-				else
-					read -p "请输入vg名称，比如dbvg，[没有默认值]："  vgname
-					while [[ X$vgname = X ]]
-					do
-						log4s info "vg名称不能为空，请重新输入"
-						read -p "请输入vg名称，比如dbvg，[没有默认值]：" vgname
-					done
-					read -p "请输入pv的名称，比如/dev/sdb，[没有默认值]："  devname
-					while [[ X$devname = X ]]
-					do
-						log4s info "pv名称不能为空，请重新输入"
-						read -p "请输入pv的名称，比如/dev/sdb，[没有默认值]：" devname
-					done
-					log4s info "vg是手动创建的，需要输入vg和pv的名称，vg名称为：$vgname，pv的名称为$devname"
-				fi
-			fi
+			echo "默认lv大小为rootdbs=$tsizerootdbs1G,tempdbs1=$tsizetempdbs1G,tempdbs2=$tsizetempdbs2G,logdbs1=$tsizelogdbs1G,phydbs1=$tsizephydbs1G,userdbs1=$tsizeuserdbs1G，单位为G"
+			read -p "是否需要调整lv大小，请输入[y/n] ：" shifoutiaozhenglvsize;
+			while [[ X$shifoutiaozhenglvsize = X ]]
+			do
+				log4s info "是否调整lv大小不能为空，请重新输入"
+				read -p "是否需要调整lv大小，请输入[y/n] ：" shifoutiaozhenglvsize
+			done
 			while [[ $shifoutiaozhenglvsize != [YyNn] ]]
 			do
-				echo "默认lv大小为rootdbs=$tsizerootdbs1G,tempdbs1=$tsizetempdbs1G,tempdbs2=$tsizetempdbs2G,logdbs1=$tsizelogdbs1G,phydbs1=$tsizephydbs1G,userdbs1=$tsizeuserdbs1G，单位为G"
-				read -p "是否需要调整lv大小，请输入[y/n] ：" shifoutiaozhenglvsize;
-				while [[ X$shifoutiaozhenglvsize = X ]]
-				do
-					log4s info "是否调整lv大小不能为空，请重新输入"
-					read -p "是否需要调整lv大小，请输入[y/n] ：" shifoutiaozhenglvsize
-				done
-				while [[ $shifoutiaozhenglvsize != [YyNn] ]]
-				do
-					log4s info "是否调整lv大小输入非法，请重新输入"
-					read -p "是否需要调整lv大小，请输入[y/n] ：" shifoutiaozhenglvsize
-				done
-				if [ X$shifoutiaozhenglvsize != XY ] && [ X$shifoutiaozhenglvsize != Xy ]
-				then
-					shifoutiaozhenglvsize=n
-				fi
+				log4s info "是否调整lv大小输入非法，请重新输入"
+				read -p "是否需要调整lv大小，请输入[y/n] ：" shifoutiaozhenglvsize
 			done
-			if [ X$shifoutiaozhenglvsize = Xy ] || [ X$shifoutiaozhenglvsize = XY ]
+			if [ X$shifoutiaozhenglvsize != XY ] && [ X$shifoutiaozhenglvsize != Xy ]
 			then
-				while [[ $shifouquerenlvsize != [Yy] ]]
-				do
-					echo "请输入调整后的大小，单位为G，只需要输入数字即可，请确保硬盘大小可以满足调整后的lv"
-					echo "如果不需要某个dbs则，[默认为0]。"
-					read -p "rootdbs1大小，  [必须创建]："					sizerootdbs1G
-					Pnum_sizerootdbs1G=`Pnum $sizerootdbs1G`
-					while [[ X$sizerootdbs1G = X || X$sizerootdbs1G = XN || X$sizerootdbs1G = Xn || X$sizerootdbs1G = X0 || X$Pnum_sizerootdbs1G = Xno ]]
-					do
-						log4s info "rootdbs1大小输入非法，请重新输入"
-						read -p "rootdbs1大小，  [必须创建]：" 			sizerootdbs1G
-						Pnum_sizerootdbs1G=`Pnum $sizerootdbs1G`
-					done
-					read -p "tempdbs1大小，  [必须创建]："					sizetempdbs1G
-					Pnum_sizetempdbs1G=`Pnum $sizetempdbs1G`
-					while [[ X$sizetempdbs1G = X || X$sizetempdbs1G = XN || X$sizetempdbs1G = Xn || X$sizetempdbs1G = X0 || X$Pnum_sizetempdbs1G = Xno ]]
-					do
-						log4s info "tempdbs1大小输入非法，请重新输入"
-						read -p "tempdbs1大小，  [必须创建]：" 			sizetempdbs1G
-						Pnum_sizetempdbs1G=`Pnum $sizetempdbs1G`
-					done
-					read -p "tempdbs2大小，  [必须创建]："					sizetempdbs2G
-					Pnum_sizetempdbs2G=`Pnum $sizetempdbs2G`
-					while [[ X$sizetempdbs2G = X || X$sizetempdbs2G = XN || X$sizetempdbs2G = Xn || X$sizetempdbs2G = X0 || X$Pnum_sizetempdbs2G = Xno ]]
-					do
-						log4s info "tempdbs2大小输入非法，请重新输入"
-						read -p "tempdbs2大小，  [必须创建]：" 			sizetempdbs2G
-						Pnum_sizetempdbs2G=`Pnum $sizetempdbs2G`
-					done
-					read -p "logdbs1大小，   [必须创建]："					sizelogdbs1G
-					Pnum_sizelogdbs1G=`Pnum $sizelogdbs1G`
-					while [[ X$sizelogdbs1G = X || X$sizelogdbs1G = XN || X$sizelogdbs1G = Xn || X$sizelogdbs1G = X0 || X$Pnum_sizelogdbs1G = Xno ]]
-					do
-						log4s info "logdbs1大小输入非法，请重新输入"
-						read -p "logdbs1大小，   [必须创建]：" 			sizelogdbs1G
-						Pnum_sizelogdbs1G=`Pnum $sizelogdbs1G`
-					done
-					read -p "phydbs1大小，   [必须创建]："					sizephydbs1G
-					Pnum_sizephydbs1G=`Pnum $sizephydbs1G`
-					while [[ X$sizephydbs1G = X || X$sizephydbs1G = XN || X$sizephydbs1G = Xn || X$sizephydbs1G = X0 || X$Pnum_sizephydbs1G = Xno ]]
-					do
-						log4s info "phydbs1大小输入非法，请重新输入"
-						read -p "phydbs1大小，   [必须创建]：" 			sizephydbs1G
-						Pnum_sizephydbs1G=`Pnum $sizephydbs1G`
-					done
-					read -p "userdbs1大小，  [必须创建]："					sizeuserdbs1G
-					Pnum_sizeuserdbs1G=`Pnum $sizeuserdbs1G`
-					while [[ X$sizeuserdbs1G = X || X$sizeuserdbs1G = XN || X$sizeuserdbs1G = Xn || X$sizeuserdbs1G = X0 || X$Pnum_sizeuserdbs1G = Xno ]]
-					do
-						log4s info "userdbs1大小输入非法，请重新输入"
-						read -p "userdbs1大小，  [必须创建]：" 			sizeuserdbs1G
-						Pnum_sizeuserdbs1G=`Pnum $sizeuserdbs1G`
-					done
-					read -p "userdbs2大小，  [不输入默认为不创建]："		sizeuserdbs2G
-					read -p "userdbs3大小，  [不输入默认为不创建]："		sizeuserdbs3G
-					read -p "userdbs4大小，  [不输入默认为不创建]："		sizeuserdbs4G
-					read -p "userdbs5大小，  [不输入默认为不创建]："		sizeuserdbs5G
-					read -p "chargedbs1大小，[不输入默认为不创建]："		sizechargedbs1G
-					read -p "chargedbs2大小，[不输入默认为不创建]："		sizechargedbs2G
-					read -p "minfodbs1大小， [不输入默认为不创建]："		sizeminfodbs1G
-					read -p "minfodbs2大小， [不输入默认为不创建]："		sizeminfodbs2G
-					read -p "servdbs1大小，  [不输入默认为不创建]："		sizeservdbs1G
-					read -p "servdbs2大小，  [不输入默认为不创建]："		sizeservdbs2G
-					if [ X$sizerootdbs1G = X ] || [ X$sizerootdbs1G = XN ] || [ X$sizerootdbs1G = Xn ] || [ X$sizerootdbs1G = X0 ]
-					then
-						sizerootdbs1G=0
-					fi
-					if [ X$sizetempdbs1G = X ] || [ X$sizetempdbs1G = XN ] || [ X$sizetempdbs1G = Xn ] || [ X$sizetempdbs1G = X0 ]
-					then
-						sizetempdbs1G=0
-					fi
-					if [ X$sizetempdbs2G = X ] || [ X$sizetempdbs2G = XN ] || [ X$sizetempdbs2G = Xn ] || [ X$sizetempdbs2G = X0 ]
-					then
-						sizetempdbs2G=0
-					fi
-					if [ X$sizelogdbs1G = X ] || [ X$sizelogdbs1G = XN ] || [ X$sizelogdbs1G = Xn ] || [ X$sizelogdbs1G = X0 ]
-					then
-						sizelogdbs1G=0
-					fi
-					if [ X$sizephydbs1G = X ] || [ X$sizephydbs1G = XN ] || [ X$sizephydbs1G = Xn ] || [ X$sizephydbs1G = X0 ]
-					then
-						sizephydbs1G=0
-					fi
-					if [ X$sizeuserdbs1G = X ] || [ X$sizeuserdbs1G = XN ] || [ X$sizeuserdbs1G = Xn ] || [ X$sizeuserdbs1G = X0 ]
-					then
-						sizeuserdbs1G=0
-					fi
-					if [ X$sizeuserdbs2G = X ] || [ X$sizeuserdbs2G = XN ] || [ X$sizeuserdbs2G = Xn ] || [ X$sizeuserdbs2G = X0 ]
-					then
-						sizeuserdbs2G=0
-					fi
-					if [ X$sizeuserdbs3G = X ] || [ X$sizeuserdbs3G = XN ] || [ X$sizeuserdbs3G = Xn ] || [ X$sizeuserdbs3G = X0 ]
-					then
-						sizeuserdbs3G=0
-					fi
-					if [ X$sizeuserdbs4G = X ] || [ X$sizeuserdbs4G = XN ] || [ X$sizeuserdbs4G = Xn ] || [ X$sizeuserdbs4G = X0 ]
-					then
-						sizeuserdbs4G=0
-					fi
-					if [ X$sizeuserdbs5G = X ] || [ X$sizeuserdbs5G = XN ] || [ X$sizeuserdbs5G = Xn ] || [ X$sizeuserdbs5G = X0 ]
-					then
-						sizeuserdbs5G=0
-					fi
-					if [ X$sizechargedbs1G = X ] || [ X$sizechargedbs1G = XN ] || [ X$sizechargedbs1G = Xn ] || [ X$sizechargedbs1G = X0 ]
-					then
-						sizechargedbs1G=0
-					fi
-					if [ X$sizechargedbs2G = X ] || [ X$sizechargedbs2G = XN ] || [ X$sizechargedbs2G = Xn ] || [ X$sizechargedbs2G = X0 ]
-					then
-						sizechargedbs2G=0
-					fi
-					if [ X$sizeminfodbs1G = X ] || [ X$sizeminfodbs1G = XN ] || [ X$sizeminfodbs1G = Xn ] || [ X$sizeminfodbs1G = X0 ]
-					then
-						sizeminfodbs1G=0
-					fi
-					if [ X$sizeminfodbs2G = X ] || [ X$sizeminfodbs2G = XN ] || [ X$sizeminfodbs2G = Xn ] || [ X$sizeminfodbs2G = X0 ]
-					then
-						sizeminfodbs2G=0
-					fi
-					if [ X$sizeservdbs1G = X ] || [ X$sizeservdbs1G = XN ] || [ X$sizeservdbs1G = Xn ] || [ X$sizeservdbs1G = X0 ]
-					then
-						sizeservdbs1G=0
-					fi
-					if [ X$sizeservdbs2G = X ] || [ X$sizeservdbs2G = XN ] || [ X$sizeservdbs2G = Xn ] || [ X$sizeservdbs2G = X0 ]
-					then
-						sizeservdbs2G=0
-					fi
-					echo "重新调整后的大小如下："
-					echo "rootdbs1大小：      $sizerootdbs1G"
-					echo "tempdbs1大小：      $sizetempdbs1G"
-					echo "tempdbs2大小：      $sizetempdbs2G"
-					echo "logdbs1大小：       $sizelogdbs1G"
-					echo "phydbs1大小：       $sizephydbs1G"
-					echo "userdbs1大小：      $sizeuserdbs1G"
-					echo "userdbs2大小：      $sizeuserdbs2G"
-					echo "userdbs3大小：      $sizeuserdbs3G"
-					echo "userdbs4大小：      $sizeuserdbs4G"
-					echo "userdbs5大小：      $sizeuserdbs5G"
-					echo "chargedbs1大小：    $sizechargedbs1G"
-					echo "chargedbs2大小：    $sizechargedbs2G"
-					echo "minfodbs1大小：     $sizeminfodbs1G"
-					echo "minfodbs2大小：     $sizeminfodbs2G"
-					echo "sizeservdbs1大小：  $sizeservdbs1G"
-					echo "sizeservdbs2大小：  $sizeservdbs2G"
-					read -p "是否确认调整后的大小，请输入[y/n]：" shifouquerenlvsize
-					while [[ X$shifouquerenlvsize = X ]]
-					do
-						log4s info "是否确认调整后大小，输入不能为空，请重新输入"
-						read -p "是否确认调整后的大小，请输入[y/n]：" shifouquerenlvsize
-					done
-					while [[ $shifouquerenlvsize != [Yy] ]]
-					do
-						log4s info "是否确认调整后大小，输入非法，请重新输入"
-						read -p "是否确认调整后的大小，请输入[y/n]：" shifouquerenlvsize
-					done
-					if [ X$shifouquerenlvsize = X ]
-					then
-						shifouquerenlvsize=n
-					fi
-					#先判断是否所有大小都是数字
-					Prootdbs1=`Pnum "$sizerootdbs1G"`
-					Ptempdbs1=`Pnum "$sizetempdbs1G"`
-					Ptempdbs2=`Pnum "$sizetempdbs2G"`
-					Plogdbs1=`Pnum "$sizelogdbs1G"`
-					Pphydbs1=`Pnum "$sizephydbs1G"`
-					Puserdbs1=`Pnum "$sizeuserdbs1G"`
-					Puserdbs2=`Pnum "$sizeuserdbs2G"`
-					Puserdbs3=`Pnum "$sizeuserdbs3G"`
-					Puserdbs4=`Pnum "$sizeuserdbs4G"`
-					Puserdbs5=`Pnum "$sizeuserdbs5G"`
-					Pchargedbs1=`Pnum "$sizechargedbs1G"`
-					Pchargedbs2=`Pnum "$sizechargedbs2G"`
-					Pminfodbs1=`Pnum "$sizeminfodbs1G"`
-					Pminfodbs2=`Pnum "$sizeminfodbs2G"`
-					Psizeservdbs1G=`Pnum "$sizeservdbs1G"`
-					Psizeservdbs2G=`Pnum "$sizeservdbs2G"`
-					if [ $Prootdbs1 = no ] || [ $Ptempdbs1 = no ] || [ $Ptempdbs2 = no ] || [ $Plogdbs1 = no ] || [ $Pphydbs1 = no ] || [ $Puserdbs1 = no ] || [ $Puserdbs2 = no ] || [ $Puserdbs3 = no ] || [ $Puserdbs4 = no ] || [ $Puserdbs5 = no ] || [ $Pchargedbs1 = no ] || [ $Pchargedbs2 = no ] || [ $Pminfodbs1 = no ] || [ $Pminfodbs2 = no ] || [ $Psizeservdbs1G = no ] || [ $Psizeservdbs2G = no ]
-					then
-						echo "输入dbs有不为数字的情况，请重新输入。"
-						shifouquerenlvsize=n
-						continue;
-					fi
-					if [ X$sizerootdbs1G = X0 ]
-					then
-						echo "rootdbs1不能为0"
-						shifouquerenlvsize=n
-						continue;
-					fi
-					if [ X$sizetempdbs1G = X0 ]
-					then
-						echo "tempdbs1"
-						shifouquerenlvsize=n
-						continue;
-					fi
-					if [ X$sizelogdbs1G = X0 ]
-					then
-						echo "logdbs1不能为0"
-						shifouquerenlvsize=n
-						continue;
-					fi
-					if [ X$sizephydbs1G = X0 ]
-					then
-						echo "phydbs1不能为0"
-						shifouquerenlvsize=n
-						continue;
-					fi
-					if [ X$sizeuserdbs1G = X0 ]
-					then
-						echo "userdbs1不能为0"
-						shifouquerenlvsize=n
-						continue;
-					fi
-					if [ X$shifouquerenlvsize != XY ] && [ X$shifouquerenlvsize != Xy ]
-					then
-						shifouquerenlvsize=n
-					fi
-					
-				done
+				shifoutiaozhenglvsize=n
 			fi
-			if [ $shifoutiaozhenglvsize = n ] || [ $shifoutiaozhenglvsize = N ]
-			then
-				sizerootdbs1G=$tsizerootdbs1G
-				sizetempdbs1G=$tsizetempdbs1G
-				sizetempdbs2G=$tsizetempdbs2G
-				sizelogdbs1G=$tsizelogdbs1G
-				sizephydbs1G=$tsizephydbs1G
-				sizeuserdbs1G=$tsizeuserdbs1G
-				sizeuserdbs2G=0
-				sizeuserdbs3G=0
-				sizeuserdbs4G=0
-				sizeuserdbs5G=0
-				sizeminfodbs1G=0
-				sizeminfodbs2G=0
-				sizeservdbs1G=0
-				sizeservdbs2G=0
-				sizechargedbs1G=0
-				sizechargedbs2G=0
-			fi
-			lvrootdbs1=/dev/$vgname/rootdbs1
-			lvtempdbs1=/dev/$vgname/tempdbs1
-			lvtempdbs2=/dev/$vgname/tempdbs2
-			lvlogdbs1=/dev/$vgname/logdbs1
-			lvphydbs1=/dev/$vgname/phydbs1
-			lvuserdbs1=/dev/$vgname/userdbs1
-			lvuserdbs2=/dev/$vgname/userdbs2
-			lvuserdbs3=/dev/$vgname/userdbs3
-			lvuserdbs4=/dev/$vgname/userdbs4
-			lvuserdbs5=/dev/$vgname/userdbs5
-			lvchargedbs1=/dev/$vgname/chargedbs1
-			lvchargedbs2=/dev/$vgname/chargedbs2
-			lvminfodbs1=/dev/$vgname/minfodbs1
-			lvminfodbs2=/dev/$vgname/minfodbs2
-			lvservdbs1=/dev/$vgname/servdbs1
-			lvservdbs2=/dev/$vgname/servdbs2
-			shifouquerenlvsize=y
-			lvmuluqueren=y
-		fi
-		#创建lv结束
-		
-		#不创建lv，指定lv路径
-		if [ $shifouchuangjianlv = N ] || [ $shifouchuangjianlv = n ]
+		done
+		if [ X$shifoutiaozhenglvsize = Xy ] || [ X$shifoutiaozhenglvsize = XY ]
 		then
-			log4s info "不需要创建lv，指定lv目录"
-			while [[ $lvmuluqueren != [Yy] ]]
-			do
-				if [ $muban = cl ]
-				then
-					read -p "请输入vg名称，比如dbvg，[没有默认值]：" vgname
-					while [[ X$vgname = X ]]
-					do
-						log4s info "vg名称不能为空，请重新输入"
-						read -p "请输入vg名称，比如dbvg，[没有默认值]：" vgname
-					done
-					echo "请根据提示输入各lv的目录，举例/dev/$vgname/rootdbs1"
-					echo "如果不需要这个dbs，则直接回车即可"
-					read -p "rootdbs1的目录，[必须创建]："		lvrootdbs1
-					while [[ X$lvrootdbs1 = X ]]
-					do
-						log4s info "rootdbs1的目录必须创建，请重新输入:"
-						read -p "rootdbs1的目录，[必须创建]："	lvrootdbs1
-					done
-					read -p "tempdbs1的目录，[必须创建]："		lvtempdbs1
-					while [[ X$lvtempdbs1 = X ]]
-					do
-						log4s info "tempdbs1的目录必须创建，请重新输入:"
-						read -p "tempdbs1的目录，[必须创建]："	lvtempdbs1
-					done
-					read -p "tempdbs2的目录，[必须创建]："		lvtempdbs2
-					while [[ X$lvtempdbs2 = X ]]
-					do
-						log4s info "tempdbs2的目录必须创建，请重新输入:"
-						read -p "tempdbs2的目录，[必须创建]："	lvtempdbs2
-					done
-					read -p "logdbs1的目录， [必须创建]："		lvlogdbs1
-					while [[ X$lvlogdbs1 = X ]]
-					do
-						log4s info "logdbs1的目录必须创建，请重新输入:"
-						read -p "logdbs1的目录，[必须创建]："	  logdbs1
-					done
-					read -p "phydbs1的目录， [必须创建]："		lvphydbs1
-					while [[ X$lvphydbs1 = X ]]
-					do
-						log4s info "phydbs1的目录必须创建，请重新输入:"
-						read -p "phydbs1的目录，[必须创建]："	  phydbs1
-					done
-					read -p "userdbs1的目录，[必须创建]："		lvuserdbs1
-					while [[ X$lvuserdbs1 = X ]]
-					do
-						log4s info "userdbs1的目录必须创建，请重新输入:"
-						read -p "userdbs1的目录，[必须创建]："	userdbs1
-					done
-					read -p "userdbs2的目录，[不输入默认为不创建]："		lvuserdbs2
-					read -p "userdbs3的目录，[不输入默认为不创建]："		lvuserdbs3
-					read -p "userdbs4的目录，[不输入默认为不创建]："		lvuserdbs4
-					read -p "userdbs5的目录，[不输入默认为不创建]："		lvuserdbs5
-					read -p "chargedbs1的目录，[不输入默认为不创建]："	lvchargedbs1
-					read -p "chargedbs2的目录，[不输入默认为不创建]："	lvchargedbs2
-					read -p "minfodbs1的目录，[不输入默认为不创建]："		lvminfodbs1
-					read -p "minfodbs2的目录，[不输入默认为不创建]："		lvminfodbs2
-					read -p "servdbs1的目录，[不输入默认为不创建]："		lvservdbs1
-					read -p "servdbs2的目录，[不输入默认为不创建]："		lvservdbs2
-					if [ X$lvrootdbs1 = X ] || [ X$lvrootdbs1 = XN ] || [ X$lvrootdbs1 = Xn ] || [ X$lvrootdbs1 = X0 ]
-					then
-						lvrootdbs1=0
-					fi
-					if [ X$lvtempdbs1 = X ] || [ X$lvtempdbs1 = XN ] || [ X$lvtempdbs1 = Xn ] || [ X$lvtempdbs1 = X0 ]
-					then
-						lvtempdbs1=0
-					fi
-					if [ X$lvtempdbs2 = X ] || [ X$lvtempdbs2 = XN ] || [ X$lvtempdbs2 = Xn ] || [ X$lvtempdbs2 = X0 ]
-					then
-						lvtempdbs2=0
-					fi
-					if [ X$lvlogdbs1 = X ] || [ X$lvlogdbs1 = XN ] || [ X$lvlogdbs1 = Xn ] || [ X$lvlogdbs1 = X0 ]
-					then
-						lvlogdbs1=0
-					fi
-					if [ X$lvphydbs1 = X ] || [ X$lvphydbs1 = XN ] || [ X$lvphydbs1 = Xn ] || [ X$lvphydbs1 = X0 ]
-					then
-						lvphydbs1=0
-					fi
-					if [ X$lvuserdbs1 = X ] || [ X$lvuserdbs1 = XN ] || [ X$lvuserdbs1 = Xn ] || [ X$lvuserdbs1 = X0 ]
-					then
-						lvuserdbs1=0
-					fi
-					if [ X$lvuserdbs2 = X ] || [ X$lvuserdbs2 = XN ] || [ X$lvuserdbs2 = Xn ] || [ X$lvuserdbs2 = X0 ]
-					then
-						lvuserdbs2=0
-					fi
-					if [ X$lvuserdbs3 = X ] || [ X$lvuserdbs3 = XN ] || [ X$lvuserdbs3 = Xn ] || [ X$lvuserdbs3 = X0 ]
-					then
-						lvuserdbs3=0
-					fi
-					if [ X$lvuserdbs4 = X ] || [ X$lvuserdbs4 = XN ] || [ X$lvuserdbs4 = Xn ] || [ X$lvuserdbs4 = X0 ]
-					then
-						lvuserdbs4=0
-					fi
-					if [ X$lvuserdbs5 = X ] || [ X$lvuserdbs5 = XN ] || [ X$lvuserdbs5 = Xn ] || [ X$lvuserdbs5 = X0 ]
-					then
-						lvuserdbs5=0
-					fi
-					if [ X$lvchargedbs1 = X ] || [ X$lvchargedbs1 = XN ] || [ X$lvchargedbs1 = Xn ] || [ X$lvchargedbs1 = X0 ]
-					then
-						lvchargedbs1=0
-					fi
-					if [ X$lvchargedbs2 = X ] || [ X$lvchargedbs2 = XN ] || [ X$lvchargedbs2 = Xn ] || [ X$lvchargedbs2 = X0 ]
-					then
-						lvchargedbs2=0
-					fi
-					if [ X$lvminfodbs1 = X ] || [ X$lvminfodbs1 = XN ] || [ X$lvminfodbs1 = Xn ] || [ X$lvminfodbs1 = X0 ]
-					then
-						lvminfodbs1=0
-					fi
-					if [ X$lvminfodbs2 = X ] || [ X$lvminfodbs2 = XN ] || [ X$lvminfodbs2 = Xn ] || [ X$lvminfodbs2 = X0 ]
-					then
-						lvminfodbs2=0
-					fi
-					if [ X$lvservdbs1 = X ] || [ X$lvservdbs1 = XN ] || [ X$lvservdbs1 = Xn ] || [ X$lvservdbs1 = X0 ]
-					then
-						lvservdbs1=0
-					fi
-					if [ X$lvservdbs2 = X ] || [ X$lvservdbs2 = XN ] || [ X$lvservdbs2 = Xn ] || [ X$lvservdbs2 = X0 ]
-					then
-						lvservdbs2=0
-					fi
-
-					echo "设置的dbs目录配置如下，请确认[Y/N]："
-					echo "rootdbs1的目录：    $lvrootdbs1" 
-					echo "tempdbs1的目录：    $lvtempdbs1" 
-					echo "tempdbs2的目录：    $lvtempdbs2" 
-					echo "logdbs1的目录：     $lvlogdbs1"
-					echo "phydbs1的目录：     $lvphydbs1"
-					echo "userdbs1的目录：    $lvuserdbs1"
-					echo "userdbs2的目录：    $lvuserdbs2"
-					echo "userdbs3的目录：    $lvuserdbs3"
-					echo "userdbs4的目录：    $lvuserdbs4"
-					echo "userdbs5的目录：    $lvuserdbs5"
-					echo "chargedbs1的目录：  $lvchargedbs1"
-					echo "chargedbs2的目录：  $lvchargedbs2"
-					echo "minfodbs1的目录：   $lvminfodbs1"
-					echo "minfodbs2的目录：   $lvminfodbs2"
-					echo "servdbs1的目录：    $lvservdbs1"
-					echo "servdbs2的目录：    $lvservdbs2"
-					read -p "是否确认：[y/n]：" lvmuluqueren
-					while [[ X$lvmuluqueren = X ]]
-					do
-						log4s info "是否确认目录，不能为空，请重新输入"
-						read -p "是否确认：[y/n]：" lvmuluqueren
-					done
-					while [[ $lvmuluqueren != [YyNn] ]]
-					do
-						log4s info "是否确认目录，输入非法，请重新输入"
-						read -p "是否确认：[y/n]：" lvmuluqueren
-					done
-					if [ X$lvmuluqueren != XY ] && [ X$lvmuluqueren != Xy ]
-					then
-						lvmuluqueren=n
-					fi
-					if [ X$lvrootdbs1 = X ] || [ X$lvrootdbs1 = XN ] || [ X$lvrootdbs1 = Xn ] || [ X$lvrootdbs1 = X0 ]
-					then
-						lvrootdbs1=0
-					fi
-				fi
-			done
 			while [[ $shifouquerenlvsize != [Yy] ]]
 			do
-				echo "请输设置的各dbs的大小，单位为G，只需要输入数字即可，请确保实际lv大小满足dbs"
-				echo "如果不需要某个dbs则设置大小为0或者N或者n或者不输入都可以。"
-				echo "rootdbs1的目录：    $lvrootdbs1" 
+				echo "请输入调整后的大小，单位为G，只需要输入数字即可，请确保硬盘大小可以满足调整后的lv"
+				echo "如果不需要某个dbs则，[默认为0]。"
 				read -p "rootdbs1大小，  [必须创建]："					sizerootdbs1G
-				Pnum_sizerootdbs1G=`Pnum $sizerootdbs1G`
-				while [[ X$sizerootdbs1G = X || X$sizerootdbs1G = XN || X$sizerootdbs1G = Xn || X$sizerootdbs1G = X0 || X$Pnum_sizerootdbs1G = Xno ]]
+				while [[ X$sizerootdbs1G = X || X$sizerootdbs1G = XN || X$sizerootdbs1G = Xn || X$sizerootdbs1G = X0 ]]
 				do
 					log4s info "rootdbs1大小输入非法，请重新输入"
 					read -p "rootdbs1大小，  [必须创建]：" 			sizerootdbs1G
-					Pnum_sizerootdbs1G=`Pnum $sizerootdbs1G`
 				done
-				echo "tempdbs1的目录：    $lvtempdbs1" 
 				read -p "tempdbs1大小，  [必须创建]："					sizetempdbs1G
-				Pnum_sizetempdbs1G=`Pnum $sizetempdbs1G`
-				while [[ X$sizetempdbs1G = X || X$sizetempdbs1G = XN || X$sizetempdbs1G = Xn || X$sizetempdbs1G = X0 || X$Pnum_sizetempdbs1G = Xno ]]
+				while [[ X$sizetempdbs1G = X || X$sizetempdbs1G = XN || X$sizetempdbs1G = Xn || X$sizetempdbs1G = X0 ]]
 				do
 					log4s info "tempdbs1大小输入非法，请重新输入"
 					read -p "tempdbs1大小，  [必须创建]：" 			sizetempdbs1G
-					Pnum_sizetempdbs1G=`Pnum $sizetempdbs1G`
 				done
-				echo "tempdbs2的目录：    $lvtempdbs2" 
 				read -p "tempdbs2大小，  [必须创建]："					sizetempdbs2G
-				Pnum_sizetempdbs2G=`Pnum $sizetempdbs2G`
-				while [[ X$sizetempdbs2G = X || X$sizetempdbs2G = XN || X$sizetempdbs2G = Xn || X$sizetempdbs2G = X0 || X$Pnum_sizetempdbs2G = Xno ]]
+				while [[ X$sizetempdbs2G = X || X$sizetempdbs2G = XN || X$sizetempdbs2G = Xn || X$sizetempdbs2G = X0 ]]
 				do
 					log4s info "tempdbs2大小输入非法，请重新输入"
 					read -p "tempdbs2大小，  [必须创建]：" 			sizetempdbs2G
-					Pnum_sizetempdbs2G=`Pnum $sizetempdbs2G`
 				done
-				echo "logdbs1的目录：     $lvlogdbs1"
 				read -p "logdbs1大小，   [必须创建]："					sizelogdbs1G
-				Pnum_sizelogdbs1G=`Pnum $sizelogdbs1G`
-				while [[ X$sizelogdbs1G = X || X$sizelogdbs1G = XN || X$sizelogdbs1G = Xn || X$sizelogdbs1G = X0 || X$Pnum_sizelogdbs1G = Xno ]]
+				while [[ X$sizelogdbs1G = X || X$sizelogdbs1G = XN || X$sizelogdbs1G = Xn || X$sizelogdbs1G = X0 ]]
 				do
 					log4s info "logdbs1大小输入非法，请重新输入"
 					read -p "logdbs1大小，   [必须创建]：" 			sizelogdbs1G
-					Pnum_sizelogdbs1G=`Pnum $sizelogdbs1G`
 				done
-				echo "phydbs1的目录：     $lvphydbs1"
 				read -p "phydbs1大小，   [必须创建]："					sizephydbs1G
-				Pnum_sizephydbs1G=`Pnum $sizephydbs1G`
-				while [[ X$sizephydbs1G = X || X$sizephydbs1G = XN || X$sizephydbs1G = Xn || X$sizephydbs1G = X0 || X$Pnum_sizephydbs1G = Xno ]]
+				while [[ X$sizephydbs1G = X || X$sizephydbs1G = XN || X$sizephydbs1G = Xn || X$sizephydbs1G = X0 ]]
 				do
 					log4s info "phydbs1大小输入非法，请重新输入"
 					read -p "phydbs1大小，   [必须创建]：" 			sizephydbs1G
-					Pnum_sizephydbs1G=`Pnum $sizephydbs1G`
 				done
-				echo "userdbs1的目录：    $lvuserdbs1"
 				read -p "userdbs1大小，  [必须创建]："					sizeuserdbs1G
-				Pnum_sizeuserdbs1G=`Pnum $sizeuserdbs1G`
-				while [[ X$sizeuserdbs1G = X || X$sizeuserdbs1G = XN || X$sizeuserdbs1G = Xn || X$sizeuserdbs1G = X0 || X$Pnum_sizeuserdbs1G = Xno ]]
+				while [[ X$sizeuserdbs1G = X || X$sizeuserdbs1G = XN || X$sizeuserdbs1G = Xn || X$sizeuserdbs1G = X0 ]]
 				do
 					log4s info "userdbs1大小输入非法，请重新输入"
 					read -p "userdbs1大小，  [必须创建]：" 			sizeuserdbs1G
-					Pnum_sizeuserdbs1G=`Pnum $sizeuserdbs1G`
 				done
-				if [ X$lvuserdbs2 = X0 ]
-				then
-					log4s info "不创建userdbs2"
-					sizeuserdbs2G=0
-				else
-					echo "userdbs2的目录：    $lvuserdbs2"
-					read -p "userdbs2大小，[不输入默认为0]："		sizeuserdbs2G
-				fi
-				if [ X$lvuserdbs3 = X0 ]
-				then
-					log4s info "不创建userdbs3"
-					sizeuserdbs3G=0
-				else
-					echo "userdbs3的目录：    $lvuserdbs3"
-					read -p "userdbs3大小，[不输入默认为0]："		sizeuserdbs3G
-				fi
-				if [ X$lvuserdbs4 = X0 ]
-				then
-					log4s info "不创建userdbs4"
-					sizeuserdbs4G=0
-				else
-					echo "userdbs4的目录：    $lvuserdbs4"
-					read -p "userdbs4大小，[不输入默认为0]："		sizeuserdbs4G
-				fi
-				if [ X$lvuserdbs5 = X0 ]
-				then
-					log4s info "不创建userdbs5"
-					sizeuserdbs5G=0
-				else
-					echo "userdbs5的目录：    $lvuserdbs5"
-					read -p "userdbs5大小，[不输入默认为0]："		sizeuserdbs5G
-				fi
-				if [ X$lvchargedbs1 = X0 ]
-				then
-					log4s info "不创建chargedbs1"
-					sizechargedbs1G=0
-				else
-					echo "chargedbs1的目录：  $lvchargedbs1"
-					read -p "chargedbs1大小，[不输入默认为0]："	sizechargedbs1G
-				fi
-				if [ X$lvchargedbs2 = X0 ]
-				then
-					log4s info "不创建chargedbs2"
-					sizechargedbs2G=0
-				else
-					echo "chargedbs2的目录：  $lvchargedbs2"
-					read -p "chargedbs2大小，[不输入默认为0]："	sizechargedbs2G
-				fi
-				if [ X$lvminfodbs1 = X0 ]
-				then
-					log4s info "不创建minfodbs1"
-					sizeminfodbs1G=0
-				else
-					echo "minfodbs1的目录：   $lvminfodbs1"
-					read -p "minfodbs1大小，[不输入默认为0]："  sizeminfodbs1G
-				fi
-				if [ X$lvminfodbs2 = X0 ]
-				then
-					log4s info "不创建minfodbs2"
-					sizeminfodbs2G=0
-				else
-					echo "minfodbs2的目录：   $lvminfodbs2"
-					read -p "minfodbs2大小，[不输入默认为0]："  sizeminfodbs2G
-				fi
-				if [ X$lvservdbs1 = X0 ]
-				then
-					log4s info "不创建servdbs1"
-					sizeservdbs1G=0
-				else
-					echo "servdbs1的目录：    $lvservdbs1"
-					read -p "servdbs1大小，[不输入默认为0]："		sizeservdbs1G
-				fi
-				if [ X$lvservdbs2 = X0 ]
-				then
-					log4s info "不创建servdbs2"
-					sizeservdbs2G=0
-				else
-					echo "servdbs2的目录：    $lvservdbs2"
-					read -p "servdbs2大小，[不输入默认为0]："		sizeservdbs2G
-				fi
-
+				read -p "userdbs2大小，  [不输入默认为不创建]："		sizeuserdbs2G
+				read -p "userdbs3大小，  [不输入默认为不创建]："		sizeuserdbs3G
+				read -p "userdbs4大小，  [不输入默认为不创建]："		sizeuserdbs4G
+				read -p "userdbs5大小，  [不输入默认为不创建]："		sizeuserdbs5G
+				read -p "chargedbs1大小，[不输入默认为不创建]："		sizechargedbs1G
+				read -p "chargedbs2大小，[不输入默认为不创建]："		sizechargedbs2G
+				read -p "minfodbs1大小， [不输入默认为不创建]："		sizeminfodbs1G
+				read -p "minfodbs2大小， [不输入默认为不创建]："		sizeminfodbs2G
+				read -p "servdbs1大小，  [不输入默认为不创建]："		sizeservdbs1G
+				read -p "servdbs2大小，  [不输入默认为不创建]："		sizeservdbs2G
 				if [ X$sizerootdbs1G = X ] || [ X$sizerootdbs1G = XN ] || [ X$sizerootdbs1G = Xn ] || [ X$sizerootdbs1G = X0 ]
 				then
 					sizerootdbs1G=0
@@ -1989,7 +1417,7 @@ InputAndCheck()
 				then
 					sizeservdbs2G=0
 				fi
-				echo "设置的dbs的大小如下："
+				echo "重新调整后的大小如下："
 				echo "rootdbs1大小：      $sizerootdbs1G"
 				echo "tempdbs1大小：      $sizetempdbs1G"
 				echo "tempdbs2大小：      $sizetempdbs2G"
@@ -2004,19 +1432,23 @@ InputAndCheck()
 				echo "chargedbs2大小：    $sizechargedbs2G"
 				echo "minfodbs1大小：     $sizeminfodbs1G"
 				echo "minfodbs2大小：     $sizeminfodbs2G"
-				echo "sizeservdbs1大小： $sizeservdbs1G"
-				echo "sizeservdbs2大小： $sizeservdbs2G"
-				read -p "是否确认调整后的大小[Y/N]，[默认为n]：" shifouquerenlvsize
+				echo "sizeservdbs1大小：  $sizeservdbs1G"
+				echo "sizeservdbs2大小：  $sizeservdbs2G"
+				read -p "是否确认调整后的大小，请输入[y/n]：" shifouquerenlvsize
 				while [[ X$shifouquerenlvsize = X ]]
 				do
-					log4s info "是否确认调整后的大小，不能为空，请重新输入"
-					read -p "是否确认调整后的大小[Y/N]，[默认为n]：" shifouquerenlvsize
+					log4s info "是否确认调整后大小，输入不能为空，请重新输入"
+					read -p "是否确认调整后的大小，请输入[y/n]：" shifouquerenlvsize
 				done
 				while [[ $shifouquerenlvsize != [YyNn] ]]
 				do
-					log4s info "是否确认调整后的大小，输入非法，请重新输入"
-					read -p "是否确认调整后的大小[Y/N]，[默认为n]：" shifouquerenlvsize
+					log4s info "是否确认调整后大小，输入非法，请重新输入"
+					read -p "是否确认调整后的大小，请输入[y/n]：" shifouquerenlvsize
 				done
+				if [ X$shifouquerenlvsize = X ]
+				then
+					shifouquerenlvsize=n
+				fi
 				#先判断是否所有大小都是数字
 				Prootdbs1=`Pnum "$sizerootdbs1G"`
 				Ptempdbs1=`Pnum "$sizetempdbs1G"`
@@ -2040,111 +1472,232 @@ InputAndCheck()
 					shifouquerenlvsize=n
 					continue;
 				fi
-				if [ X$shifouquerenlvsize != Xy ] && [ X$shifouquerenlvsize != XY ]
+				if [ X$sizerootdbs1G = X0 ]
+				then
+					echo "rootdbs1不能为0"
+					shifouquerenlvsize=n
+					continue;
+				fi
+				if [ X$sizetempdbs1G = X0 ]
+				then
+					echo "tempdbs1"
+					shifouquerenlvsize=n
+					continue;
+				fi
+				if [ X$sizelogdbs1G = X0 ]
+				then
+					echo "logdbs1不能为0"
+					shifouquerenlvsize=n
+					continue;
+				fi
+				if [ X$sizephydbs1G = X0 ]
+				then
+					echo "phydbs1不能为0"
+					shifouquerenlvsize=n
+					continue;
+				fi
+				if [ X$sizeuserdbs1G = X0 ]
+				then
+					echo "userdbs1不能为0"
+					shifouquerenlvsize=n
+					continue;
+				fi
+				if [ X$shifouquerenlvsize != XY ] && [ X$shifouquerenlvsize != Xy ]
 				then
 					shifouquerenlvsize=n
 				fi
-				Plvsize  $lvrootdbs1      $sizerootdbs1G           rootdbs1   
-				Plvsize  $lvtempdbs1      $sizetempdbs1G           tempdbs1   
-				Plvsize  $lvtempdbs2      $sizetempdbs2G           tempdbs2   
-				Plvsize  $lvlogdbs1       $sizelogdbs1G            logdbs1    
-				Plvsize  $lvphydbs1       $sizephydbs1G            phydbs1    
-				Plvsize  $lvuserdbs1      $sizeuserdbs1G           userdbs1   
-				Plvsize  $lvuserdbs2      $sizeuserdbs2G           userdbs2   
-				Plvsize  $lvuserdbs3      $sizeuserdbs3G           userdbs3   
-				Plvsize  $lvuserdbs4      $sizeuserdbs4G           userdbs4   
-				Plvsize  $lvuserdbs5      $sizeuserdbs5G           userdbs5   
-				Plvsize  $lvchargedbs1    $sizechargedbs1G         chargedbs1 
-				Plvsize  $lvchargedbs2    $sizechargedbs2G         chargedbs2 
-				Plvsize  $lvminfodbs1     $sizeminfodbs1G          minfodbs1  
-				Plvsize  $lvminfodbs2     $sizeminfodbs2G          minfodbs2  
-				Plvsize  $lvservdbs1      $sizeservdbs1G           servdbs1   
-				Plvsize  $lvservdbs2      $sizeservdbs2G           servdbs2   
+				
 			done
 		fi
-		#不创建lv，指定lv路径结束
+		if [ $shifoutiaozhenglvsize = n ] || [ $shifoutiaozhenglvsize = N ]
+		then
+			sizerootdbs1G=$tsizerootdbs1G
+			sizetempdbs1G=$tsizetempdbs1G
+			sizetempdbs2G=$tsizetempdbs2G
+			sizelogdbs1G=$tsizelogdbs1G
+			sizephydbs1G=$tsizephydbs1G
+			sizeuserdbs1G=$tsizeuserdbs1G
+			sizeuserdbs2G=0
+			sizeuserdbs3G=0
+			sizeuserdbs4G=0
+			sizeuserdbs5G=0
+			sizeminfodbs1G=0
+			sizeminfodbs2G=0
+			sizeservdbs1G=0
+			sizeservdbs2G=0
+			sizechargedbs1G=0
+			sizechargedbs2G=0
+		fi
+		lvrootdbs1=/dev/$vgname/rootdbs1
+		lvtempdbs1=/dev/$vgname/tempdbs1
+		lvtempdbs2=/dev/$vgname/tempdbs2
+		lvlogdbs1=/dev/$vgname/logdbs1
+		lvphydbs1=/dev/$vgname/phydbs1
+		lvuserdbs1=/dev/$vgname/userdbs1
+		lvuserdbs2=/dev/$vgname/userdbs2
+		lvuserdbs3=/dev/$vgname/userdbs3
+		lvuserdbs4=/dev/$vgname/userdbs4
+		lvuserdbs5=/dev/$vgname/userdbs5
+		lvchargedbs1=/dev/$vgname/chargedbs1
+		lvchargedbs2=/dev/$vgname/chargedbs2
+		lvminfodbs1=/dev/$vgname/minfodbs1
+		lvminfodbs2=/dev/$vgname/minfodbs2
+		lvservdbs1=/dev/$vgname/servdbs1
+		lvservdbs2=/dev/$vgname/servdbs2
+		shifouquerenlvsize=y
+		lvmuluqueren=y
 	fi
-	#使用lv方式结束
-	
-	#使用fs方式开始
-	if [ X$lvorfs = Xfs ]
+		#不创建lv
+	if [ $shifouchuangjianlv = N ] || [ $shifouchuangjianlv = n ]
 	then
-		#写这里
-		log4s info "选择使用文件系统方式创建dbs，目录为$idshome/dbfiles，请输入各dbs大小"
-		lvrootdbs1=$idshome/dbfiles/rootdbs1
-		lvtempdbs1=$idshome/dbfiles/tempdbs1
-		lvtempdbs2=$idshome/dbfiles/tempdbs2
-		lvlogdbs1=$idshome/dbfiles/logdbs1
-		lvphydbs1=$idshome/dbfiles/phydbs1
-		lvuserdbs1=$idshome/dbfiles/userdbs1
-		lvuserdbs2=$idshome/dbfiles/userdbs2
-		lvuserdbs3=$idshome/dbfiles/userdbs3
-		lvuserdbs4=$idshome/dbfiles/userdbs4
-		lvuserdbs5=$idshome/dbfiles/userdbs5
-		lvchargedbs1=$idshome/dbfiles/chargedbs1
-		lvchargedbs2=$idshome/dbfiles/chargedbs2
-		lvminfodbs1=$idshome/dbfiles/minfodbs1
-		lvminfodbs2=$idshome/dbfiles/minfodbs2
-		lvservdbs1=$idshome/dbfiles/servdbs1
-		lvservdbs2=$idshome/dbfiles/servdbs2
-		while [[ $shifouquerendbssize != [Yy] ]]
+		log4s info "不需要创建lv，指定lv目录"
+		while [[ $lvmuluqueren != [Yy] ]]
 		do
-			echo "请输设置的各dbs的大小，单位为G，只需要输入数字即可，请确保实际硬盘大小满足dbs"
+			if [ $muban = cl ]
+			then
+				read -p "请输入vg名称，比如dbvg，[没有默认值]：" vgname
+				while [[ X$vgname = X ]]
+				do
+					log4s info "vg名称不能为空，请重新输入"
+					read -p "请输入vg名称，比如dbvg，[没有默认值]：" vgname
+				done
+				echo "请根据提示输入各lv的目录，举例/dev/hdvg/rootdbs1"
+				echo "如果没有这个dbs，[默认为不创建]"
+				read -p "rootdbs1的目录，[不输入默认为不创建]："		lvrootdbs1
+				read -p "tempdbs1的目录，[不输入默认为不创建]："		lvtempdbs1
+				read -p "tempdbs2的目录，[不输入默认为不创建]："		lvtempdbs2
+				read -p "logdbs1的目录，[不输入默认为不创建]："			lvlogdbs1
+				read -p "phydbs1的目录，[不输入默认为不创建]："			lvphydbs1
+				read -p "userdbs1的目录，[不输入默认为不创建]："		lvuserdbs1
+				read -p "userdbs2的目录，[不输入默认为不创建]："		lvuserdbs2
+				read -p "userdbs3的目录，[不输入默认为不创建]："		lvuserdbs3
+				read -p "userdbs4的目录，[不输入默认为不创建]："		lvuserdbs4
+				read -p "userdbs5的目录，[不输入默认为不创建]："		lvuserdbs5
+				read -p "chargedbs1的目录，[不输入默认为不创建]："	lvchargedbs1
+				read -p "chargedbs2的目录，[不输入默认为不创建]："	lvchargedbs2
+				read -p "minfodbs1的目录，[不输入默认为不创建]："		lvminfodbs1
+				read -p "minfodbs2的目录，[不输入默认为不创建]："		lvminfodbs2
+				read -p "servdbs1的目录，[不输入默认为不创建]："		lvservdbs1
+				read -p "servdbs2的目录，[不输入默认为不创建]："		lvservdbs2
+				if [ X$lvrootdbs1 = X ] || [ X$lvrootdbs1 = XN ] || [ X$lvrootdbs1 = Xn ] || [ X$lvrootdbs1 = X0 ]
+				then
+					lvrootdbs1=0
+				fi
+				if [ X$lvtempdbs1 = X ] || [ X$lvtempdbs1 = XN ] || [ X$lvtempdbs1 = Xn ] || [ X$lvtempdbs1 = X0 ]
+				then
+					lvtempdbs1=0
+				fi
+				if [ X$lvtempdbs2 = X ] || [ X$lvtempdbs2 = XN ] || [ X$lvtempdbs2 = Xn ] || [ X$lvtempdbs2 = X0 ]
+				then
+					lvtempdbs2=0
+				fi
+				if [ X$lvlogdbs1 = X ] || [ X$lvlogdbs1 = XN ] || [ X$lvlogdbs1 = Xn ] || [ X$lvlogdbs1 = X0 ]
+				then
+					lvlogdbs1=0
+				fi
+				if [ X$lvphydbs1 = X ] || [ X$lvphydbs1 = XN ] || [ X$lvphydbs1 = Xn ] || [ X$lvphydbs1 = X0 ]
+				then
+					lvphydbs1=0
+				fi
+				if [ X$lvuserdbs1 = X ] || [ X$lvuserdbs1 = XN ] || [ X$lvuserdbs1 = Xn ] || [ X$lvuserdbs1 = X0 ]
+				then
+					lvuserdbs1=0
+				fi
+				if [ X$lvuserdbs2 = X ] || [ X$lvuserdbs2 = XN ] || [ X$lvuserdbs2 = Xn ] || [ X$lvuserdbs2 = X0 ]
+				then
+					lvuserdbs2=0
+				fi
+				if [ X$lvuserdbs3 = X ] || [ X$lvuserdbs3 = XN ] || [ X$lvuserdbs3 = Xn ] || [ X$lvuserdbs3 = X0 ]
+				then
+					lvuserdbs3=0
+				fi
+				if [ X$lvuserdbs4 = X ] || [ X$lvuserdbs4 = XN ] || [ X$lvuserdbs4 = Xn ] || [ X$lvuserdbs4 = X0 ]
+				then
+					lvuserdbs4=0
+				fi
+				if [ X$lvuserdbs5 = X ] || [ X$lvuserdbs5 = XN ] || [ X$lvuserdbs5 = Xn ] || [ X$lvuserdbs5 = X0 ]
+				then
+					lvuserdbs5=0
+				fi
+				if [ X$lvchargedbs1 = X ] || [ X$lvchargedbs1 = XN ] || [ X$lvchargedbs1 = Xn ] || [ X$lvchargedbs1 = X0 ]
+				then
+					lvchargedbs1=0
+				fi
+				if [ X$lvchargedbs2 = X ] || [ X$lvchargedbs2 = XN ] || [ X$lvchargedbs2 = Xn ] || [ X$lvchargedbs2 = X0 ]
+				then
+					lvchargedbs2=0
+				fi
+				if [ X$lvminfodbs1 = X ] || [ X$lvminfodbs1 = XN ] || [ X$lvminfodbs1 = Xn ] || [ X$lvminfodbs1 = X0 ]
+				then
+					lvminfodbs1=0
+				fi
+				if [ X$lvminfodbs2 = X ] || [ X$lvminfodbs2 = XN ] || [ X$lvminfodbs2 = Xn ] || [ X$lvminfodbs2 = X0 ]
+				then
+					lvminfodbs2=0
+				fi
+				if [ X$lvservdbs1 = X ] || [ X$lvservdbs1 = XN ] || [ X$lvservdbs1 = Xn ] || [ X$lvservdbs1 = X0 ]
+				then
+					lvservdbs1=0
+				fi
+				if [ X$lvservdbs2 = X ] || [ X$lvservdbs2 = XN ] || [ X$lvservdbs2 = Xn ] || [ X$lvservdbs2 = X0 ]
+				then
+					lvservdbs2=0
+				fi
+
+				echo "设置的dbs目录配置如下，请确认[Y/N]："
+				echo "rootdbs1的目录：    $lvrootdbs1" 
+				echo "tempdbs1的目录：    $lvtempdbs1" 
+				echo "tempdbs2的目录：    $lvtempdbs2" 
+				echo "logdbs1的目录：     $lvlogdbs1"
+				echo "phydbs1的目录：     $lvphydbs1"
+				echo "userdbs1的目录：    $lvuserdbs1"
+				echo "userdbs2的目录：    $lvuserdbs2"
+				echo "userdbs3的目录：    $lvuserdbs3"
+				echo "userdbs4的目录：    $lvuserdbs4"
+				echo "userdbs5的目录：    $lvuserdbs5"
+				echo "chargedbs1的目录：  $lvchargedbs1"
+				echo "chargedbs2的目录：  $lvchargedbs2"
+				echo "minfodbs1的目录：   $lvminfodbs1"
+				echo "minfodbs2的目录：   $lvminfodbs2"
+				echo "servdbs1的目录：    $lvservdbs1"
+				echo "servdbs2的目录：    $lvservdbs2"
+				read -p "是否确认：[y/n]：" lvmuluqueren
+				while [[ X$lvmuluqueren = X ]]
+				do
+					log4s info "是否确认目录，不能为空，请重新输入"
+					read -p "是否确认：[y/n]：" lvmuluqueren
+				done
+				while [[ $lvmuluqueren != [YyNn] ]]
+				do
+					log4s info "是否确认目录，输入非法，请重新输入"
+					read -p "是否确认：[y/n]：" lvmuluqueren
+				done
+				if [ X$lvmuluqueren != XY ] && [ X$lvmuluqueren != Xy ]
+				then
+					lvmuluqueren=n
+				fi
+				if [ X$lvrootdbs1 = X ] || [ X$lvrootdbs1 = XN ] || [ X$lvrootdbs1 = Xn ] || [ X$lvrootdbs1 = X0 ]
+				then
+					lvrootdbs1=0
+				fi
+			fi
+		done
+		while [[ $shifouquerenlvsize != [Yy] ]]
+		do
+			echo "请输设置的各dbs的大小，单位为G，只需要输入数字即可，请确保实际lv大小满足dbs"
 			echo "如果不需要某个dbs则设置大小为0或者N或者n或者不输入都可以。"
 			echo "rootdbs1的目录：    $lvrootdbs1" 
-			read -p "rootdbs1大小，  [必须创建]："					sizerootdbs1G
-			Pnum_sizerootdbs1G=`Pnum $sizerootdbs1G`
-			while [[ X$sizerootdbs1G = X || X$sizerootdbs1G = XN || X$sizerootdbs1G = Xn || X$sizerootdbs1G = X0 || X$Pnum_sizerootdbs1G = Xno ]]
-			do
-				log4s info "rootdbs1大小输入非法，请重新输入"
-				read -p "rootdbs1大小，  [必须创建]：" 			sizerootdbs1G
-				Pnum_sizerootdbs1G=`Pnum $sizerootdbs1G`
-			done
+			read -p "rootdbs1大小，[不输入默认为0]："		sizerootdbs1G
 			echo "tempdbs1的目录：    $lvtempdbs1" 
-			read -p "tempdbs1大小，  [必须创建]："					sizetempdbs1G
-			Pnum_sizetempdbs1G=`Pnum $sizetempdbs1G`
-			while [[ X$sizetempdbs1G = X || X$sizetempdbs1G = XN || X$sizetempdbs1G = Xn || X$sizetempdbs1G = X0 || X$Pnum_sizetempdbs1G = Xno ]]
-			do
-				log4s info "tempdbs1大小输入非法，请重新输入"
-				read -p "tempdbs1大小，  [必须创建]：" 			sizetempdbs1G
-				Pnum_sizetempdbs1G=`Pnum $sizetempdbs1G`
-			done
+			read -p "tempdbs1大小，[不输入默认为0]："		sizetempdbs1G
 			echo "tempdbs2的目录：    $lvtempdbs2" 
-			read -p "tempdbs2大小，  [必须创建]："					sizetempdbs2G
-			Pnum_sizetempdbs2G=`Pnum $sizetempdbs2G`
-			while [[ X$sizetempdbs2G = X || X$sizetempdbs2G = XN || X$sizetempdbs2G = Xn || X$sizetempdbs2G = X0 || X$Pnum_sizetempdbs2G = Xno ]]
-			do
-				log4s info "tempdbs2大小输入非法，请重新输入"
-				read -p "tempdbs2大小，  [必须创建]：" 			sizetempdbs2G
-				Pnum_sizetempdbs2G=`Pnum $sizetempdbs2G`
-			done
+			read -p "tempdbs2大小，[不输入默认为0]："		sizetempdbs2G
 			echo "logdbs1的目录：     $lvlogdbs1"
-			read -p "logdbs1大小，   [必须创建]："					sizelogdbs1G
-			Pnum_sizelogdbs1G=`Pnum $sizelogdbs1G`
-			while [[ X$sizelogdbs1G = X || X$sizelogdbs1G = XN || X$sizelogdbs1G = Xn || X$sizelogdbs1G = X0 || X$Pnum_sizelogdbs1G = Xno ]]
-			do
-				log4s info "logdbs1大小输入非法，请重新输入"
-				read -p "logdbs1大小，   [必须创建]：" 			sizelogdbs1G
-				Pnum_sizelogdbs1G=`Pnum $sizelogdbs1G`
-			done
+			read -p "logdbs1大小，[不输入默认为0]："			sizelogdbs1G
 			echo "phydbs1的目录：     $lvphydbs1"
-			read -p "phydbs1大小，   [必须创建]："					sizephydbs1G
-			Pnum_sizephydbs1G=`Pnum $sizephydbs1G`
-			while [[ X$sizephydbs1G = X || X$sizephydbs1G = XN || X$sizephydbs1G = Xn || X$sizephydbs1G = X0 || X$Pnum_sizephydbs1G = Xno ]]
-			do
-				log4s info "phydbs1大小输入非法，请重新输入"
-				read -p "phydbs1大小，   [必须创建]：" 			sizephydbs1G
-				Pnum_sizephydbs1G=`Pnum $sizephydbs1G`
-			done
+			read -p "phydbs1大小，[不输入默认为0]："			sizephydbs1G
 			echo "userdbs1的目录：    $lvuserdbs1"
-			read -p "userdbs1大小，  [必须创建]："					sizeuserdbs1G
-			Pnum_sizeuserdbs1G=`Pnum $sizeuserdbs1G`
-			while [[ X$sizeuserdbs1G = X || X$sizeuserdbs1G = XN || X$sizeuserdbs1G = Xn || X$sizeuserdbs1G = X0 || X$Pnum_sizeuserdbs1G = Xno ]]
-			do
-				log4s info "userdbs1大小输入非法，请重新输入"
-				read -p "userdbs1大小，  [必须创建]：" 			sizeuserdbs1G
-				Pnum_sizeuserdbs1G=`Pnum $sizeuserdbs1G`
-			done
+			read -p "userdbs1大小，[不输入默认为0]："		sizeuserdbs1G
 			echo "userdbs2的目录：    $lvuserdbs2"
 			read -p "userdbs2大小，[不输入默认为0]："		sizeuserdbs2G
 			echo "userdbs3的目录：    $lvuserdbs3"
@@ -2246,11 +1799,60 @@ InputAndCheck()
 			echo "minfodbs2大小：     $sizeminfodbs2G"
 			echo "sizeservdbs1大小： $sizeservdbs1G"
 			echo "sizeservdbs2大小： $sizeservdbs2G"
-			read -p "是否确认设置大小[y/n]：" shifouquerendbssize
-			while [[ $shifouquerendbssize != [YyNn] ]]
+			read -p "是否确认调整后的大小[Y/N]，[默认为n]：" shifouquerenlvsize
+			while [[ X$shifouquerenlvsize = X ]]
 			do
-				read -p "输入不能为空，是否确认设置大小[y/n]：" shifouquerendbssize
+				log4s info "是否确认调整后的大小，不能为空，请重新输入"
+				read -p "是否确认调整后的大小[Y/N]，[默认为n]：" shifouquerenlvsize
 			done
+			while [[ $shifouquerenlvsize != [YyNn] ]]
+			do
+				log4s info "是否确认调整后的大小，输入非法，请重新输入"
+				read -p "是否确认调整后的大小[Y/N]，[默认为n]：" shifouquerenlvsize
+			done
+			#先判断是否所有大小都是数字
+			Prootdbs1=`Pnum "$sizerootdbs1G"`
+			Ptempdbs1=`Pnum "$sizetempdbs1G"`
+			Ptempdbs2=`Pnum "$sizetempdbs2G"`
+			Plogdbs1=`Pnum "$sizelogdbs1G"`
+			Pphydbs1=`Pnum "$sizephydbs1G"`
+			Puserdbs1=`Pnum "$sizeuserdbs1G"`
+			Puserdbs2=`Pnum "$sizeuserdbs2G"`
+			Puserdbs3=`Pnum "$sizeuserdbs3G"`
+			Puserdbs4=`Pnum "$sizeuserdbs4G"`
+			Puserdbs5=`Pnum "$sizeuserdbs5G"`
+			Pchargedbs1=`Pnum "$sizechargedbs1G"`
+			Pchargedbs2=`Pnum "$sizechargedbs2G"`
+			Pminfodbs1=`Pnum "$sizeminfodbs1G"`
+			Pminfodbs2=`Pnum "$sizeminfodbs2G"`
+			Psizeservdbs1G=`Pnum "$sizeservdbs1G"`
+			Psizeservdbs2G=`Pnum "$sizeservdbs2G"`
+			if [ $Prootdbs1 = no ] || [ $Ptempdbs1 = no ] || [ $Ptempdbs2 = no ] || [ $Plogdbs1 = no ] || [ $Pphydbs1 = no ] || [ $Puserdbs1 = no ] || [ $Puserdbs2 = no ] || [ $Puserdbs3 = no ] || [ $Puserdbs4 = no ] || [ $Puserdbs5 = no ] || [ $Pchargedbs1 = no ] || [ $Pchargedbs2 = no ] || [ $Pminfodbs1 = no ] || [ $Pminfodbs2 = no ] || [ $Psizeservdbs1G = no ] || [ $Psizeservdbs2G = no ]
+			then
+				echo "输入dbs有不为数字的情况，请重新输入。"
+				shifouquerenlvsize=n
+				continue;
+			fi
+			if [ X$shifouquerenlvsize != Xy ] && [ X$shifouquerenlvsize != XY ]
+			then
+				shifouquerenlvsize=n
+			fi
+			Plvsize  $lvrootdbs1      $sizerootdbs1G           rootdbs1   
+			Plvsize  $lvtempdbs1      $sizetempdbs1G           tempdbs1   
+			Plvsize  $lvtempdbs2      $sizetempdbs2G           tempdbs2   
+			Plvsize  $lvlogdbs1       $sizelogdbs1G            logdbs1    
+			Plvsize  $lvphydbs1       $sizephydbs1G            phydbs1    
+			Plvsize  $lvuserdbs1      $sizeuserdbs1G           userdbs1   
+			Plvsize  $lvuserdbs2      $sizeuserdbs2G           userdbs2   
+			Plvsize  $lvuserdbs3      $sizeuserdbs3G           userdbs3   
+			Plvsize  $lvuserdbs4      $sizeuserdbs4G           userdbs4   
+			Plvsize  $lvuserdbs5      $sizeuserdbs5G           userdbs5   
+			Plvsize  $lvchargedbs1    $sizechargedbs1G         chargedbs1 
+			Plvsize  $lvchargedbs2    $sizechargedbs2G         chargedbs2 
+			Plvsize  $lvminfodbs1     $sizeminfodbs1G          minfodbs1  
+			Plvsize  $lvminfodbs2     $sizeminfodbs2G          minfodbs2  
+			Plvsize  $lvservdbs1      $sizeservdbs1G           servdbs1   
+			Plvsize  $lvservdbs2      $sizeservdbs2G           servdbs2   
 		done
 	fi
 	let sizerootdbs1=sizerootdbs1G*1000000
@@ -2275,197 +1877,144 @@ ZhanWeiflag()
 	#第一阶段，基本参数占位符修改
 	if [ X$hdrflag = Xonly ]
 	then
-		xiugai "hdrflag=XXXXXX"                 "hdrflag=only"
+		xiugai "hdrflag=XXXXXX"								"hdrflag=only"
 	fi
 	if [ X$hdrflag = Xpri ]
 	then
 		#这里内存和文件不一致，是因为文件是给备机用的
-		xiugai "hdrflag=XXXXXX"                 "hdrflag=sec"
+		xiugai "hdrflag=XXXXXX"								"hdrflag=sec"
 	fi
-	xiugai "^peizhiqueren=XXXXXX"               "peizhiqueren=$peizhiqueren"
+	xiugai "^peizhiqueren=XXXXXX"						"peizhiqueren=$peizhiqueren"
 	xiugai "^priINFORMIXSERVER=XXXXXX"			"priINFORMIXSERVER=$priINFORMIXSERVER"
 	xiugai "^secINFORMIXSERVER=XXXXXX"			"secINFORMIXSERVER=$secINFORMIXSERVER"
 	xiugai "^priDBSERVERALIASES=XXXXXX"			"priDBSERVERALIASES=$priDBSERVERALIASES"
 	xiugai "^secDBSERVERALIASES=XXXXXX"			"secDBSERVERALIASES=$secDBSERVERALIASES"
-	xiugai "^priip=XXXXXX"                      "priip=$priip"
-	xiugai "^secip=XXXXXX"                      "secip=$secip"
-	xiugai "^priappip=XXXXXX"                   "priappip=$priappip"
-	xiugai "^secappip=XXXXXX"                   "secappip=$secappip"
-	xiugai "^priONCONFIG=XXXXXX"                "priONCONFIG=$priONCONFIG"
-	xiugai "^secONCONFIG=XXXXXX"                "secONCONFIG=$secONCONFIG"
-	xiugai "^ltapedev=XXXXXX"                   "ltapedev=$ltapedev"
+	xiugai "^priip=XXXXXX"									"priip=$priip"
+	xiugai "^secip=XXXXXX"									"secip=$secip"
+	xiugai "^priappip=XXXXXX"								"priappip=$priappip"
+	xiugai "^secappip=XXXXXX"								"secappip=$secappip"
+	xiugai "^priONCONFIG=XXXXXX"						"priONCONFIG=$priONCONFIG"
+	xiugai "^secONCONFIG=XXXXXX"						"secONCONFIG=$secONCONFIG"
+	xiugai "^ltapedev=XXXXXX"								"ltapedev=$ltapedev"
 	#第二阶段，硬盘划分占位符修改
-	xiugai "^shifouquerenlvorfs=XXXXXX"         "shifouquerenlvorfs=$shifouquerenlvorfs"
-	xiugai "^lvorfs=XXXXXX"                     "lvorfs=$lvorfs"
-	xiugai "^shifouquerendbssize=XXXXXX"        "shifouquerendbssize=$shifouquerendbssize"
-	
-	xiugai "^shifouchuangjianpv=XXXXXX"         "shifouchuangjianpv=$shifouchuangjianpv"
-	xiugai "^shifouqueredevname=XXXXXX"         "shifouqueredevname=$shifouqueredevname"
-	xiugai "^devname=XXXXXX"                    "devname=$devname"
+	xiugai "^shifouchuangjianpv=XXXXXX"			"shifouchuangjianpv=$shifouchuangjianpv"
+	xiugai "^shifouqueredevname=XXXXXX"			"shifouqueredevname=$shifouqueredevname"
+	xiugai "^devname=XXXXXX"									"devname=$devname"
 	
 	xiugai "^shifouchuangjianvg=XXXXXX"			"shifouchuangjianvg=$shifouchuangjianvg"
-	xiugai "^vgname=XXXXXX"                     "vgname=$vgname"
-	xiugai "^shifouqueredevname1=XXXXXX"        "shifouqueredevname1=$shifouqueredevname1"
+	xiugai "^vgname=XXXXXX"									"vgname=$vgname"
+	xiugai "^shifouqueredevname1=XXXXXX"			"shifouqueredevname1=$shifouqueredevname1"
 	
 	xiugai "^shifouchuangjianlv=XXXXXX"			"shifouchuangjianlv=$shifouchuangjianlv"
-	xiugai "^vgname=XXXXXX"                     "vgname=$vgname"
+	xiugai "^vgname=XXXXXX"									"vgname=$vgname"
 	xiugai "^shifoutiaozhenglvsize=XXXXXX"		"shifoutiaozhenglvsize=$shifoutiaozhenglvsize"
 	xiugai "^shifouquerenlvsize=XXXXXX"			"shifouquerenlvsize=$shifouquerenlvsize"
-	xiugai "^sizerootdbs1G=XXXXXX"              "sizerootdbs1G=$sizerootdbs1G"
-	xiugai "^sizetempdbs1G=XXXXXX"              "sizetempdbs1G=$sizetempdbs1G"
-	xiugai "^sizetempdbs2G=XXXXXX"              "sizetempdbs2G=$sizetempdbs2G"
-	xiugai "^sizelogdbs1G=XXXXXX"               "sizelogdbs1G=$sizelogdbs1G"
-	xiugai "^sizephydbs1G=XXXXXX"               "sizephydbs1G=$sizephydbs1G"
-	xiugai "^sizeuserdbs1G=XXXXXX"              "sizeuserdbs1G=$sizeuserdbs1G"
-	xiugai "^sizeuserdbs2G=XXXXXX"              "sizeuserdbs2G=$sizeuserdbs2G"
-	xiugai "^sizeuserdbs3G=XXXXXX"              "sizeuserdbs3G=$sizeuserdbs3G"
-	xiugai "^sizeuserdbs4G=XXXXXX"              "sizeuserdbs4G=$sizeuserdbs4G"
-	xiugai "^sizeuserdbs5G=XXXXXX"              "sizeuserdbs5G=$sizeuserdbs5G"
-	xiugai "^sizechargedbs1G=XXXXXX"            "sizechargedbs1G=$sizechargedbs1G"
-	xiugai "^sizechargedbs2G=XXXXXX"            "sizechargedbs2G=$sizechargedbs2G"
-	xiugai "^sizeminfodbs1G=XXXXXX"             "sizeminfodbs1G=$sizeminfodbs1G"
-	xiugai "^sizeminfodbs2G=XXXXXX"             "sizeminfodbs2G=$sizeminfodbs2G"
-	xiugai "^sizeservdbs1G=XXXXXX"              "sizeservdbs1G=$sizeservdbs1G"
-	xiugai "^sizeservdbs2G=XXXXXX"              "sizeservdbs2G=$sizeservdbs2G"
+	xiugai "^sizerootdbs1G=XXXXXX"						"sizerootdbs1G=$sizerootdbs1G"
+	xiugai "^sizetempdbs1G=XXXXXX"						"sizetempdbs1G=$sizetempdbs1G"
+	xiugai "^sizetempdbs2G=XXXXXX"						"sizetempdbs2G=$sizetempdbs2G"
+	xiugai "^sizelogdbs1G=XXXXXX"						"sizelogdbs1G=$sizelogdbs1G"
+	xiugai "^sizephydbs1G=XXXXXX"						"sizephydbs1G=$sizephydbs1G"
+	xiugai "^sizeuserdbs1G=XXXXXX"						"sizeuserdbs1G=$sizeuserdbs1G"
+	xiugai "^sizeuserdbs2G=XXXXXX"						"sizeuserdbs2G=$sizeuserdbs2G"
+	xiugai "^sizeuserdbs3G=XXXXXX"						"sizeuserdbs3G=$sizeuserdbs3G"
+	xiugai "^sizeuserdbs4G=XXXXXX"						"sizeuserdbs4G=$sizeuserdbs4G"
+	xiugai "^sizeuserdbs5G=XXXXXX"						"sizeuserdbs5G=$sizeuserdbs5G"
+	xiugai "^sizechargedbs1G=XXXXXX"					"sizechargedbs1G=$sizechargedbs1G"
+	xiugai "^sizechargedbs2G=XXXXXX"					"sizechargedbs2G=$sizechargedbs2G"
+	xiugai "^sizeminfodbs1G=XXXXXX"					"sizeminfodbs1G=$sizeminfodbs1G"
+	xiugai "^sizeminfodbs2G=XXXXXX"					"sizeminfodbs2G=$sizeminfodbs2G"
+	xiugai "^sizeservdbs1G=XXXXXX"						"sizeservdbs1G=$sizeservdbs1G"
+	xiugai "^sizeservdbs2G=XXXXXX"						"sizeservdbs2G=$sizeservdbs2G"
 	
-	xiugai "^lvrootdbs1=XXXXXX"                 "lvrootdbs1=$lvrootdbs1"
-	xiugai "^lvtempdbs1=XXXXXX"                 "lvtempdbs1=$lvtempdbs1"
-	xiugai "^lvtempdbs2=XXXXXX"                 "lvtempdbs2=$lvtempdbs2"
-	xiugai "^lvlogdbs1=XXXXXX"                  "lvlogdbs1=$lvlogdbs1"
-	xiugai "^lvphydbs1=XXXXXX"                  "lvphydbs1=$lvphydbs1"
-	xiugai "^lvuserdbs1=XXXXXX"                 "lvuserdbs1=$lvuserdbs1"
-	xiugai "^lvuserdbs2=XXXXXX"                 "lvuserdbs2=$lvuserdbs2"
-	xiugai "^lvuserdbs3=XXXXXX"                 "lvuserdbs3=$lvuserdbs3"
-	xiugai "^lvuserdbs4=XXXXXX"                 "lvuserdbs4=$lvuserdbs4"
-	xiugai "^lvuserdbs5=XXXXXX"                 "lvuserdbs5=$lvuserdbs5"
-	xiugai "^lvchargedbs1=XXXXXX"               "lvchargedbs1=$lvchargedbs1"
-	xiugai "^lvchargedbs2=XXXXXX"               "lvchargedbs2=$lvchargedbs2"
-	xiugai "^lvminfodbs1=XXXXXX"                "lvminfodbs1=$lvminfodbs1"
-	xiugai "^lvminfodbs2=XXXXXX"                "lvminfodbs2=$lvminfodbs2"
-	xiugai "^lvservdbs1=XXXXXX"                 "lvservdbs1=$lvservdbs1"
-	xiugai "^lvservdbs2=XXXXXX"                 "lvservdbs2=$lvservdbs2"
-	xiugai "^lvmuluqueren=XXXXXX"               "lvmuluqueren=$lvmuluqueren"
-}
-touchfsdbs()
-{
-	#$1是dbs目录，$2是dbs大小，大小为0的不创建，$3是dbs名称
-	if [ $2  = 0 ]
-	then
-		log4s info "$3 设置大小为0，不创建"
-	else
-		log4s info "$3 设置大小为${2}G，开始创建"
-		touch $1
-		if [ $? = 0 ]
-		then
-			log4s info "$3创建成功"
-		else
-			log4s error "$3创建失败，请检查目录$1"
-			exit 1;
-		fi
-	fi
+	xiugai "^lvrootdbs1=XXXXXX"              "lvrootdbs1=$lvrootdbs1"
+	xiugai "^lvtempdbs1=XXXXXX"              "lvtempdbs1=$lvtempdbs1"
+	xiugai "^lvtempdbs2=XXXXXX"              "lvtempdbs2=$lvtempdbs2"
+	xiugai "^lvlogdbs1=XXXXXX"               "lvlogdbs1=$lvlogdbs1"
+	xiugai "^lvphydbs1=XXXXXX"               "lvphydbs1=$lvphydbs1"
+	xiugai "^lvuserdbs1=XXXXXX"              "lvuserdbs1=$lvuserdbs1"
+	xiugai "^lvuserdbs2=XXXXXX"              "lvuserdbs2=$lvuserdbs2"
+	xiugai "^lvuserdbs3=XXXXXX"              "lvuserdbs3=$lvuserdbs3"
+	xiugai "^lvuserdbs4=XXXXXX"              "lvuserdbs4=$lvuserdbs4"
+	xiugai "^lvuserdbs5=XXXXXX"              "lvuserdbs5=$lvuserdbs5"
+	xiugai "^lvchargedbs1=XXXXXX"						"lvchargedbs1=$lvchargedbs1"
+	xiugai "^lvchargedbs2=XXXXXX"						"lvchargedbs2=$lvchargedbs2"
+	xiugai "^lvminfodbs1=XXXXXX"							"lvminfodbs1=$lvminfodbs1"
+	xiugai "^lvminfodbs2=XXXXXX"							"lvminfodbs2=$lvminfodbs2"
+	xiugai "^lvservdbs1=XXXXXX"							"lvservdbs1=$lvservdbs1"
+	xiugai "^lvservdbs2=XXXXXX"							"lvservdbs2=$lvservdbs2"
+	xiugai "^lvmuluqueren=XXXXXX"						"lvmuluqueren=$lvmuluqueren"
 }
 startdisk()
 {
-	if [ $lvorfs = lv ]
+	if [ $shifouchuangjianlv = y ] || [ $shifouchuangjianlv = Y ]
 	then
-		if [ $shifouchuangjianlv = y ] || [ $shifouchuangjianlv = Y ]
+		if [ $devname != XXXXXX ]
 		then
-			if [ $devname != XXXXXX ]
+			if [ $shifouqueredevname = Y ] || [ $shifouqueredevname = y ]
 			then
-				if [ $shifouqueredevname = Y ] || [ $shifouqueredevname = y ]
-				then
-					log4s info "开始创建pv"
-					makepv $devname
-				fi
+				log4s info "开始创建pv"
+				makepv $devname
 			fi
-		fi
-		
-		if [ $shifouchuangjianvg = y ] || [ $shifouchuangjianvg = Y ]
-		then
-			if [ $shifouqueredevname1 = y ] || [ $shifouqueredevname1 = Y ]
-			then
-				if [ $devname != XXXXXX ] && [ $vgname != XXXXXX ]
-				then
-					log4s info "开始创建vg，vg名为：$vgname，pv名为：$devname"
-					makevg $vgname $devname
-				fi
-			fi
-		fi
-		
-		if [ $shifouchuangjianlv = Y ] || [ $shifouchuangjianlv = y ]
-		then
-			if [ $devname != XXXXXX ]
-			then
-				if [ $shifouquerenlvsize = y ] || [ $shifouquerenlvsize = Y ]
-				then
-					if [ $lvmuluqueren = y ] || [ $lvmuluqueren = Y ]
-					then
-						log4s info "开始创建lv"
-						makelv rootdbs1		$sizerootdbs1G		$vgname
-						makelv tempdbs1		$sizetempdbs1G		$vgname
-						makelv tempdbs2		$sizetempdbs2G		$vgname
-						makelv logdbs1		$sizelogdbs1G       $vgname
-						makelv phydbs1		$sizephydbs1G       $vgname
-						makelv userdbs1		$sizeuserdbs1G		$vgname
-						makelv userdbs2		$sizeuserdbs2G		$vgname
-						makelv userdbs3	    $sizeuserdbs3G		$vgname
-						makelv userdbs4		$sizeuserdbs4G		$vgname
-						makelv userdbs5		$sizeuserdbs5G		$vgname
-						makelv chargedbs1	$sizechargedbs1G	$vgname
-						makelv chargedbs2   $sizechargedbs2G	$vgname
-						makelv minfodbs1	$sizeminfodbs1G		$vgname
-						makelv minfodbs2	$sizeminfodbs2G		$vgname
-						makelv servdbs1		$sizeservdbs1G		$vgname
-						makelv servdbs2		$sizeservdbs2G		$vgname
-					fi
-				fi
-			fi
-		fi
-		checklv $lvrootdbs1		$sizerootdbs1G
-		checklv $lvtempdbs1		$sizetempdbs1G
-		checklv $lvtempdbs2		$sizetempdbs2G
-		checklv $lvlogdbs1		$sizelogdbs1G
-		checklv $lvphydbs1		$sizephydbs1G
-		checklv $lvuserdbs1		$sizeuserdbs1G
-		checklv $lvuserdbs2		$sizeuserdbs2G
-		checklv $lvuserdbs3		$sizeuserdbs3G
-		checklv $lvuserdbs4		$sizeuserdbs4G
-		checklv $lvuserdbs5		$sizeuserdbs5G
-		checklv $lvchargedbs1	$sizechargedbs1G
-		checklv $lvchargedbs2	$sizechargedbs2G
-		checklv $lvminfodbs1	$sizeminfodbs1G
-		checklv $lvminfodbs2	$sizeminfodbs2G
-		checklv $lvservdbs1		$sizeservdbs1G
-		checklv $lvservdbs2		$sizeservdbs2G
-	fi
-	if [ $lvorfs = fs ]
-	then
-		let needsize=sizerootdbs1G+sizetempdbs1G+sizetempdbs2G+sizelogdbs1G+sizephydbs1G+sizeuserdbs1G+sizeuserdbs2G+sizeuserdbs3G+sizeuserdbs4G+sizeuserdbs5G+sizechargedbs1G+sizechargedbs2G+sizeminfodbs1G+sizeminfodbs2G+sizeservdbs1G+sizeservdbs2G
-		let needsizek=needsize*1000000
-		truesize=`df -kP $idshome|tail -1|awk '{print $4}'`
-		if [ $truesize -lt $needsize ]
-		then
-			log4s error "需要的空间大小为${needsize}G，但实际只有${truesize}G，请重新设置"
-			exit 1;
-		else
-			touchfsdbs   $lvrootdbs1     $sizerootdbs1G     rootdbs
-			touchfsdbs   $lvtempdbs1     $sizetempdbs1G     tempdbs1
-			touchfsdbs   $lvtempdbs2     $sizetempdbs2G     tempdbs2
-			touchfsdbs   $lvlogdbs1      $sizelogdbs1G      logdbs1
-			touchfsdbs   $lvphydbs1      $sizephydbs1G      phydbs1
-			touchfsdbs   $lvuserdbs1     $sizeuserdbs1G     userdbs1
-			touchfsdbs   $lvuserdbs2     $sizeuserdbs2G     userdbs2
-			touchfsdbs   $lvuserdbs3     $sizeuserdbs3G     userdbs3
-			touchfsdbs   $lvuserdbs4     $sizeuserdbs4G     userdbs4
-			touchfsdbs   $lvuserdbs5     $sizeuserdbs5G     userdbs5
-			touchfsdbs   $lvchargedbs1   $sizechargedbs1G   chargedbs1
-			touchfsdbs   $lvchargedbs2   $sizechargedbs2G   chargedbs2
-			touchfsdbs   $lvminfodbs1    $sizeminfodbs1G    minfodbs1
-			touchfsdbs   $lvminfodbs2    $sizeminfodbs2G    minfodbs2
-			touchfsdbs   $lvservdbs1     $sizeservdbs1G     servdbs1
-			touchfsdbs   $lvservdbs2     $sizeservdbs2G     servdbs2
 		fi
 	fi
+	
+	if [ $shifouchuangjianvg = y ] || [ $shifouchuangjianvg = Y ]
+	then
+		if [ $shifouqueredevname1 = y ] || [ $shifouqueredevname1 = Y ]
+		then
+			if [ $devname != XXXXXX ] && [ $vgname != XXXXXX ]
+			then
+				log4s info "开始创建vg，vg名为：$vgname，pv名为：$devname"
+				makevg $vgname $devname
+			fi
+		fi
+	fi
+	
+	if [ $shifouchuangjianlv = Y ] || [ $shifouchuangjianlv = y ]
+	then
+		if [ $devname != XXXXXX ]
+		then
+			if [ $shifouquerenlvsize = y ] || [ $shifouquerenlvsize = Y ]
+			then
+				if [ $lvmuluqueren = y ] || [ $lvmuluqueren = Y ]
+				then
+					log4s info "开始创建lv"
+					makelv rootdbs1		$sizerootdbs1G		$vgname
+					makelv tempdbs1		$sizetempdbs1G		$vgname
+					makelv tempdbs2		$sizetempdbs2G		$vgname
+					makelv logdbs1		$sizelogdbs1G			$vgname
+					makelv phydbs1		$sizephydbs1G			$vgname
+					makelv userdbs1		$sizeuserdbs1G		$vgname
+					makelv userdbs2		$sizeuserdbs2G		$vgname
+					makelv userdbs3	  $sizeuserdbs3G		$vgname
+					makelv userdbs4		$sizeuserdbs4G		$vgname
+					makelv userdbs5		$sizeuserdbs5G		$vgname
+					makelv chargedbs1	$sizechargedbs1G	$vgname
+					makelv chargedbs2 $sizechargedbs2G	$vgname
+					makelv minfodbs1	$sizeminfodbs1G		$vgname
+					makelv minfodbs2	$sizeminfodbs2G		$vgname
+					makelv servdbs1		$sizeservdbs1G		$vgname
+					makelv servdbs2		$sizeservdbs2G		$vgname
+				fi
+			fi
+		fi
+	fi
+	checklv $lvrootdbs1		$sizerootdbs1G
+	checklv $lvtempdbs1		$sizetempdbs1G
+	checklv $lvtempdbs2		$sizetempdbs2G
+	checklv $lvlogdbs1		$sizelogdbs1G
+	checklv $lvphydbs1		$sizephydbs1G
+	checklv $lvuserdbs1		$sizeuserdbs1G
+	checklv $lvuserdbs2		$sizeuserdbs2G
+	checklv $lvuserdbs3		$sizeuserdbs3G
+	checklv $lvuserdbs4		$sizeuserdbs4G
+	checklv $lvuserdbs5		$sizeuserdbs5G
+	checklv $lvchargedbs1	$sizechargedbs1G
+	checklv $lvchargedbs2	$sizechargedbs2G
+	checklv $lvminfodbs1	$sizeminfodbs1G
+	checklv $lvminfodbs2	$sizeminfodbs2G
+	checklv $lvservdbs1		$sizeservdbs1G
+	checklv $lvservdbs2		$sizeservdbs2G
 }
 
 
@@ -2528,17 +2077,9 @@ anzhuang()
 		mkdir $idshome
 		log4s info "创建安装目录"
 	fi
-	querenanzhuangbao;
 	CheckP;
 	InputAndCheck;
 	ZhanWeiflag;
-	if [ ! -d $idshome/dbfiles ]
-	then
-		log4s info "创建dbfiles目录"
-		mkdir $idshome/dbfiles 1>/dev/null 2>&1
-		chown informix:informix $idshome/dbfiles 1>/dev/null 2>&1
-		chmod 775 $idshome/dbfiles 1>/dev/null 2>&1
-	fi
 	startdisk;
 
 
@@ -2565,9 +2106,9 @@ anzhuang()
 		exit 1;
 	fi
 	FILEsize=`stat -c %s /tmp/$anzhuangbao`
-	if [ X$FILEsize != X$filesize ]
+	if [ X$FILEsize != X564142080 ]
 	then
-		log4s error "文件大小不正确，请核对后再进行，大小应为${filesize}字节";
+		log4s error "文件大小不正确，请核对后再进行，大小应为554557440字节";
 		exit 1;
 	fi
 	if [ $tXTBB -le 590 ] || [ $tXTBB -ge 760 ]
@@ -2587,7 +2128,7 @@ anzhuang()
 if [ $initflag = 0 ]
 then
 	#用户是否存在，如果不存在就建立
-	log4s debug "安装标识文件中不存在安装标识，可以正常安装"
+	log4s info "安装标识文件中不存在安装标识"
 	userexistflag=`grep informix /etc/passwd|wc -l|awk '{print $1}'`
 	if [ X$userexistflag != X1 ]
 	then
@@ -2688,33 +2229,25 @@ EOF
 		fi
 	fi
 	log4s info "修改内核参数"
-	kernel_shmmaxnum=`grep "kernel.shmmax" /etc/sysctl.conf|wc -l`
-	kernel_shmmninum=`grep "kernel.shmmni" /etc/sysctl.conf|wc -l`
-	kernel_shmallnum=`grep "kernel.shmall" /etc/sysctl.conf|wc -l`
-	kernel_semnum=`grep "kernel.sem" /etc/sysctl.conf|wc -l`
+	kernel_shmmaxnum=`grep "kernel.shmmax = 439,80465,11104" /etc/sysctl.conf|wc -l`
+	kernel_shmmninum=`grep "kernel.shmmni = 4096" /etc/sysctl.conf|wc -l`
+	kernel_shmallnum=`grep "kernel.shmall = 67108864" /etc/sysctl.conf|wc -l`
+	kernel_semnum=`grep "kernel.sem = 250 32000 32 4096" /etc/sysctl.conf|wc -l`
 	if [ $kernel_shmmaxnum = 0 ]
 	then
 		echo "kernel.shmmax = 4398046511104" >> /etc/sysctl.conf
-	else
-		log4s error "已经存在kernel.shmmax 参数，请人工判断，informix需要值为 \"kernel.shmmax = 4398046511104\""
 	fi
 	if [ $kernel_shmmninum = 0 ]
 	then
 		echo "kernel.shmmni = 4096" >> /etc/sysctl.conf
-	else
-		log4s error "已经存在kernel.shmmni 参数，请人工判断，informix需要值为 \"kernel.shmmni = 4096\""
 	fi
 	if [ $kernel_shmallnum = 0 ]
 	then
 		echo "kernel.shmall = 67108864" >> /etc/sysctl.conf
-	else
-		log4s error "已经存在kernel.shmall 参数，请人工判断，informix需要值为 \"kernel.shmall = 67108864\""
 	fi
 	if [ $kernel_semnum = 0 ]
 	then
 		echo "kernel.sem = 250 32000 32 4096" >> /etc/sysctl.conf
-	else
-		log4s error "已经存在kernel.sem 参数，请人工判断，informix需要值为 \"kernel.sem = 250 32000 32 4096\""
 	fi
 
 
@@ -2726,7 +2259,8 @@ EOF
 	kernel_semok=`grep "kernel.sem = 250 32000 32 4096" /etc/sysctl.conf|wc -l`
 	if [ X$kernel_shmmaxok != X1 ] || [ X$kernel_shmmniok != X1 ] || [ X$kernel_shmallok != X1 ] || [ X$kernel_semok != X1 ]
 	then
-	log4s error "内核参数写入异常，请检查"
+	log4s info "内核参数写入异常，请检查"
+	exit 0;
 	fi
 	log4s info "写入内核数据更新标识"
 	echo "alreadyinstall informix" >> $alreadyornolog
@@ -2887,7 +2421,7 @@ EOF
 	fi
 	if [ X$hdrflag = Xonly ]
 	then
-		ltapedev=alarmprogram
+		ltapedev = alarmprogram
 	fi
 	tihuan "^ROOTPATH \$INFORMIXDIR/tmp/demo_on.rootdbs" "ROOTPATH $idshome/dbfiles/rootdbs1";
 	tihuan "^ROOTSIZE 300000" "ROOTSIZE 2000000";
@@ -2906,19 +2440,17 @@ EOF
 	tihuan "^CKPTINTVL 300" "CKPTINTVL 30";
 	tihuan "^TAPEDEV /dev/tapedev" "TAPEDEV /dev/null";
 	tihuan "^TAPEBLK 32" "TAPEBLK 128";
-	tihuan "^DEF_TABLE_LOCKMODE.*" "DEF_TABLE_LOCKMODE row"
+	tihuan "^DEF_TABLE_LOCKMODE" "DEF_TABLE_LOCKMODE row"
 	if [ X$ltapedev = Xalarmprogram ]
 	then
 		tihuan "^ALARMPROGRAM.*" "ALARMPROGRAM $idshome/etc/alarmprogram.sh"
 		tihuan "^LTAPEDEV.*" "LTAPEDEV /dev/null"
-	elif [ X$ltapedev = Xalarmapi ]
+	fi
+	if [ X$ltapedev = Xalarmapi ]
 	then
 		tihuan "^ALARMPROGRAM.*" "ALARMPROGRAM $idshome/alarmAPI/log_full.sh"
 		tihuan "^LTAPEDEV.*" "LTAPEDEV /dev/null"
 		chmod +x $INFORMIXDIR/alarmAPI/log_full.sh
-	else
-		tihuan "^ALARMPROGRAM.*" "ALARMPROGRAM $idshome/etc/alarmprogram.sh"
-		tihuan "^LTAPEDEV.*" "LTAPEDEV /dev/null"
 	fi
 	tihuan "^BAR_ACT_LOG \$INFORMIXDIR/tmp/bar_act.log" "BAR_ACT_LOG /home/informix/bar_act.log";
 	tihuan "^OPTCOMPIND 2" "OPTCOMPIND 0";
@@ -3049,8 +2581,8 @@ EOF
 	if [ X$hdrflag = Xpri ] || [ X$hdrflag = Xonly ]
 	then
 		log4s info "主机开始初始化"
-		chmod 775 $idshome 1>/dev/null 2>&1;
-		chmod 777 $log4slog 1>/dev/null 2>&1
+		chmod 775 $idshome;
+		chmod 777 $log4slog
 		echo "su - informix -c '. /home/informix/.bash_profile;sh /tmp/tempIFX12.sh chushihua'" >/tmp/temp.sh
 		chmod 777 /tmp/temp.sh
 		
@@ -3073,7 +2605,6 @@ fi
 ###################搭建hdr区###############
 client()
 {
-	querenanzhuangbao
 	#安装客户端模式
 	hdrflag=client
 	if [ X$hdrflag = Xclient ]
@@ -3365,9 +2896,9 @@ client()
 					exit 1;
 				fi
 				FILEsize=`stat -c %s /tmp/$anzhuangbao`
-				if [ X$FILEsize != X$filesize ]
+				if [ X$FILEsize != X564142080 ]
 				then
-					log4s error "文件大小不正确，请核对后再进行，大小应为${filesize}字节";
+					log4s error "文件大小不正确，请核对后再进行，大小应为554557440字节";
 					exit 1;
 				fi
 				if [ $tXTBB -lt 590 ] || [ $tXTBB -ge 760 ]
@@ -3505,15 +3036,6 @@ hdr()
 	oninit;
 	log4s info "开始零备并恢复备库"
 	ontape -t STDIO -s -L 0 -F|rsh $secip "cd /home/informix;. ./.bash_profile ; ontape -t STDIO -p";
-	ontaperesult=`echo $?`
-	if [ $ontaperesult = 0 ]
-	then
-		log4s info "零备恢复完成"
-	else
-		log4s error "零备恢复失败，请根据报错进行核查，修复问题后，使用命令如下进行零备恢复，之后重新设置主备状态"
-		log4s error "ontape -t STDIO -s -L 0 -F|rsh $secip \"cd /home/informix;. ./.bash_profile ; ontape -t STDIO -p\";"
-		exit 1;
-	fi
 	sleep 5;
 	log4s info "开始设置主备库状态"
 	onmode -d primary $secINFORMIXSERVER;
@@ -3546,8 +3068,8 @@ chushihua()
 		echo "请用informix账户启动"
 		exit 0;
 	fi
-	chmod 775 $idshome 1>/dev/null 2>&1;
-	chmod 775 $idshome/dbfiles 1>/dev/null 2>&1;
+	chmod 775 $idshome;
+	chmod 775 $idshome/dbfiles;
 	
 	oninit -ivy;
 	bulidsysmasterok=`grep "'sysmaster' database built successfully." /home/informix/online.log|wc -l|awk '{print $1}'`

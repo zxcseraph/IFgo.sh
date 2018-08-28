@@ -79,19 +79,10 @@ splittype=none								#日志分割方式，none不分割，day按照日期分割后缀名为YYYY-MM-
 splitnum=1000
 
 X86=`uname -m`
-releaseBANBEN=`cat /etc/redhat-release |awk '{print $1}'|tr '[a-z]' '[A-Z]'`
 XITONGTEMP=`uname`
 XITONG=`echo $XITONGTEMP|tr '[a-z]' '[A-Z]'`  #系统类型
 xtong=`echo $XITONG|tr '[A-Z]' '[a-z]'`
-if [ X$releaseBANBEN = XRED ]
-then
-	#是红帽系统
-	XTBANBEN=`lsb_release -a|grep Release|awk '{print $2}'`  #获取系统版本
-elif [ X$releaseBANBEN = XCENTOS ]
-then
-	#是centos
-	XTBANBEN=`cat /etc/redhat-release |awk '{print $4}'|awk 'BEGIN{FS=".";OFS="."} {print $1,$2}'` #获取系统版本
-fi
+XTBANBEN=`cat /etc/redhat-release |awk '{print $4}'|awk 'BEGIN{FS=".";OFS="."} {print $1,$2}'`  #获取系统版本
 tXTBB=$(echo $XTBANBEN |awk '{print $1*100}')
 cpunumtemp=`cat /proc/cpuinfo|grep processor|wc -l`
 let cpunum=cpunumtemp-1
@@ -689,7 +680,7 @@ X86=`uname -m`
 XITONGTEMP=`uname`
 XITONG=`echo $XITONGTEMP|tr '[a-z]' '[A-Z]'`  #系统类型
 xtong=`echo $XITONG|tr '[A-Z]' '[a-z]'`
-XTBANBEN=`lsb_release -a|grep Release|awk '{print $2}'`  #获取系统版本
+XTBANBEN=`cat /etc/redhat-release |awk '{print $4}'|awk 'BEGIN{FS=".";OFS="."} {print $1,$2}'`  #获取系统版本
 tXTBB=$(echo $XTBANBEN |awk '{print $1*100}')
 cpunumtemp=`cat /proc/cpuinfo|grep processor|wc -l`
 let cpunum=cpunumtemp-1
