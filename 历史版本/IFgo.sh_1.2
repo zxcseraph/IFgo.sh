@@ -93,7 +93,7 @@ then
 	#是centos
 	XTBANBEN=`cat /etc/redhat-release |awk '{print $4}'|awk 'BEGIN{FS=".";OFS="."} {print $1,$2}'` #获取系统版本
 fi
-tXTBB=$(echo $XTBANBEN |awk -F'.' '{print $1*1000+$2}')
+tXTBB=$(echo $XTBANBEN |awk '{print $1*100}')
 cpunumtemp=`cat /proc/cpuinfo|grep processor|wc -l`
 let cpunum=cpunumtemp-1
 kernel_shmmax="kernel.shmmax = 4398046511104"
@@ -690,16 +690,8 @@ X86=`uname -m`
 XITONGTEMP=`uname`
 XITONG=`echo $XITONGTEMP|tr '[a-z]' '[A-Z]'`  #系统类型
 xtong=`echo $XITONG|tr '[A-Z]' '[a-z]'`
-if [ X$releaseBANBEN = XRED ]
-then
-	#是红帽系统
-	XTBANBEN=`lsb_release -a|grep Release|awk '{print $2}'`  #获取系统版本
-elif [ X$releaseBANBEN = XCENTOS ]
-then
-	#是centos
-	XTBANBEN=`cat /etc/redhat-release |awk '{print $4}'|awk 'BEGIN{FS=".";OFS="."} {print $1,$2}'` #获取系统版本
-fi
-tXTBB=$(echo $XTBANBEN |awk -F'.' '{print $1*1000+$2}')
+XTBANBEN=`lsb_release -a|grep Release|awk '{print $2}'`  #获取系统版本
+tXTBB=$(echo $XTBANBEN |awk '{print $1*100}')
 cpunumtemp=`cat /proc/cpuinfo|grep processor|wc -l`
 let cpunum=cpunumtemp-1
 kernel_shmmax="kernel.shmmax = 4398046511104"
@@ -743,7 +735,7 @@ CheckP()
 		log4s error "文件大小不正确，请核对后再进行，大小应为$filesize字节";
 		exit 0;
 	fi
-	if [ $tXTBB -le 5009 ] || [ $tXTBB -ge 7006 ]
+	if [ $tXTBB -le 590 ] || [ $tXTBB -ge 760 ]
 	then
 		echo "系统版本暂不支持，请联系脚本开发人员"
 		exit 1;
@@ -2579,7 +2571,7 @@ anzhuang()
 		log4s error "文件大小不正确，请核对后再进行，大小应为${filesize}字节";
 		exit 1;
 	fi
-	if [ $tXTBB -le 5009 ] || [ $tXTBB -ge 7006 ]
+	if [ $tXTBB -le 590 ] || [ $tXTBB -ge 760 ]
 	then
 		log4s error "系统版本暂不支持，请联系脚本开发人员"
 		exit 1;
@@ -2776,7 +2768,7 @@ EOF
 
 	log4s info "增加5.9或者6.5的特定配置"
 	log4s info "系统版本为$XTBANBEN"
-	if [ $tXTBB -ge 5009 ] && [ $tXTBB -le 6005 ]
+	if [ $tXTBB -ge 590 ] && [ $tXTBB -le 650 ]
 	then
 		gai59   $lvrootdbs1       $sizerootdbs1G
 		gai59   $lvtempdbs1       $sizetempdbs1G
@@ -2794,7 +2786,7 @@ EOF
 		gai59   $lvminfodbs2      $sizeminfodbs2G
 		gai59   $lvservdbs1       $sizeservdbs1G
 		gai59   $lvservdbs2       $sizeservdbs2G
-	elif [ $tXTBB -gt 6005 ] && [ $tXTBB -le 7005 ]
+	elif [ $tXTBB -gt 650 ] && [ $tXTBB -le 750 ]
 	then
 		gai65  $vgname  rootdbs1       $sizerootdbs1G
 		gai65  $vgname  tempdbs1       $sizetempdbs1G
@@ -2813,7 +2805,7 @@ EOF
 		gai65  $vgname  servdbs1       $sizeservdbs1G
 		gai65  $vgname  servdbs2       $sizeservdbs2G
 	else
-		log4s error "tXTBB值为 $tXTBB ，无在5.9和7.5之间，所以将两种93rule都加进去尝试使用，如有异常请手动解决"
+		log4s error "tXTBB值为 $tXTBB ，无在5.9和7.5之间，所以将两种93rule都加进去，如有异常请手动解决"
 		gai59   $lvrootdbs1       $sizerootdbs1G
 		gai59   $lvtempdbs1       $sizetempdbs1G
 		gai59   $lvtempdbs2       $sizetempdbs2G
@@ -2846,38 +2838,6 @@ EOF
 		gai65  $vgname  minfodbs2      $sizeminfodbs2G
 		gai65  $vgname  servdbs1       $sizeservdbs1G
 		gai65  $vgname  servdbs2       $sizeservdbs2G
-		chown  informix:informix       $lvrootdbs1 
-		chown  informix:informix       $lvtempdbs1 
-		chown  informix:informix       $lvtempdbs2 
-		chown  informix:informix       $lvlogdbs1  
-		chown  informix:informix       $lvphydbs1  
-		chown  informix:informix       $lvuserdbs1 
-		chown  informix:informix       $lvuserdbs2 
-		chown  informix:informix       $lvuserdbs3 
-		chown  informix:informix       $lvuserdbs4 
-		chown  informix:informix       $lvuserdbs5 
-		chown  informix:informix       $lvchargedbs1
-		chown  informix:informix       $lvchargedbs2
-		chown  informix:informix       $lvminfodbs1
-		chown  informix:informix       $lvminfodbs2
-		chown  informix:informix       $lvservdbs1 
-		chown  informix:informix       $lvservdbs2 
-		chmod  660       $lvrootdbs1 
-		chmod  660       $lvtempdbs1 
-		chmod  660       $lvtempdbs2 
-		chmod  660       $lvlogdbs1  
-		chmod  660       $lvphydbs1  
-		chmod  660       $lvuserdbs1 
-		chmod  660       $lvuserdbs2 
-		chmod  660       $lvuserdbs3 
-		chmod  660       $lvuserdbs4 
-		chmod  660       $lvuserdbs5 
-		chmod  660       $lvchargedbs1
-		chmod  660       $lvchargedbs2
-		chmod  660       $lvminfodbs1
-		chmod  660       $lvminfodbs2
-		chmod  660       $lvservdbs1 
-		chmod  660       $lvservdbs2 
 	fi
 	
 	log4s info "修改informix的环境变量配置文件"
@@ -3411,7 +3371,7 @@ client()
 					log4s error "文件大小不正确，请核对后再进行，大小应为${filesize}字节";
 					exit 1;
 				fi
-				if [ $tXTBB -lt 5009 ] || [ $tXTBB -ge 7006 ]
+				if [ $tXTBB -lt 590 ] || [ $tXTBB -ge 760 ]
 				then
 					log4s error "系统版本暂不支持，请联系脚本开发人员"
 					exit 1;

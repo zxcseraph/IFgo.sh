@@ -1,9 +1,8 @@
 #!/bin/sh
 
-version=1.2
+version=1.1
 #1.0优化内容：支持fc8和fc10，自动检测，使用最高版本
 #1.1优化内容：更多提示，输入监控前置。本地盘方式支持优化。单机安装优化。内核参数核查机制变更。
-#1.2增加对fc12的支持
 
 #架构重置版
 #############################################
@@ -41,9 +40,9 @@ idshome=/ids									#软件安装目录
 INFORMIXDIR=$idshome
 log=$idshome/rizhi.log
 alreadyornolog=$idshome/instalready.log
-banbenlist=("fc8" "fc10" "fc12")
-declare -A anzhuangbaolist=(["fc8"]="Informix_Enterprise_12.10.FC8W1_LIN-x86_64_IFix.tar" ["fc10"]="Informix_Enterprise_12.10.FC10_LIN-x86_64_Fixpack.tar" ["fc12"]="Informix_Enterprise_12.10.FC12_LIN-x86_64_Fixpack.tar")
-declare -A filesizelist=(["fc8"]="564142080" ["fc10"]="402227200" ["fc12"]="418252800")
+banbenlist=("fc8" "fc10")
+declare -A anzhuangbaolist=(["fc8"]="Informix_Enterprise_12.10.FC8W1_LIN-x86_64_IFix.tar" ["fc10"]="Informix_Enterprise_12.10.FC10_LIN-x86_64_Fixpack.tar")
+declare -A filesizelist=(["fc8"]="564142080" ["fc10"]="402227200")
 jiaobenming=`echo $0|awk -F'/' '{print $NF}'`
 tongxinduankou1=36925					#主备机通信的端口，系统默认的36925不被占用，如有特殊情况请手动更改。
 tongxinduankou2=36926
@@ -93,7 +92,7 @@ then
 	#是centos
 	XTBANBEN=`cat /etc/redhat-release |awk '{print $4}'|awk 'BEGIN{FS=".";OFS="."} {print $1,$2}'` #获取系统版本
 fi
-tXTBB=$(echo $XTBANBEN |awk -F'.' '{print $1*1000+$2}')
+tXTBB=$(echo $XTBANBEN |awk '{print $1*100}')
 cpunumtemp=`cat /proc/cpuinfo|grep processor|wc -l`
 let cpunum=cpunumtemp-1
 kernel_shmmax="kernel.shmmax = 4398046511104"
@@ -690,16 +689,8 @@ X86=`uname -m`
 XITONGTEMP=`uname`
 XITONG=`echo $XITONGTEMP|tr '[a-z]' '[A-Z]'`  #系统类型
 xtong=`echo $XITONG|tr '[A-Z]' '[a-z]'`
-if [ X$releaseBANBEN = XRED ]
-then
-	#是红帽系统
-	XTBANBEN=`lsb_release -a|grep Release|awk '{print $2}'`  #获取系统版本
-elif [ X$releaseBANBEN = XCENTOS ]
-then
-	#是centos
-	XTBANBEN=`cat /etc/redhat-release |awk '{print $4}'|awk 'BEGIN{FS=".";OFS="."} {print $1,$2}'` #获取系统版本
-fi
-tXTBB=$(echo $XTBANBEN |awk -F'.' '{print $1*1000+$2}')
+XTBANBEN=`lsb_release -a|grep Release|awk '{print $2}'`  #获取系统版本
+tXTBB=$(echo $XTBANBEN |awk '{print $1*100}')
 cpunumtemp=`cat /proc/cpuinfo|grep processor|wc -l`
 let cpunum=cpunumtemp-1
 kernel_shmmax="kernel.shmmax = 4398046511104"
@@ -743,7 +734,7 @@ CheckP()
 		log4s error "文件大小不正确，请核对后再进行，大小应为$filesize字节";
 		exit 0;
 	fi
-	if [ $tXTBB -le 5009 ] || [ $tXTBB -ge 7006 ]
+	if [ $tXTBB -le 590 ] || [ $tXTBB -ge 760 ]
 	then
 		echo "系统版本暂不支持，请联系脚本开发人员"
 		exit 1;
@@ -838,7 +829,7 @@ InputAndCheck()
 				read -p "业务实例对外ip，不能为空，请重新输入"  priappip
 			done
 			echo "下面是刚才输入的配置"
-			echo "主实例名：     $priINFORMIXSERVER"
+			echo "主实例名： $priINFORMIXSERVER"
 			echo "业务实例名：   $priDBSERVERALIASES"
 			echo "主实例ip：     $priip"
 			echo "业务实例ip：   $priappip"
@@ -2579,7 +2570,7 @@ anzhuang()
 		log4s error "文件大小不正确，请核对后再进行，大小应为${filesize}字节";
 		exit 1;
 	fi
-	if [ $tXTBB -le 5009 ] || [ $tXTBB -ge 7006 ]
+	if [ $tXTBB -le 590 ] || [ $tXTBB -ge 760 ]
 	then
 		log4s error "系统版本暂不支持，请联系脚本开发人员"
 		exit 1;
@@ -2776,7 +2767,7 @@ EOF
 
 	log4s info "增加5.9或者6.5的特定配置"
 	log4s info "系统版本为$XTBANBEN"
-	if [ $tXTBB -ge 5009 ] && [ $tXTBB -le 6005 ]
+	if [ $tXTBB -ge 590 ] && [ $tXTBB -le 650 ]
 	then
 		gai59   $lvrootdbs1       $sizerootdbs1G
 		gai59   $lvtempdbs1       $sizetempdbs1G
@@ -2794,7 +2785,7 @@ EOF
 		gai59   $lvminfodbs2      $sizeminfodbs2G
 		gai59   $lvservdbs1       $sizeservdbs1G
 		gai59   $lvservdbs2       $sizeservdbs2G
-	elif [ $tXTBB -gt 6005 ] && [ $tXTBB -le 7005 ]
+	elif [ $tXTBB -gt 650 ] && [ $tXTBB -le 750 ]
 	then
 		gai65  $vgname  rootdbs1       $sizerootdbs1G
 		gai65  $vgname  tempdbs1       $sizetempdbs1G
@@ -2813,7 +2804,7 @@ EOF
 		gai65  $vgname  servdbs1       $sizeservdbs1G
 		gai65  $vgname  servdbs2       $sizeservdbs2G
 	else
-		log4s error "tXTBB值为 $tXTBB ，无在5.9和7.5之间，所以将两种93rule都加进去尝试使用，如有异常请手动解决"
+		log4s error "tXTBB值为 $tXTBB ，无在5.9和7.5之间，所以将两种93rule都加进去，如有异常请手动解决"
 		gai59   $lvrootdbs1       $sizerootdbs1G
 		gai59   $lvtempdbs1       $sizetempdbs1G
 		gai59   $lvtempdbs2       $sizetempdbs2G
@@ -2846,38 +2837,6 @@ EOF
 		gai65  $vgname  minfodbs2      $sizeminfodbs2G
 		gai65  $vgname  servdbs1       $sizeservdbs1G
 		gai65  $vgname  servdbs2       $sizeservdbs2G
-		chown  informix:informix       $lvrootdbs1 
-		chown  informix:informix       $lvtempdbs1 
-		chown  informix:informix       $lvtempdbs2 
-		chown  informix:informix       $lvlogdbs1  
-		chown  informix:informix       $lvphydbs1  
-		chown  informix:informix       $lvuserdbs1 
-		chown  informix:informix       $lvuserdbs2 
-		chown  informix:informix       $lvuserdbs3 
-		chown  informix:informix       $lvuserdbs4 
-		chown  informix:informix       $lvuserdbs5 
-		chown  informix:informix       $lvchargedbs1
-		chown  informix:informix       $lvchargedbs2
-		chown  informix:informix       $lvminfodbs1
-		chown  informix:informix       $lvminfodbs2
-		chown  informix:informix       $lvservdbs1 
-		chown  informix:informix       $lvservdbs2 
-		chmod  660       $lvrootdbs1 
-		chmod  660       $lvtempdbs1 
-		chmod  660       $lvtempdbs2 
-		chmod  660       $lvlogdbs1  
-		chmod  660       $lvphydbs1  
-		chmod  660       $lvuserdbs1 
-		chmod  660       $lvuserdbs2 
-		chmod  660       $lvuserdbs3 
-		chmod  660       $lvuserdbs4 
-		chmod  660       $lvuserdbs5 
-		chmod  660       $lvchargedbs1
-		chmod  660       $lvchargedbs2
-		chmod  660       $lvminfodbs1
-		chmod  660       $lvminfodbs2
-		chmod  660       $lvservdbs1 
-		chmod  660       $lvservdbs2 
 	fi
 	
 	log4s info "修改informix的环境变量配置文件"
@@ -3411,7 +3370,7 @@ client()
 					log4s error "文件大小不正确，请核对后再进行，大小应为${filesize}字节";
 					exit 1;
 				fi
-				if [ $tXTBB -lt 5009 ] || [ $tXTBB -ge 7006 ]
+				if [ $tXTBB -lt 590 ] || [ $tXTBB -ge 760 ]
 				then
 					log4s error "系统版本暂不支持，请联系脚本开发人员"
 					exit 1;
