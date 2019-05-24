@@ -1,43 +1,43 @@
 #!/bin/sh
 
 version=1.2
-#1.0ÓÅ»¯ÄÚÈİ£ºÖ§³Öfc8ºÍfc10£¬×Ô¶¯¼ì²â£¬Ê¹ÓÃ×î¸ß°æ±¾
-#1.1ÓÅ»¯ÄÚÈİ£º¸ü¶àÌáÊ¾£¬ÊäÈë¼à¿ØÇ°ÖÃ¡£±¾µØÅÌ·½Ê½Ö§³ÖÓÅ»¯¡£µ¥»ú°²×°ÓÅ»¯¡£ÄÚºË²ÎÊıºË²é»úÖÆ±ä¸ü¡£
-#1.2Ôö¼Ó¶Ôfc12µÄÖ§³Ö
+#1.0ä¼˜åŒ–å†…å®¹ï¼šæ”¯æŒfc8å’Œfc10ï¼Œè‡ªåŠ¨æ£€æµ‹ï¼Œä½¿ç”¨æœ€é«˜ç‰ˆæœ¬
+#1.1ä¼˜åŒ–å†…å®¹ï¼šæ›´å¤šæç¤ºï¼Œè¾“å…¥ç›‘æ§å‰ç½®ã€‚æœ¬åœ°ç›˜æ–¹å¼æ”¯æŒä¼˜åŒ–ã€‚å•æœºå®‰è£…ä¼˜åŒ–ã€‚å†…æ ¸å‚æ•°æ ¸æŸ¥æœºåˆ¶å˜æ›´ã€‚
+#1.2å¢åŠ å¯¹fc12çš„æ”¯æŒ
 
-#¼Ü¹¹ÖØÖÃ°æ
+#æ¶æ„é‡ç½®ç‰ˆ
 #############################################
-#½«±¾½Å±¾ºÍ°²×°°ü·Åµ½/tmpÏÂ
-#ÔİÊ±Ö»Ö§³Ölinux
+#å°†æœ¬è„šæœ¬å’Œå®‰è£…åŒ…æ”¾åˆ°/tmpä¸‹
+#æš‚æ—¶åªæ”¯æŒlinux
 #############################################
 
-#²âÊÔ±êÖ¾Î»£¬1ÔòÎª²âÊÔÅäÖÃÏî£¬0ÔòÎªÕıÊ½ÅäÖÃÏî
+#æµ‹è¯•æ ‡å¿—ä½ï¼Œ1åˆ™ä¸ºæµ‹è¯•é…ç½®é¡¹ï¼Œ0åˆ™ä¸ºæ­£å¼é…ç½®é¡¹
 testflag=0
-#Ä£°å£¬´ıÀ©Õ¹
+#æ¨¡æ¿ï¼Œå¾…æ‰©å±•
 muban=cl
-#Îª0ÊÇÊ¹ÓÃÅäÖÃÎÄ¼ş£¬Îª1ÊÇÊ¹ÓÃÊäÈë·½Ê½
+#ä¸º0æ˜¯ä½¿ç”¨é…ç½®æ–‡ä»¶ï¼Œä¸º1æ˜¯ä½¿ç”¨è¾“å…¥æ–¹å¼
 peizhiflag=1
-#ÊÇ·ñĞèÒªÈ¥±¸»ú×Ô¶¯Ö´ĞĞ£¬0·ñ£¬1ÊÇ
+#æ˜¯å¦éœ€è¦å»å¤‡æœºè‡ªåŠ¨æ‰§è¡Œï¼Œ0å¦ï¼Œ1æ˜¯
 prionly=1
-#ÊÇ·ñ°²È«¼Ó¹Ì£¬0·ñ£¬1ÊÇ
+#æ˜¯å¦å®‰å…¨åŠ å›ºï¼Œ0å¦ï¼Œ1æ˜¯
 anquan=1
 
 
 if [ $# = 0 ]
 then
-	echo "Æô¶¯ĞèÒª²ÎÊı£¬anzhuang£¬½øĞĞ°²×°£¬¾ßÌåÅäÖÃÇëÏêÏ¸ÔÄ¶ÁÅäÖÃÇø"
+	echo "å¯åŠ¨éœ€è¦å‚æ•°ï¼Œanzhuangï¼Œè¿›è¡Œå®‰è£…ï¼Œå…·ä½“é…ç½®è¯·è¯¦ç»†é˜…è¯»é…ç½®åŒº"
 	echo "SecureCRT need defult"
 	echo "ru guo zhong wen luan ma ,qing geng gai SecureCRT bian ma wei defult"
 	exit 0;
 fi
 
 
-#############ÅäÖÃÇø£¬ÈçĞè¸ü¸ÄÇë×ĞÏ¸ÔÄ¶Á##############
-isinformixid=0								#ÊÇ·ñÖ¸¶¨informixÓÃ»§idºÍ×éid£¬Ôİ²»Ö§³Ö£¬¾õµÃÃ»ÓÃ
+#############é…ç½®åŒºï¼Œå¦‚éœ€æ›´æ”¹è¯·ä»”ç»†é˜…è¯»##############
+isinformixid=0								#æ˜¯å¦æŒ‡å®šinformixç”¨æˆ·idå’Œç»„idï¼Œæš‚ä¸æ”¯æŒï¼Œè§‰å¾—æ²¡ç”¨
 informixgroupid=200
 informixuserid=200
-informixhome=/home/informix		#informixµÄhomeÄ¿Â¼
-idshome=/ids									#Èí¼ş°²×°Ä¿Â¼
+informixhome=/home/informix		#informixçš„homeç›®å½•
+idshome=/ids									#è½¯ä»¶å®‰è£…ç›®å½•
 INFORMIXDIR=$idshome
 log=$idshome/rizhi.log
 alreadyornolog=$idshome/instalready.log
@@ -45,12 +45,12 @@ banbenlist=("fc8" "fc10" "fc12")
 declare -A anzhuangbaolist=(["fc8"]="Informix_Enterprise_12.10.FC8W1_LIN-x86_64_IFix.tar" ["fc10"]="Informix_Enterprise_12.10.FC10_LIN-x86_64_Fixpack.tar" ["fc12"]="Informix_Enterprise_12.10.FC12_LIN-x86_64_Fixpack.tar")
 declare -A filesizelist=(["fc8"]="564142080" ["fc10"]="402227200" ["fc12"]="418252800")
 jiaobenming=`echo $0|awk -F'/' '{print $NF}'`
-tongxinduankou1=36925					#Ö÷±¸»úÍ¨ĞÅµÄ¶Ë¿Ú£¬ÏµÍ³Ä¬ÈÏµÄ36925²»±»Õ¼ÓÃ£¬ÈçÓĞÌØÊâÇé¿öÇëÊÖ¶¯¸ü¸Ä¡£
+tongxinduankou1=36925					#ä¸»å¤‡æœºé€šä¿¡çš„ç«¯å£ï¼Œç³»ç»Ÿé»˜è®¤çš„36925ä¸è¢«å ç”¨ï¼Œå¦‚æœ‰ç‰¹æ®Šæƒ…å†µè¯·æ‰‹åŠ¨æ›´æ”¹ã€‚
 tongxinduankou2=36926
 
-#dbsÇøÓò£¬ÉèÖÃ¸÷dbs´óĞ¡£¬¸ù¾İchunkÃûÌîĞ´£¬ÅäÖÃµ¥Î»ÎªG
-#×¢ÒâÏëÒªÉèÖÃµÄdbsËùÔÚlvµÄ´óĞ¡Ò»¶¨Òª´óÓÚÉèÖÃµÄdbs´óĞ¡
-#²âÊÔ°æµÄĞ¡Êı¾İ
+#dbsåŒºåŸŸï¼Œè®¾ç½®å„dbså¤§å°ï¼Œæ ¹æ®chunkåå¡«å†™ï¼Œé…ç½®å•ä½ä¸ºG
+#æ³¨æ„æƒ³è¦è®¾ç½®çš„dbsæ‰€åœ¨lvçš„å¤§å°ä¸€å®šè¦å¤§äºè®¾ç½®çš„dbså¤§å°
+#æµ‹è¯•ç‰ˆçš„å°æ•°æ®
 if [ $testflag = 1 ]
 then
 	tsizerootdbs1G=2
@@ -69,78 +69,57 @@ else
 fi
 
 
-#############»ù´¡º¯Êı£¬²»Òª¶¯###############################
-################log4sÅäÖÃÇø#################
-log4spath=$idshome								#Êä³öÈÕÖ¾Ä¿Â¼
-log4sechoCategory=info				#Êä³öµ½ÆÁÄ»ÈÕÖ¾¼¶±ğÃû³Æ£¬¼¶±ğ°´ÕÕdebug=0£¬warn=1£¬info=2£¬error=3
-log4swriteCategory=debug			#Êä³öµ½ÎÄ¼şÈÕÖ¾¼¶±ğÃû³Æ£¬¼¶±ğ°´ÕÕdebug=0£¬warn=1£¬info=2£¬error=3
-log4slogname=root.log					#Êä³öÈÕÖ¾Ãû³Æ
-isecho=1											#Êä³öµ½ÈÕÖ¾µÄÍ¬Ê±ÊÇ·ñ´òÓ¡µ½ÆÁÄ»£¬0ÊÇ²»´òÓ¡£¬1ÊÇ´òÓ¡
-splittype=none								#ÈÕÖ¾·Ö¸î·½Ê½£¬none²»·Ö¸î£¬day°´ÕÕÈÕÆÚ·Ö¸îºó×ºÃûÎªYYYY-MM-DD£¬numÎª°´ÕÕĞĞÄ£Ê½·Ö¸î£¬Èç¹ûÊ¹ÓÃnumÄ£Ê½Ôò±ØĞëÌîĞ´splitnum²ÎÊı£¬Õâ¸öÃ»Ë¼Â·Ôİ²»Ö§³Ö
+#############åŸºç¡€å‡½æ•°ï¼Œä¸è¦åŠ¨###############################
+################log4sé…ç½®åŒº#################
+log4spath=$idshome								#è¾“å‡ºæ—¥å¿—ç›®å½•
+log4sechoCategory=info				#è¾“å‡ºåˆ°å±å¹•æ—¥å¿—çº§åˆ«åç§°ï¼Œçº§åˆ«æŒ‰ç…§debug=0ï¼Œwarn=1ï¼Œinfo=2ï¼Œerror=3
+log4swriteCategory=debug			#è¾“å‡ºåˆ°æ–‡ä»¶æ—¥å¿—çº§åˆ«åç§°ï¼Œçº§åˆ«æŒ‰ç…§debug=0ï¼Œwarn=1ï¼Œinfo=2ï¼Œerror=3
+log4slogname=root.log					#è¾“å‡ºæ—¥å¿—åç§°
+isecho=1											#è¾“å‡ºåˆ°æ—¥å¿—çš„åŒæ—¶æ˜¯å¦æ‰“å°åˆ°å±å¹•ï¼Œ0æ˜¯ä¸æ‰“å°ï¼Œ1æ˜¯æ‰“å°
+splittype=none								#æ—¥å¿—åˆ†å‰²æ–¹å¼ï¼Œnoneä¸åˆ†å‰²ï¼ŒdayæŒ‰ç…§æ—¥æœŸåˆ†å‰²åç¼€åä¸ºYYYY-MM-DDï¼Œnumä¸ºæŒ‰ç…§è¡Œæ¨¡å¼åˆ†å‰²ï¼Œå¦‚æœä½¿ç”¨numæ¨¡å¼åˆ™å¿…é¡»å¡«å†™splitnumå‚æ•°ï¼Œè¿™ä¸ªæ²¡æ€è·¯æš‚ä¸æ”¯æŒ
 splitnum=1000
 
-X86=`uname -m`
-releaseBANBEN=`cat /etc/redhat-release |awk '{print $1}'|tr '[a-z]' '[A-Z]'`
-XITONGTEMP=`uname`
-XITONG=`echo $XITONGTEMP|tr '[a-z]' '[A-Z]'`  #ÏµÍ³ÀàĞÍ
-xtong=`echo $XITONG|tr '[A-Z]' '[a-z]'`
-if [ X$releaseBANBEN = XRED ]
-then
-	#ÊÇºìÃ±ÏµÍ³
-	XTBANBEN=`lsb_release -a|grep Release|awk '{print $2}'`  #»ñÈ¡ÏµÍ³°æ±¾
-elif [ X$releaseBANBEN = XCENTOS ]
-then
-	#ÊÇcentos
-	XTBANBEN=`cat /etc/redhat-release |awk '{print $4}'|awk 'BEGIN{FS=".";OFS="."} {print $1,$2}'` #»ñÈ¡ÏµÍ³°æ±¾
-fi
-tXTBB=$(echo $XTBANBEN |awk -F'.' '{print $1*1000+$2}')
-cpunumtemp=`cat /proc/cpuinfo|grep processor|wc -l`
-let cpunum=cpunumtemp-1
-kernel_shmmax="kernel.shmmax = 4398046511104"
-kernel_shmmni="kernel.shmmni = 4096"
-kernel_shmall="kernel.shmall = 67108864"
-kernel_sem="kernel.sem = 250 32000 32 4096"
-stty erase ^H;
 
 
-################log4sÅäÖÃĞ£Ñé²¢³õÊ¼»¯Çø£¬µ¥¶ÀÄÃ³öÀ´ÊÇÎª³õÊ¼»¯Ö»ĞèÒªÒ»´Î#############
+
+################log4sé…ç½®æ ¡éªŒå¹¶åˆå§‹åŒ–åŒºï¼Œå•ç‹¬æ‹¿å‡ºæ¥æ˜¯ä¸ºåˆå§‹åŒ–åªéœ€è¦ä¸€æ¬¡#############
 log4scheck()
 {
 	if [ X$log4spath = X ]
 	then
-		echo "log4spath²ÎÊıĞèÒªÅäÖÃ"
+		echo "log4spathå‚æ•°éœ€è¦é…ç½®"
 		exit 1;
 	fi
 	if [ X$log4sechoCategory = X ]
 	then
-		echo "log4sechoCategory²ÎÊıĞèÒªÅäÖÃ"
+		echo "log4sechoCategoryå‚æ•°éœ€è¦é…ç½®"
 		exit 1;
 	fi
 	if [ X$log4swriteCategory = X ]
 	then
-		echo "log4swriteCategory²ÎÊıĞèÒªÅäÖÃ"
+		echo "log4swriteCategoryå‚æ•°éœ€è¦é…ç½®"
 		exit 1;
 	fi
 	if [ X$log4slogname = X ]
 	then
-		echo "log4slogname²ÎÊıĞèÒªÅäÖÃ"
+		echo "log4slognameå‚æ•°éœ€è¦é…ç½®"
 		exit 1;
 	fi
 	if [ X$isecho = X ]
 	then
-		echo "isecho²ÎÊıĞèÒªÅäÖÃ"
+		echo "isechoå‚æ•°éœ€è¦é…ç½®"
 		exit 1;
 	fi
 	if [ X$splittype = X ]
 	then
-		echo "splittype²ÎÊıĞèÒªÅäÖÃ"
+		echo "splittypeå‚æ•°éœ€è¦é…ç½®"
 		exit 1;
 	fi
 	if [ X$splittype = Xnum ]
 	then
 		if [ X$splitnum = X ]
 		then
-			echo "splitnum²ÎÊıĞèÒªÅäÖÃ"
+			echo "splitnumå‚æ•°éœ€è¦é…ç½®"
 			exit 1;
 		fi
 	fi
@@ -182,36 +161,38 @@ log4scheck()
 			;;
 	esac
 }
-################log4s´úÂëÇø#################
+################log4sä»£ç åŒº#################
 log4slog=${log4spath}/${log4slogname}
 log4scheck;
-log4s()                       #$1ÊÇ¼¶±ğ£¬$2ÊÇÄÚÈİ
+log4s()                       #$1æ˜¯çº§åˆ«ï¼Œ$2æ˜¯å†…å®¹
 {
 	nowdate=`date +"%Y-%m-%d %H:%M:%S"`
-	######ÅĞ¶ÏÇøÓò£¬±£Ö¤²ÎÊıÑÏ½÷ĞÔ
-	#ÅĞ¶ÏÄ¿Â¼¼°ÈÕÖ¾ÎÄ¼ş£¬²»×Ô¶¯´´½¨Ä¿Â¼£¬µ«ÊÇ»á×Ô¶¯´´½¨ÎÄ¼ş
+	######åˆ¤æ–­åŒºåŸŸï¼Œä¿è¯å‚æ•°ä¸¥è°¨æ€§
+	#åˆ¤æ–­ç›®å½•åŠæ—¥å¿—æ–‡ä»¶ï¼Œä¸è‡ªåŠ¨åˆ›å»ºç›®å½•ï¼Œä½†æ˜¯ä¼šè‡ªåŠ¨åˆ›å»ºæ–‡ä»¶
 	if [ ! -d $log4spath ]
 	then
-		echo "$nowdate log4sÅäÖÃµÄÄ¿Â¼²»´æÔÚ£¬ÇëÈ·ÈÏÅäÖÃÊÇ·ñÕıÈ·"
-		exit 1;
+		echo "$nowdate log4sé…ç½®çš„ç›®å½•ä¸å­˜åœ¨ï¼Œè‡ªåŠ¨å»ºç«‹ç›®å½•"
+		mkdir $log4spath;
+		chmod 777 $log4spath;
+		chown informix:informix $log4spath;
 	fi
 	if [ ! -f $log4slog ]
 	then
-		#echo "log4sÈÕÖ¾²»´æÔÚ£¬´´½¨log4sÈÕÖ¾ÎÄ¼ş"
-		echo "$nowdate log4sÈÕÖ¾²»´æÔÚ£¬´´½¨log4sÈÕÖ¾ÎÄ¼ş" >> $log4slog
+		#echo "log4sæ—¥å¿—ä¸å­˜åœ¨ï¼Œåˆ›å»ºlog4sæ—¥å¿—æ–‡ä»¶"
+		echo "$nowdate log4sæ—¥å¿—ä¸å­˜åœ¨ï¼Œåˆ›å»ºlog4sæ—¥å¿—æ–‡ä»¶" >> $log4slog
 		chmod 777 $log4slog
 	fi
 	
-	#ÅĞ¶Ï²ÎÊı¸öÊı
+	#åˆ¤æ–­å‚æ•°ä¸ªæ•°
 	if [ $# -ne 2 ]
 	then
-		echo "²ÎÊı¸öÊıÎª2¸ö"
+		echo "å‚æ•°ä¸ªæ•°ä¸º2ä¸ª"
 		exit 1;
 	fi
 	log4sindex=0
 	
-	###·Ö¸îÈÕÖ¾Çø
-	#°´ÈÕ·Ö¸î
+	###åˆ†å‰²æ—¥å¿—åŒº
+	#æŒ‰æ—¥åˆ†å‰²
 	if [ $splittype = day ]
 	then
 		lastlineday=`tail -1 $log|awk  '{print $1}'`
@@ -230,12 +211,12 @@ log4s()                       #$1ÊÇ¼¶±ğ£¬$2ÊÇÄÚÈİ
 			touch $log4slog
 		fi
 	fi
-	#°´ĞĞÊı·Ö¸î
+	#æŒ‰è¡Œæ•°åˆ†å‰²
 	if [ $splittype = num ]
 	then
 		if [ ! -f $log4slog ]
 		then
-			echo "ÈÕÖ¾ÎÄ¼ş²»´æÔÚ£¬Çë¼ì²éÅäÖÃÊÇ·ñÕıÈ·"
+			echo "æ—¥å¿—æ–‡ä»¶ä¸å­˜åœ¨ï¼Œè¯·æ£€æŸ¥é…ç½®æ˜¯å¦æ­£ç¡®"
 			exit 1;
 		fi
 		lognum=`wc -l $log4slog|awk '{print $1}'`
@@ -247,7 +228,7 @@ log4s()                       #$1ÊÇ¼¶±ğ£¬$2ÊÇÄÚÈİ
 		fi
 	fi
 
-	######¹¦ÄÜÇøÓò
+	######åŠŸèƒ½åŒºåŸŸ
 	log4sinlevel=`echo $1|tr '[a-z]' '[A-Z]'`
 	case $log4sinlevel in
 		DEBUG)
@@ -277,19 +258,19 @@ log4s()                       #$1ÊÇ¼¶±ğ£¬$2ÊÇÄÚÈİ
 }
 querenanzhuangbao()
 {
-	#°²×°°ü·Ö±æ
+	#å®‰è£…åŒ…åˆ†è¾¨
 	for banbenlisti in ${banbenlist[*]}; do
 		if [ -f ${anzhuangbaolist[$banbenlisti]} ]
 		then
-			log4s debug "°²×°°üÉèÖÃÎª${anzhuangbaolist[$banbenlisti]}"
+			log4s debug "å®‰è£…åŒ…è®¾ç½®ä¸º${anzhuangbaolist[$banbenlisti]}"
 			anzhuangbao=${anzhuangbaolist[$banbenlisti]}
 			filesize=${filesizelist[$banbenlisti]}
-			log4s debug "°²×°°ü´óĞ¡Ó¦¸ÃÎª$filesize"
+			log4s debug "å®‰è£…åŒ…å¤§å°åº”è¯¥ä¸º$filesize"
 		fi
 	done
 	if [ X$anzhuangbao = X ] || [ X$filesize = X ]
 	then
-		log4s error "°²×°°ü²»´æÔÚ"
+		log4s error "å®‰è£…åŒ…ä¸å­˜åœ¨"
 		exit 1;
 	fi
 }
@@ -313,7 +294,7 @@ tihuanbasic()
 }
 gai59()
 {
-	#Á½¸ö²ÎÊı£¬$1Î»lvÄ¿Â¼±ÈÈç$lvrootdbs1£¬$2Î»lvµÄ´óĞ¡
+	#ä¸¤ä¸ªå‚æ•°ï¼Œ$1ä½lvç›®å½•æ¯”å¦‚$lvrootdbs1ï¼Œ$2ä½lvçš„å¤§å°
 	if [ $2 != 0 ]
 	then
 		log4s debug "ENV{DM_NAME}==\"$1\", OWNER:=\"informix\", GROUP:=\"informix\", MODE:=\"660\""
@@ -322,7 +303,7 @@ gai59()
 }
 gai65()
 {
-	#3¸ö²ÎÊı£¬$1Î»$vgname£¬$2ÊÇlvÃû³Æ±ÈÈçrootdbs1£¬,3ÊÇlvµÄ´óĞ¡
+	#3ä¸ªå‚æ•°ï¼Œ$1ä½$vgnameï¼Œ$2æ˜¯lvåç§°æ¯”å¦‚rootdbs1ï¼Œ,3æ˜¯lvçš„å¤§å°
 	if [ $3 != 0 ]
 	then
 		log4s debug "ENV{DM_VG_NAME}==\"$1\", ENV{DM_LV_NAME}==\"$2\", OWNER:=\"informix\", GROUP:=\"informix\""
@@ -332,13 +313,13 @@ gai65()
 makeonspace()
 {
 	#onspaces -c -d logdbs -p $idshome/dbfiles/logdbs1 -o 0 -s $sizelogdbs1;
-	#$1ÊÇlogdbs£¬$2ÊÇ$idshome/dbfiles/logdbs1£¬$3ÊÇ$sizelogdbs1£¬$4ÊÇ¾ö¶¨ÊÇ-c -d »¹ÊÇ-a
+	#$1æ˜¯logdbsï¼Œ$2æ˜¯$idshome/dbfiles/logdbs1ï¼Œ$3æ˜¯$sizelogdbs1ï¼Œ$4æ˜¯å†³å®šæ˜¯-c -d è¿˜æ˜¯-a
 	if [ $3 != 0 ]
 	then
 		let onspacetempsize=$3*1000000
 		if [ X$4 = Xc ]
 		then
-			log4s debug "¿ªÊ¼´´½¨dbspace  $1"
+			log4s debug "å¼€å§‹åˆ›å»ºdbspace  $1"
 			onsapcetempflag=`echo $1|grep temp|wc -l|awk '{print $1}'`
 			if [ X$onsapcetempflag = X0 ]
 			then
@@ -351,22 +332,22 @@ makeonspace()
 			sleep 3;
 			if [ $onresult = 0 ]
 			then
-				log4s info "$1´´½¨³É¹¦"
+				log4s info "$1åˆ›å»ºæˆåŠŸ"
 			else
-				log4s error "$1´´½¨Ê§°Ü"
+				log4s error "$1åˆ›å»ºå¤±è´¥"
 			fi
 		fi
 		if [ X$4 = Xa ]
 		then
-			log4s debug "Ôö¼Ódbspace  $1"
+			log4s debug "å¢åŠ dbspace  $1"
 			onspaces -a $1 -p $2 -o 0 -s $onspacetempsize;
 			onresult=$?
 			sleep 3;
 			if [ $onresult = 0 ]
 			then
-				log4s info "$1Ôö¼Ó³É¹¦"
+				log4s info "$1å¢åŠ æˆåŠŸ"
 			else
-				log4s error "$1Ôö¼ÓÊ§°Ü"
+				log4s error "$1å¢åŠ å¤±è´¥"
 			fi
 		fi
 	fi
@@ -384,103 +365,103 @@ sizesum()
 isfull=0
 diskisfull()
 {
-	#Ê¹ÓÃ·½·¨£¬ÏÈÖ´ĞĞsizesum£¬µÚÒ»¸ö²ÎÊıÊÇ$devname
+	#ä½¿ç”¨æ–¹æ³•ï¼Œå…ˆæ‰§è¡Œsizesumï¼Œç¬¬ä¸€ä¸ªå‚æ•°æ˜¯$devname
 	if [ $sizesumnum = 0 ]
 	then
-		echo "ÇëÏÈÔËĞĞsizesum"
+		echo "è¯·å…ˆè¿è¡Œsizesum"
 		exit 1;
 	fi
 	let tempsize=$sizesumnum*1024*1024*1024
 	disksize=`fdisk -l|grep "$1" |awk -F',' '{print $2}'|awk '{print $1}'`
-	log4s info "ĞèÒª¿Õ¼ä$tempsize,´ÅÅÌ¿Õ¼äÎª$disksize"
+	log4s info "éœ€è¦ç©ºé—´$tempsize,ç£ç›˜ç©ºé—´ä¸º$disksize"
 	if [ $tempsize -lt $disksize ] && [ $tempsize != 0 ]
 	then
 		ifull=ok
-		log4s info "´ÅÅÌ¿Õ¼äÂú×ãĞèÇó"
+		log4s info "ç£ç›˜ç©ºé—´æ»¡è¶³éœ€æ±‚"
 	else
 		isfull=full
-		log4s error "´ÅÅÌ¿Õ¼ä²»×ã"
+		log4s error "ç£ç›˜ç©ºé—´ä¸è¶³"
 		exit 1;
 	fi
 }
 vgisfull()
 {
-	#Ê¹ÓÃ·½·¨£¬ÏÈÖ´ĞĞsizesum£¬µÚÒ»¸ö²ÎÊıÊÇ$devname
+	#ä½¿ç”¨æ–¹æ³•ï¼Œå…ˆæ‰§è¡Œsizesumï¼Œç¬¬ä¸€ä¸ªå‚æ•°æ˜¯$devname
 	if [ $sizesumnum = 0 ]
 	then
-		echo "ÇëÏÈÔËĞĞsizesum"
+		echo "è¯·å…ˆè¿è¡Œsizesum"
 		exit 1;
 	fi
 	let tempsize=$sizesumnum
 	vgsize=`vgdisplay $vgname|grep 'VG Size'|awk '{print $3}'`
-	log4s info "ĞèÒªµÄvg¿Õ¼äÎª${tempsize}G£¬µ±Ç°vgÊµ¼Ê¿Õ¼äÎª${tempsize}G"
+	log4s info "éœ€è¦çš„vgç©ºé—´ä¸º${tempsize}Gï¼Œå½“å‰vgå®é™…ç©ºé—´ä¸º${tempsize}G"
 	if [ $tempsize -lt $vgsize ] && [ $tempsize != 0 ]
 	then
 		ifull=ok
-		log4s info "vg¿Õ¼äÂú×ãĞèÇó"
+		log4s info "vgç©ºé—´æ»¡è¶³éœ€æ±‚"
 	else
 		isfull=full
-		log4s error "vg¿Õ¼ä²»×ã"
+		log4s error "vgç©ºé—´ä¸è¶³"
 		exit 1;
 	fi
 }
 checklv()
 {
-	#¼ì²é»®·ÖµÄlv´óĞ¡ÊÇ·ñ·ûºÏÉèÖÃµÄÖµ£¬»òÕßÊÇ·ñ»®·Ö³É¹¦
-	#$1ÎªlvÄ¿Â¼£¬$2ÎªÉèÖÃµÄ´óĞ¡
+	#æ£€æŸ¥åˆ’åˆ†çš„lvå¤§å°æ˜¯å¦ç¬¦åˆè®¾ç½®çš„å€¼ï¼Œæˆ–è€…æ˜¯å¦åˆ’åˆ†æˆåŠŸ
+	#$1ä¸ºlvç›®å½•ï¼Œ$2ä¸ºè®¾ç½®çš„å¤§å°
 	if [ X$1 = X ] || [ X$2 = X ]
 	then
-		log4s debug "checklvÔËĞĞ´íÎó£¬µÚÒ»¸ö²ÎÊıÎª£º$1£¬µÚ¶ş¸ö²ÎÊıÎª£º$2"
+		log4s debug "checklvè¿è¡Œé”™è¯¯ï¼Œç¬¬ä¸€ä¸ªå‚æ•°ä¸ºï¼š$1ï¼Œç¬¬äºŒä¸ªå‚æ•°ä¸ºï¼š$2"
 	fi
 	if [ X$2 != X0 ]
 	then
 		lvexist=`lvdisplay $1|grep 'LV Size'|wc -l|awk '{print $1}'`
 		if [ X$lvexist != X1 ]
 		then
-			log4s error "$1²»´æÔÚ"
+			log4s error "$1ä¸å­˜åœ¨"
 			exit 1;
 		fi
 		huafensize=`lvdisplay $1|grep 'LV Size'|awk '{print $3}'|awk -F'.' '{print $1}'`
 		yaoqiusize=$2
 		if [ $huafensize -ge $yaoqiusize ]
 		then
-			log4s debug "${1}´óĞ¡·ûºÏÒªÇó"
+			log4s debug "${1}å¤§å°ç¬¦åˆè¦æ±‚"
 		else
-			log4s error "ÊäÈëµÄdbs´óĞ¡Îª$2£¬µ«ÊÇlv´óĞ¡Îª$1£¬²»·ûºÏÒªÇó"
+			log4s error "è¾“å…¥çš„dbså¤§å°ä¸º$2ï¼Œä½†æ˜¯lvå¤§å°ä¸º$1ï¼Œä¸ç¬¦åˆè¦æ±‚"
 			exit 1;
 		fi
 	else
-		log4s debug "${1}µÄ´óĞ¡Îª0£¬²»ĞèÒª´´½¨¸Ãdbs£¬ËùÒÔ²»¼ì²é"
+		log4s debug "${1}çš„å¤§å°ä¸º0ï¼Œä¸éœ€è¦åˆ›å»ºè¯¥dbsï¼Œæ‰€ä»¥ä¸æ£€æŸ¥"
 	fi
 }
 makeln()
 {
-	#$1ÊÇÔ´ÎÄ¼şÒ²¾ÍÊÇlv£¬$2ÊÇÒª´´½¨µÄ´óĞ¡£¬$3ÊÇÁ¬½ÓÎÄ¼şÒ²¾ÍÊÇdbsfileÏÂµÄ
+	#$1æ˜¯æºæ–‡ä»¶ä¹Ÿå°±æ˜¯lvï¼Œ$2æ˜¯è¦åˆ›å»ºçš„å¤§å°ï¼Œ$3æ˜¯è¿æ¥æ–‡ä»¶ä¹Ÿå°±æ˜¯dbsfileä¸‹çš„
 	if [ X$2 != X0 ]
 	then
 		ln -s $1 $3
-		log4s info "´´½¨$3"
+		log4s info "åˆ›å»º$3"
 		if [ -L $3 ]
 		then
-			log4s info "´´½¨Á¬½ÓÎÄ¼ş $3 ³É¹¦"
+			log4s info "åˆ›å»ºè¿æ¥æ–‡ä»¶ $3 æˆåŠŸ"
 		else
-			log4s error "´´½¨Á¬½ÓÎÄ¼ş $3 Ê§°Ü"
+			log4s error "åˆ›å»ºè¿æ¥æ–‡ä»¶ $3 å¤±è´¥"
 		fi
 	fi
 }
 tihuan()
 {
-	log4s debug "½«$peizhiÖĞµÄ\"$1\" ĞŞ¸ÄÎª \"$2\""
+	log4s debug "å°†$peizhiä¸­çš„\"$1\" ä¿®æ”¹ä¸º \"$2\""
 	tihuanbasic "$1" "$2" $peizhi
 }
 tihuanaao()
 {
-	log4s debug "½«$idshome/aaodir/adtcfgÖĞµÄ\"$1\" ĞŞ¸ÄÎª \"$2\""
+	log4s debug "å°†$idshome/aaodir/adtcfgä¸­çš„\"$1\" ä¿®æ”¹ä¸º \"$2\""
 	tihuanbasic "$1" "$2" $idshome/aaodir/adtcfg
 }
 xiugai()
 {
-	log4s debug "½«/tmp/tempIFX12.shÖĞµÄ\"$1\" ĞŞ¸ÄÎª \"$2\""
+	log4s debug "å°†/tmp/tempIFX12.shä¸­çš„\"$1\" ä¿®æ”¹ä¸º \"$2\""
 	tihuanbasic "$1" "$2" /tmp/tempIFX12.sh
 }
 Pstr()
@@ -526,18 +507,18 @@ Pnum()
 
 Plvsize()
 {
-	#$1ÎªlvÄ¿Â¼£¬$2Îªlv´óĞ¡£¬$3ÎªlvÃû³Æ
+	#$1ä¸ºlvç›®å½•ï¼Œ$2ä¸ºlvå¤§å°ï¼Œ$3ä¸ºlvåç§°
 	if [ X$1 = X0 ] || [ X$2 = X0 ] || [ X$3 = X0 ]
 	then
-		log4s info "µ±Ç°dbs²»½¨Á¢£¬ËùÒÔ²»ĞèÒªÅĞ¶Ï"
+		log4s info "å½“å‰dbsä¸å»ºç«‹ï¼Œæ‰€ä»¥ä¸éœ€è¦åˆ¤æ–­"
 	else
 		Plvsizegetsize=`lvdisplay $1|grep 'LV Size'|awk '{print $3}'|awk -F'.' '{print $1}'`
 		if [ $Plvsizegetsize -lt $2 ]
 		then
-			log4s error "$3,ÉèÖÃµÄlvµÄ´óĞ¡Îª$Plvsizegetsize£¬Ğ¡ÓÚÒªÇóµÄ´óĞ¡$2"
+			log4s error "$3,è®¾ç½®çš„lvçš„å¤§å°ä¸º$Plvsizegetsizeï¼Œå°äºè¦æ±‚çš„å¤§å°$2"
 			exit 1;
 		else
-			log4s debug "$3,ÉèÖÃµÄlvµÄ´óĞ¡Îª$Plvsizegetsize£¬´óÓÚÒªÇóµÄ´óĞ¡$2£¬·ûºÏÒªÇó"
+			log4s debug "$3,è®¾ç½®çš„lvçš„å¤§å°ä¸º$Plvsizegetsizeï¼Œå¤§äºè¦æ±‚çš„å¤§å°$2ï¼Œç¬¦åˆè¦æ±‚"
 		fi
 	fi
 }
@@ -550,7 +531,7 @@ Rset0()
 }
 makepv()
 {
-	#$1ÎªÒª´´½¨pvµÄÄ¿Â¼
+	#$1ä¸ºè¦åˆ›å»ºpvçš„ç›®å½•
 	pvisexist=`pvscan|grep "$1"|wc -l|awk '{print $1}'`
 	if [ X$pvisexist = X0 ]
 	then
@@ -559,13 +540,13 @@ makepv()
 		getmakeresult=`grep -i successfully $log4spath/makepv.temp|wc -l|awk '{print $1}'`
 		if [ X$getpvnum = X1 ] && [ X$getmakeresult = X1 ]
 		then
-			log4s info "pv´´½¨³É¹¦"
+			log4s info "pvåˆ›å»ºæˆåŠŸ"
 		else
-			log4s error "pv´´½¨Ê§°Ü"
+			log4s error "pvåˆ›å»ºå¤±è´¥"
 			exit 1;
 		fi
 	else
-		log4s error "pvÒÑ¾­´æÔÚ£¬Çë×¢ÒâÊäÈëÊÇ·ñÕı³£"
+		log4s error "pvå·²ç»å­˜åœ¨ï¼Œè¯·æ³¨æ„è¾“å…¥æ˜¯å¦æ­£å¸¸"
 		exit 1;
 	fi
 }
@@ -577,25 +558,25 @@ makevg()
 	getmakevgresult=`grep -i successfully $log4spath/makevg.temp|wc -l|awk '{print $1}'`
 	if [ X$getvgnum = X1 ] && [ X$getmakevgresult = X1 ]
 	then
-		log4s info "´´½¨vg³É¹¦£¬vgÃû³ÆÎª$vgname"
+		log4s info "åˆ›å»ºvgæˆåŠŸï¼Œvgåç§°ä¸º$vgname"
 	else
-		log4s error "´´½¨vgÊ§°Ü"
+		log4s error "åˆ›å»ºvgå¤±è´¥"
 		exit 1;
 	fi
 }
 
 makelv()
 {
-	#Ê¹ÓÃ·½·¨£¬´«ÈëµÚÒ»¸ö²ÎÊıÊÇlvÃû£¬µÚ¶ş¸ö²ÎÊı´óĞ¡£¨¸ñÊ½Îª1G£©£¬µÚÈı¸ö²ÎÊıvgÃû³Æ
+	#ä½¿ç”¨æ–¹æ³•ï¼Œä¼ å…¥ç¬¬ä¸€ä¸ªå‚æ•°æ˜¯lvåï¼Œç¬¬äºŒä¸ªå‚æ•°å¤§å°ï¼ˆæ ¼å¼ä¸º1Gï¼‰ï¼Œç¬¬ä¸‰ä¸ªå‚æ•°vgåç§°
 	if [ $2 != 0 ]
 	then
 		lvcreate -L ${2}G -n $1 $3 > $log4spath/makelv.temp
 		getmakelvresult=`grep $1 $log4spath/makelv.temp|grep -i created|wc -l|awk '{print $1}'`
 		if [ X$getmakelvresult = X1 ]
 		then
-			log4s info "$1´´½¨³É¹¦"
+			log4s info "$1åˆ›å»ºæˆåŠŸ"
 		else
-			log4s error "$1´´½¨Ê§°Ü"
+			log4s error "$1åˆ›å»ºå¤±è´¥"
 			exit 1;
 		fi
 	fi
@@ -604,8 +585,8 @@ makelv()
 
 
 
-#########################Õ¼Î»ÅäÖÃÇø£¬ÇëÎğĞŞ¸Ä#########
-#¸ÃÇøÓòÊÇÎªÁËÊ¹ÓÃinformixÕË»§Æô¶¯½Å±¾Ê±ÄÜ»ñµÃÖ®Ç°ÊäÈëµÄÅäÖÃĞÅÏ¢
+#########################å ä½é…ç½®åŒºï¼Œè¯·å‹¿ä¿®æ”¹#########
+#è¯¥åŒºåŸŸæ˜¯ä¸ºäº†ä½¿ç”¨informixè´¦æˆ·å¯åŠ¨è„šæœ¬æ—¶èƒ½è·å¾—ä¹‹å‰è¾“å…¥çš„é…ç½®ä¿¡æ¯
 priINFORMIXSERVER=XXXXXX
 secINFORMIXSERVER=XXXXXX
 priDBSERVERALIASES=XXXXXX
@@ -685,27 +666,38 @@ clientip=XXXXXX
 clientport=XXXXXX
 clientpeizhiqueren=XXXXXX
 ltapedev=XXXXXX
-#############»ñÈ¡ÏµÍ³ÅäÖÃÇø£¬µ¥¶ÀÄÃ³öÀ´ÎªÁË±ãÓÚµ÷ÊÔ#########
+#############è·å–ç³»ç»Ÿé…ç½®åŒºï¼Œå•ç‹¬æ‹¿å‡ºæ¥ä¸ºäº†ä¾¿äºè°ƒè¯•#########
 X86=`uname -m`
 XITONGTEMP=`uname`
-XITONG=`echo $XITONGTEMP|tr '[a-z]' '[A-Z]'`  #ÏµÍ³ÀàĞÍ
+XITONG=`echo $XITONGTEMP|tr '[a-z]' '[A-Z]'`  #ç³»ç»Ÿç±»å‹
 xtong=`echo $XITONG|tr '[A-Z]' '[a-z]'`
+releaseBANBEN=`cat /etc/redhat-release |awk '{print $1}'|tr '[a-z]' '[A-Z]'`
 if [ X$releaseBANBEN = XRED ]
 then
-	#ÊÇºìÃ±ÏµÍ³
-	XTBANBEN=`lsb_release -a|grep Release|awk '{print $2}'`  #»ñÈ¡ÏµÍ³°æ±¾
+	#æ˜¯çº¢å¸½ç³»ç»Ÿ
+	XTBANBEN=`lsb_release -a|grep Release|awk '{print $2}'`  #è·å–ç³»ç»Ÿç‰ˆæœ¬
 elif [ X$releaseBANBEN = XCENTOS ]
 then
-	#ÊÇcentos
-	XTBANBEN=`cat /etc/redhat-release |awk '{print $4}'|awk 'BEGIN{FS=".";OFS="."} {print $1,$2}'` #»ñÈ¡ÏµÍ³°æ±¾
+	#æ˜¯centos
+	XTBANBEN=`cat /etc/redhat-release |awk '{print $4}'|awk 'BEGIN{FS=".";OFS="."} {print $1,$2}'` #è·å–ç³»ç»Ÿç‰ˆæœ¬
 fi
 tXTBB=$(echo $XTBANBEN |awk -F'.' '{print $1*1000+$2}')
 cpunumtemp=`cat /proc/cpuinfo|grep processor|wc -l`
 let cpunum=cpunumtemp-1
+#è·å–å†…å­˜ä¿¡æ¯ï¼Œè¦æ±‚å•ä½æ˜¯kbï¼Œä½†æ˜¯è¿™é‡Œå¾—å‡ºæ•°æ˜¯ç›´æ¥æŒ‰ç…§page2kçš„ä¸ªæ•°ï¼Œç„¶åè®¡ç®—å†…å­˜çš„50%æ˜¯å¦å¤§äº32Gï¼Œå¦‚æœå¤§äºåˆ™buffé…ç½®32Gï¼Œå¦åˆ™buffé…ç½®å†…å­˜çš„50%
+meminfopage=`cat /proc/meminfo |grep -i MemTotal|awk '{print $2/2}'`
+let memthreshold=meminfopage/2
+if [ 16000000 -le $memthreshold ]
+then
+	BUFFPOOLMEM=16000000
+else
+	BUFFPOOLMEM=$memthreshold
+fi
 kernel_shmmax="kernel.shmmax = 4398046511104"
 kernel_shmmni="kernel.shmmni = 4096"
 kernel_shmall="kernel.shmall = 67108864"
 kernel_sem="kernel.sem = 250 32000 32 4096"
+stty erase ^H;
 
 let sizerootdbs1=$sizerootdbs1G*1000000
 let sizetempdbs1=$sizetempdbs1G*1000000
@@ -714,18 +706,18 @@ let sizelogdbs1=$sizelogdbs1G*1000000
 let sizephydbs1=$sizephydbs1G*1000000
 let sizeuserdbs1=$sizeuserdbs1G*1000000
 
-#²ÎÊı³õÊ¼»¯²¢Ğ£ÑéÇøÓò
+#å‚æ•°åˆå§‹åŒ–å¹¶æ ¡éªŒåŒºåŸŸ
 CheckP()
 {
 	PWDDIR=`pwd`
 	if [ X$PWDDIR != X/tmp ]
 	then
-		echo "Çë½«½Å±¾·ÅÔÚ/tmpÏÂ£¬ÇÒÔÚ/tmpÏÂÖ´ĞĞ"
+		echo "è¯·å°†è„šæœ¬æ”¾åœ¨/tmpä¸‹ï¼Œä¸”åœ¨/tmpä¸‹æ‰§è¡Œ"
 		exit 1;
 	fi
 	if [ ! -f /tmp/$anzhuangbao ]
 	then
-		echo "Çë½«°²×°°ü$anzhuangbao·ÅÔÚ/tmpÏÂ"
+		echo "è¯·å°†å®‰è£…åŒ…$anzhuangbaoæ”¾åœ¨/tmpä¸‹"
 		exit 1;
 	fi
 	cp /tmp/$jiaobenming /tmp/tempIFX12.sh
@@ -734,63 +726,63 @@ CheckP()
 	X86=`uname -m`
 	if [ X$X86 != Xx86_64 ]
 	then
-		log4s error "ÏµÍ³Îª32Î»°æ±¾£¬ÔİÊ±²»Ö§³Ö"
+		log4s error "ç³»ç»Ÿä¸º32ä½ç‰ˆæœ¬ï¼Œæš‚æ—¶ä¸æ”¯æŒ"
 		exit 1;
 	fi
 	FILEsize=`stat -c %s /tmp/$anzhuangbao`
 	if [ X$FILEsize != X$filesize ]
 	then
-		log4s error "ÎÄ¼ş´óĞ¡²»ÕıÈ·£¬ÇëºË¶ÔºóÔÙ½øĞĞ£¬´óĞ¡Ó¦Îª$filesize×Ö½Ú";
+		log4s error "æ–‡ä»¶å¤§å°ä¸æ­£ç¡®ï¼Œè¯·æ ¸å¯¹åå†è¿›è¡Œï¼Œå¤§å°åº”ä¸º$filesizeå­—èŠ‚";
 		exit 0;
 	fi
-	if [ $tXTBB -le 5009 ] || [ $tXTBB -ge 7006 ]
+	if [ $tXTBB -le 5009 ] || [ $tXTBB -ge 7906 ]
 	then
-		echo "ÏµÍ³°æ±¾Ôİ²»Ö§³Ö£¬ÇëÁªÏµ½Å±¾¿ª·¢ÈËÔ±"
+		echo "ç³»ç»Ÿç‰ˆæœ¬æš‚ä¸æ”¯æŒï¼Œè¯·è”ç³»è„šæœ¬å¼€å‘äººå‘˜"
 		exit 1;
 	fi
 	ncanzhuang=`rpm -q nc|wc -l|awk '{print $1}'`
-	if [ X$ncanzhuang != X1 ]
+	if [ X$ncanzhuang != X1 ] || [ ! -f /usr/bin/nc ]
 	then
-		echo "Çë°²×°ncºóÔÙÖ´ĞĞ½Å±¾"
+		echo "è¯·å®‰è£…ncåå†æ‰§è¡Œè„šæœ¬"
 		exit 1;
 	fi
 	rshanzhuang1=`rpm -q rsh|wc -l|awk '{print $1}'`
 	if [ X$rshanzhuang1 != X1 ] || [ ! -f /etc/xinetd.d/rsh ]
 	then
-		echo "ÇëÈ·ÈÏ°²×°rshºóÔÙÖ´ĞĞ½Å±¾"
+		echo "è¯·ç¡®è®¤å®‰è£…rshåå†æ‰§è¡Œè„šæœ¬"
 		exit 1;
 	fi
 	which nc 1>/dev/null 2>&1
 	if [ $? != 0 ]
 	then
-		echo "µ±Ç°Ö÷»úÃ»ÓĞnc£¬ÇëÎñ±ØÈ·±£°²×°"
+		echo "å½“å‰ä¸»æœºæ²¡æœ‰ncï¼Œè¯·åŠ¡å¿…ç¡®ä¿å®‰è£…"
 	fi
 }
 InputAndCheck()
 {
-	echo "¿ªÊ¼°²×°£¬µ±Ç°°æ±¾Îª$version£¬Ã¿Ò»¿éÊäÈëºó¶¼ÓĞ¶ş´ÎÈ·ÈÏ£¬ÈçÓĞÊäÈë´íÎó¿ÉÒÔÑ¡Ôñn£¬Ôò¸ÃÄ£¿éÖØĞÂÊäÈë"
+	echo "å¼€å§‹å®‰è£…ï¼Œå½“å‰ç‰ˆæœ¬ä¸º$versionï¼Œæ¯ä¸€å—è¾“å…¥åéƒ½æœ‰äºŒæ¬¡ç¡®è®¤ï¼Œå¦‚æœ‰è¾“å…¥é”™è¯¯å¯ä»¥é€‰æ‹©nï¼Œåˆ™è¯¥æ¨¡å—é‡æ–°è¾“å…¥"
 	while [[ X$hdrflag != Xhdr  && X$hdrflag != Xonly && X$hdrflag != Xsec && X$hdrflag != Xpri && X$hdrflag != Xclient ]]
 	do
-		read -p "ÇëÉèÖÃ°²×°Ä£Ê½£¬1¡¢µ¥»úÄ£Ê½ÇëÊäÈëonly£»2¡¢Ö÷±¸Ë«»úhdrÄ£Ê½£¬ÇëÊäÈëhdr£¨Ö»ÔÚÖ÷»úÖ´ĞĞ¸Ã½Å±¾¼´¿É£©£»3¡¢°²×°¿Í»§¶ËÄ£Ê½ÇëÊäÈëclient£º " hdrflaginput
+		read -p "è¯·è®¾ç½®å®‰è£…æ¨¡å¼ï¼Œ1ã€å•æœºæ¨¡å¼è¯·è¾“å…¥onlyï¼›2ã€ä¸»å¤‡åŒæœºhdræ¨¡å¼ï¼Œè¯·è¾“å…¥hdrï¼ˆåªåœ¨ä¸»æœºæ‰§è¡Œè¯¥è„šæœ¬å³å¯ï¼‰ï¼›3ã€å®‰è£…å®¢æˆ·ç«¯æ¨¡å¼è¯·è¾“å…¥clientï¼š " hdrflaginput
 		while [[ X$hdrflaginput != Xhdr && X$hdrflaginput != Xonly && X$hdrflaginput != Xclient ]]
 		do
-			log4s info "ÊäÈë²»·ûºÏÒªÇó£¬Çë°´ÕÕÒªÇóÊäÈë"
-			read -p "ÇëÉèÖÃ°²×°Ä£Ê½£¬1¡¢µ¥»úÄ£Ê½ÇëÊäÈëonly£»2¡¢Ö÷±¸Ë«»úhdrÄ£Ê½£¬ÇëÊäÈëhdr£¨Ö»ÔÚÖ÷»úÖ´ĞĞ¸Ã½Å±¾¼´¿É£©£»3¡¢°²×°¿Í»§¶ËÄ£Ê½ÇëÊäÈëclient£º " hdrflaginput
+			log4s info "è¾“å…¥ä¸ç¬¦åˆè¦æ±‚ï¼Œè¯·æŒ‰ç…§è¦æ±‚è¾“å…¥"
+			read -p "è¯·è®¾ç½®å®‰è£…æ¨¡å¼ï¼Œ1ã€å•æœºæ¨¡å¼è¯·è¾“å…¥onlyï¼›2ã€ä¸»å¤‡åŒæœºhdræ¨¡å¼ï¼Œè¯·è¾“å…¥hdrï¼ˆåªåœ¨ä¸»æœºæ‰§è¡Œè¯¥è„šæœ¬å³å¯ï¼‰ï¼›3ã€å®‰è£…å®¢æˆ·ç«¯æ¨¡å¼è¯·è¾“å…¥clientï¼š " hdrflaginput
 		done
-		log4s debug "ÊäÈëµÄhdrflaginput²ÎÊıÎª£º$hdrflaginput"
+		log4s debug "è¾“å…¥çš„hdrflaginputå‚æ•°ä¸ºï¼š$hdrflaginput"
 		if [ X$hdrflaginput = Xonly ]
 		then
-			log4s debug "ÉèÖÃhdrflag²ÎÊıÎªonly"
+			log4s debug "è®¾ç½®hdrflagå‚æ•°ä¸ºonly"
 			hdrflag=only
 		fi
 		if [ X$hdrflaginput = Xhdr ]
 		then
-			log4s debug "ÉèÖÃhdrflag²ÎÊıÎªpri"
+			log4s debug "è®¾ç½®hdrflagå‚æ•°ä¸ºpri"
 			hdrflag=hdr
 		fi 
 		if [ X$hdrflaginput = Xclient ]
 		then
-			log4s debug "ÉèÖÃhdrflag²ÎÊıÎªclient"
+			log4s debug "è®¾ç½®hdrflagå‚æ•°ä¸ºclient"
 			hdrflag=client
 		fi 
 	done
@@ -800,269 +792,272 @@ InputAndCheck()
 	fi
 	while [[ $peizhiqueren != [Yy] ]]
 	do
-		#µ¥»úÄ£Ê½
+		#å•æœºæ¨¡å¼
 		if [ X$hdrflaginput = Xonly ]
 		then
-			log4s info "µ¥»úÅäÖÃ¿ªÊ¼"
-			echo "ÏÂÃæ¿ªÊ¼ÊäÈëÊı¾İ¿âÖ÷ÊµÀıÃû£¬Ò²¾ÍÊÇÔÚonconfigÖĞÅäÖÃµÄÊı¾İ¿âÊµÀıÃûservername"
-			read -p "ÇëÊäÈëÖ÷ÊµÀıÃû£¬±ÈÈçhdr1£¬[Ä¬ÈÏÎªhdr1] £º " priINFORMIXSERVER
-			log4s debug "ÊäÈëµÄÖ÷ÊµÀıÃûÎª$priINFORMIXSERVER"
+			log4s info "å•æœºé…ç½®å¼€å§‹"
+			echo "ä¸‹é¢å¼€å§‹è¾“å…¥æ•°æ®åº“ä¸»å®ä¾‹åï¼Œä¹Ÿå°±æ˜¯åœ¨onconfigä¸­é…ç½®çš„æ•°æ®åº“å®ä¾‹åservername"
+			read -p "è¯·è¾“å…¥ä¸»å®ä¾‹åï¼Œæ¯”å¦‚hdr1ï¼Œ[é»˜è®¤ä¸ºhdr1] ï¼š " priINFORMIXSERVER
+			log4s debug "è¾“å…¥çš„ä¸»å®ä¾‹åä¸º$priINFORMIXSERVER"
 			if [ X$priINFORMIXSERVER = X ]
 			then
 				priINFORMIXSERVER=hdr1
-				log4s debug "Ö÷ÊµÀıÃûÎª¿Õ£¬ÉèÖÃÖ÷ÊµÀıÃûpriINFORMIXSERVERÎªÄ¬ÈÏÖµhdr1"
+				log4s debug "ä¸»å®ä¾‹åä¸ºç©ºï¼Œè®¾ç½®ä¸»å®ä¾‹åpriINFORMIXSERVERä¸ºé»˜è®¤å€¼hdr1"
 				priONCONFIG=onconfig.$priINFORMIXSERVER
-				log4s debug "ÉèÖÃÅäÖÃÃûpriONCONFIGÎªonconfig.$priINFORMIXSERVER"
+				log4s debug "è®¾ç½®é…ç½®åpriONCONFIGä¸ºonconfig.$priINFORMIXSERVER"
 			else
 				priONCONFIG=onconfig.${priINFORMIXSERVER}
-				log4s debug "ÊäÈëµÄÖ÷ÊµÀıÃûpriINFORMIXSERVER²»Îª¿Õ£¬ÖµÎª$priINFORMIXSERVER"
-				log4s debug "ÉèÖÃÅäÖÃÃûpriONCONFIGÎªonconfig.$priINFORMIXSERVER"
+				log4s debug "è¾“å…¥çš„ä¸»å®ä¾‹åpriINFORMIXSERVERä¸ä¸ºç©ºï¼Œå€¼ä¸º$priINFORMIXSERVER"
+				log4s debug "è®¾ç½®é…ç½®åpriONCONFIGä¸ºonconfig.$priINFORMIXSERVER"
 			fi
-			read -p "ÇëÊäÈëÖ÷»úÒµÎñÊµÀıÃû£¬Ò²¾ÍÊÇonconfigÖĞµÄalisename£¬±ÈÈçappdb1£¬Îñ±Ø²»ÄÜÓëÖ÷ÊµÀıÃûÏàÍ¬£¬[Ä¬ÈÏÎªappdb1] £º " priDBSERVERALIASES
-			log4s debug "ÊäÈëµÄÒµÎñÊµÀıÃûpriDBSERVERALIASESÎª$priDBSERVERALIASES"
+			read -p "è¯·è¾“å…¥ä¸»æœºä¸šåŠ¡å®ä¾‹åï¼Œä¹Ÿå°±æ˜¯onconfigä¸­çš„alisenameï¼Œæ¯”å¦‚appdb1ï¼ŒåŠ¡å¿…ä¸èƒ½ä¸ä¸»å®ä¾‹åç›¸åŒï¼Œ[é»˜è®¤ä¸ºappdb1] ï¼š " priDBSERVERALIASES
+			log4s debug "è¾“å…¥çš„ä¸šåŠ¡å®ä¾‹åpriDBSERVERALIASESä¸º$priDBSERVERALIASES"
 			if [ X$priDBSERVERALIASES = X ]
 			then
 				priDBSERVERALIASES=appdb1
-				log4s debug "ÊäÈëµÄÒµÎñÊµÀıÃûÎª¿Õ£¬priDBSERVERALIASESÉèÖÃÎªÄ¬ÈÏÖµappdb1"
+				log4s debug "è¾“å…¥çš„ä¸šåŠ¡å®ä¾‹åä¸ºç©ºï¼ŒpriDBSERVERALIASESè®¾ç½®ä¸ºé»˜è®¤å€¼appdb1"
 			fi
 			echo `ifconfig -a|grep "inet addr"|grep -v '127.0.0.1'|awk '{print $2}'|awk -F':' '{print $2}'`
 
-			read -p "ÇëÊäÈëÖ÷ÊµÀı¶ÔÍâip£º"			priip
+			read -p "è¯·è¾“å…¥ä¸»å®ä¾‹å¯¹å¤–ipï¼š"			priip
 			while [[ X$priip = X ]]
 			do
-				read -p "Ö÷ÊµÀı¶ÔÍâip£¬²»ÄÜÎª¿Õ£¬ÇëÖØĞÂÊäÈë"  priip
+				read -p "ä¸»å®ä¾‹å¯¹å¤–ipï¼Œä¸èƒ½ä¸ºç©ºï¼Œè¯·é‡æ–°è¾“å…¥"  priip
 			done
-			read -p "ÇëÊäÈëÒµÎñÊµÀı¶ÔÍâip£º"	priappip
+			read -p "è¯·è¾“å…¥ä¸šåŠ¡å®ä¾‹å¯¹å¤–ipï¼š"	priappip
 			while [[ X$priappip = X ]]
 			do
-				read -p "ÒµÎñÊµÀı¶ÔÍâip£¬²»ÄÜÎª¿Õ£¬ÇëÖØĞÂÊäÈë"  priappip
+				read -p "ä¸šåŠ¡å®ä¾‹å¯¹å¤–ipï¼Œä¸èƒ½ä¸ºç©ºï¼Œè¯·é‡æ–°è¾“å…¥"  priappip
 			done
-			echo "ÏÂÃæÊÇ¸Õ²ÅÊäÈëµÄÅäÖÃ"
-			echo "Ö÷ÊµÀıÃû£º     $priINFORMIXSERVER"
-			echo "ÒµÎñÊµÀıÃû£º   $priDBSERVERALIASES"
-			echo "Ö÷ÊµÀıip£º     $priip"
-			echo "ÒµÎñÊµÀıip£º   $priappip"
-			log4s debug "ÊäÈëµÄÖ÷ÊµÀıipÎª$priip"
-			log4s debug "ÊäÈëµÄÒµÎñÊµÀıipÎª$priappip"
-			read -p "ÅäÖÃÊÇ·ñÕıÈ·£¬Èç¹ûÕıÈ·ÇëÊäÈë[y/n]£º" peizhiqueren
-			log4s debug "ÊäÈëµÄÈ·ÈÏÅäÖÃÎª$peizhiqueren"
+			echo "ä¸‹é¢æ˜¯åˆšæ‰è¾“å…¥çš„é…ç½®"
+			echo "ä¸»å®ä¾‹åï¼š     $priINFORMIXSERVER"
+			echo "ä¸šåŠ¡å®ä¾‹åï¼š   $priDBSERVERALIASES"
+			echo "ä¸»å®ä¾‹ipï¼š     $priip"
+			echo "ä¸šåŠ¡å®ä¾‹ipï¼š   $priappip"
+			log4s debug "è¾“å…¥çš„ä¸»å®ä¾‹ipä¸º$priip"
+			log4s debug "è¾“å…¥çš„ä¸šåŠ¡å®ä¾‹ipä¸º$priappip"
+			read -p "é…ç½®æ˜¯å¦æ­£ç¡®ï¼Œå¦‚æœæ­£ç¡®è¯·è¾“å…¥[y/n]ï¼š" peizhiqueren
+			log4s debug "è¾“å…¥çš„ç¡®è®¤é…ç½®ä¸º$peizhiqueren"
 		fi
-		#µ¥»úÄ£Ê½½áÊø
+		#å•æœºæ¨¡å¼ç»“æŸ
 		
-		#hdrÄ£Ê½
+		#hdræ¨¡å¼
 		if [ X$hdrflaginput = Xhdr ]
 		then
-			log4s info "hdrÅäÖÃ¿ªÊ¼"
-			read -p "ÇëÊäÈëÖ÷±¸»ússh¶Ë¿ÚºÅ£¬Ò»°ãÎª19222»òÕß22£¬[Ä¬ÈÏÎª19222]£º"  sshport
+			log4s info "hdré…ç½®å¼€å§‹"
+			read -p "è¯·è¾“å…¥ä¸»å¤‡æœºsshç«¯å£å·ï¼Œä¸€èˆ¬ä¸º19222æˆ–è€…22ï¼Œ[é»˜è®¤ä¸º19222]ï¼š"  sshport
 			if [ X$sshport = X ]
 			then
 				sshport=19222
 			fi
-			echo "ÏÂÃæ¿ªÊ¼ÊäÈëÊı¾İ¿âÊµÀıÃû£¬Ò²¾ÍÊÇÔÚsqlhostsÖĞÅäÖÃµÄÊı¾İ¿âÊµÀıÃû"
+			echo "ä¸‹é¢å¼€å§‹è¾“å…¥æ•°æ®åº“å®ä¾‹åï¼Œä¹Ÿå°±æ˜¯åœ¨sqlhostsä¸­é…ç½®çš„æ•°æ®åº“å®ä¾‹å"
 			
-			#priINFORMIXSERVER²ÎÊı
+			#priINFORMIXSERVERå‚æ•°
 			if [ X$peizhiqueren = XXXXXXX ]
 			then
-				read -p "ÇëÊäÈëÖ÷»úĞÄÌøÏßÊµÀıÃû£¬[Ä¬ÈÏÎªhdr1] £º " tpriINFORMIXSERVER
+				read -p "è¯·è¾“å…¥ä¸»æœºå¿ƒè·³çº¿å®ä¾‹åï¼Œ[é»˜è®¤ä¸ºhdr1] ï¼š " tpriINFORMIXSERVER
 			fi
 			if [ X$peizhiqueren != XXXXXXX ]
 			then
-				read -p "ÇëÊäÈëÖ÷»úĞÄÌøÏßÊµÀıÃû£¬¸Õ²ÅÊäÈëµÄÊÇ$priINFORMIXSERVER £º " tpriINFORMIXSERVER
+				read -p "è¯·è¾“å…¥ä¸»æœºå¿ƒè·³çº¿å®ä¾‹åï¼Œåˆšæ‰è¾“å…¥çš„æ˜¯$priINFORMIXSERVER ï¼š " tpriINFORMIXSERVER
 			fi
-			log4s debug "ÊäÈëµÄÖ÷»úĞÄÌøÏßÊµÀıÃûÎª£º$tpriINFORMIXSERVER"
+			log4s debug "è¾“å…¥çš„ä¸»æœºå¿ƒè·³çº¿å®ä¾‹åä¸ºï¼š$tpriINFORMIXSERVER"
 			if [ X$tpriINFORMIXSERVER = X ]
 			then
 				priINFORMIXSERVER=hdr1
-				log4s debug "priINFORMIXSERVERÖµÎª¿Õ£¬ÉèÖÃÎªÄ¬ÈÏ£ºhdr1"
+				log4s debug "priINFORMIXSERVERå€¼ä¸ºç©ºï¼Œè®¾ç½®ä¸ºé»˜è®¤ï¼šhdr1"
 				priONCONFIG=onconfig.$priINFORMIXSERVER
-				log4s debug "ÉèÖÃÖ÷»úÅäÖÃÎÄ¼şÃûÎª£ºonconfig.$priINFORMIXSERVER"
+				log4s debug "è®¾ç½®ä¸»æœºé…ç½®æ–‡ä»¶åä¸ºï¼šonconfig.$priINFORMIXSERVER"
 			else
 				priINFORMIXSERVER=$tpriINFORMIXSERVER
-				log4s debug "Ö÷»úÅäÖÃpriINFORMIXSERVERÎª£º$tpriINFORMIXSERVER"
+				log4s debug "ä¸»æœºé…ç½®priINFORMIXSERVERä¸ºï¼š$tpriINFORMIXSERVER"
 				priONCONFIG=onconfig.${priINFORMIXSERVER}
-				log4s debug "Ö÷»úÅäÖÃÎÄ¼şÃûÎª£º$priONCONFIG"
+				log4s debug "ä¸»æœºé…ç½®æ–‡ä»¶åä¸ºï¼š$priONCONFIG"
 			fi
 			if [ X$tpriINFORMIXSERVER = X ]
 			then
 				priINFORMIXSERVER=$priINFORMIXSERVER
-				log4s debug "priINFORMIXSERVERÖµÎª¿Õ£¬ÉèÖÃÎªÄ¬ÈÏ£º$priINFORMIXSERVER"
+				log4s debug "priINFORMIXSERVERå€¼ä¸ºç©ºï¼Œè®¾ç½®ä¸ºé»˜è®¤ï¼š$priINFORMIXSERVER"
 				priONCONFIG=onconfig.$priINFORMIXSERVER
-				log4s debug "ÉèÖÃÖ÷»úÅäÖÃÎÄ¼şÃûÎª£ºonconfig.$priINFORMIXSERVER"
+				log4s debug "è®¾ç½®ä¸»æœºé…ç½®æ–‡ä»¶åä¸ºï¼šonconfig.$priINFORMIXSERVER"
 			else
 				priINFORMIXSERVER=$tpriINFORMIXSERVER
-				log4s debug "Ö÷»úÅäÖÃpriINFORMIXSERVERÎª£º$tpriINFORMIXSERVER"
+				log4s debug "ä¸»æœºé…ç½®priINFORMIXSERVERä¸ºï¼š$tpriINFORMIXSERVER"
 				priONCONFIG=onconfig.${priINFORMIXSERVER}
-				log4s debug "Ö÷»úÅäÖÃÎÄ¼şÃûÎª£º$priONCONFIG"
+				log4s debug "ä¸»æœºé…ç½®æ–‡ä»¶åä¸ºï¼š$priONCONFIG"
 			fi
 			
 			#secINFORMIXSERVER
 			if [ X$peizhiqueren = XXXXXXX ]
 			then
-				read -p "ÇëÊäÈë±¸»úĞÄÌøÏßÊµÀıÃû£¬[Ä¬ÈÏÎªhdr2] £º " tsecINFORMIXSERVER
+				read -p "è¯·è¾“å…¥å¤‡æœºå¿ƒè·³çº¿å®ä¾‹åï¼Œ[é»˜è®¤ä¸ºhdr2] ï¼š " tsecINFORMIXSERVER
 			fi
 			if [ X$peizhiqueren != XXXXXXX ]
 			then
-				read -p "ÇëÊäÈë±¸»úĞÄÌøÏßÊµÀıÃû£¬¸Õ²ÅÊäÈëµÄÊÇ$secINFORMIXSERVER £º " tsecINFORMIXSERVER
+				read -p "è¯·è¾“å…¥å¤‡æœºå¿ƒè·³çº¿å®ä¾‹åï¼Œåˆšæ‰è¾“å…¥çš„æ˜¯$secINFORMIXSERVER ï¼š " tsecINFORMIXSERVER
 			fi
-			log4s debug "ÊäÈëµÄ±¸»úĞÄÌøÏßÊµÀıÃûÎª£º$tsecINFORMIXSERVER"
+			log4s debug "è¾“å…¥çš„å¤‡æœºå¿ƒè·³çº¿å®ä¾‹åä¸ºï¼š$tsecINFORMIXSERVER"
 			if [ X$tsecINFORMIXSERVER = X ]
 			then
 				secINFORMIXSERVER=hdr2
-				log4s debug "secINFORMIXSERVERÖµÎª¿Õ£¬ÉèÖÃÎªÄ¬ÈÏ£ºhdr2"
+				log4s debug "secINFORMIXSERVERå€¼ä¸ºç©ºï¼Œè®¾ç½®ä¸ºé»˜è®¤ï¼šhdr2"
 				secONCONFIG=onconfig.$secINFORMIXSERVER
-				log4s debug "ÉèÖÃ±¸»úÅäÖÃÎÄ¼şÃûÎª£º$secONCONFIG"
+				log4s debug "è®¾ç½®å¤‡æœºé…ç½®æ–‡ä»¶åä¸ºï¼š$secONCONFIG"
 			else
 				secINFORMIXSERVER=$tsecINFORMIXSERVER
-				log4s debug "secINFORMIXSERVERÅäÖÃÎª£º$secINFORMIXSERVER"
+				log4s debug "secINFORMIXSERVERé…ç½®ä¸ºï¼š$secINFORMIXSERVER"
 				secONCONFIG=onconfig.${secINFORMIXSERVER}
-				log4s debug "±¸»úÅäÖÃÎÄ¼şÃûÎª£º$secONCONFIG"
+				log4s debug "å¤‡æœºé…ç½®æ–‡ä»¶åä¸ºï¼š$secONCONFIG"
 			fi
 			if [ X$tsecINFORMIXSERVER = X ]
 			then
 				secINFORMIXSERVER=$secINFORMIXSERVER
-				log4s debug "secINFORMIXSERVERÖµÎª¿Õ£¬ÉèÖÃÎªÄ¬ÈÏ£º$secINFORMIXSERVER"
+				log4s debug "secINFORMIXSERVERå€¼ä¸ºç©ºï¼Œè®¾ç½®ä¸ºé»˜è®¤ï¼š$secINFORMIXSERVER"
 				secONCONFIG=onconfig.$secINFORMIXSERVER
-				log4s debug "ÉèÖÃ±¸»úÅäÖÃÎÄ¼şÃûÎª£º$secONCONFIG"
+				log4s debug "è®¾ç½®å¤‡æœºé…ç½®æ–‡ä»¶åä¸ºï¼š$secONCONFIG"
 			else
 				secINFORMIXSERVER=$tsecINFORMIXSERVER
-				log4s debug "secINFORMIXSERVERÅäÖÃÎª£º$secINFORMIXSERVER"
+				log4s debug "secINFORMIXSERVERé…ç½®ä¸ºï¼š$secINFORMIXSERVER"
 				secONCONFIG=onconfig.${secINFORMIXSERVER}
-				log4s debug "±¸»úÅäÖÃÎÄ¼şÃûÎª£º$secONCONFIG"
+				log4s debug "å¤‡æœºé…ç½®æ–‡ä»¶åä¸ºï¼š$secONCONFIG"
 			fi
 			
 			#priDBSERVERALIASES
 			if [ X$peizhiqueren = XXXXXXX ]
 			then
-				read -p "ÇëÊäÈëÖ÷»úÒµÎñÊµÀıÃû£¬²»ÄÜÓëĞÄÌøÏßÊµÀıÃûÏàÍ¬£¬[Ä¬ÈÏÎªappdb1] £º " tpriDBSERVERALIASES
+				read -p "è¯·è¾“å…¥ä¸»æœºä¸šåŠ¡å®ä¾‹åï¼Œä¸èƒ½ä¸å¿ƒè·³çº¿å®ä¾‹åç›¸åŒï¼Œ[é»˜è®¤ä¸ºappdb1] ï¼š " tpriDBSERVERALIASES
 			fi
 			if [ X$peizhiqueren != XXXXXXX ]
 			then
-				read -p "ÇëÊäÈëÖ÷»úÒµÎñÊµÀıÃû£¬¸Õ²ÅÊäÈëµÄÊÇ$priDBSERVERALIASES £º " tpriDBSERVERALIASES
+				read -p "è¯·è¾“å…¥ä¸»æœºä¸šåŠ¡å®ä¾‹åï¼Œåˆšæ‰è¾“å…¥çš„æ˜¯$priDBSERVERALIASES ï¼š " tpriDBSERVERALIASES
 			fi
-			log4s debug "ÊäÈëÖ÷»úÒµÎñÊµÀıÃûÎª£º$tpriDBSERVERALIASES"
+			log4s debug "è¾“å…¥ä¸»æœºä¸šåŠ¡å®ä¾‹åä¸ºï¼š$tpriDBSERVERALIASES"
 			if [ X$tpriDBSERVERALIASES = X ]
 			then
 				priDBSERVERALIASES=appdb1
-				log4s debug "ÊäÈëµÄÖ÷»úÒµÎñÊµÀıÃûÎª¿Õ£¬ÉèÖÃÄ¬ÈÏÖµÎª£ºappdb1"
+				log4s debug "è¾“å…¥çš„ä¸»æœºä¸šåŠ¡å®ä¾‹åä¸ºç©ºï¼Œè®¾ç½®é»˜è®¤å€¼ä¸ºï¼šappdb1"
 			else
 				priDBSERVERALIASES=$tpriDBSERVERALIASES
-				log4s debug "ÊäÈëµÄÖ÷»úÒµÎñÊµÀıÃûÎª£º$tpriDBSERVERALIASES"
+				log4s debug "è¾“å…¥çš„ä¸»æœºä¸šåŠ¡å®ä¾‹åä¸ºï¼š$tpriDBSERVERALIASES"
 			fi
 			if [ X$tpriDBSERVERALIASES = X ]
 			then
 				priDBSERVERALIASES=$priDBSERVERALIASES
-				log4s debug "ÊäÈëµÄÖ÷»úÒµÎñÊµÀıÃûÎª¿Õ£¬ÉèÖÃÄ¬ÈÏÖµÎª£º$priDBSERVERALIASES"
+				log4s debug "è¾“å…¥çš„ä¸»æœºä¸šåŠ¡å®ä¾‹åä¸ºç©ºï¼Œè®¾ç½®é»˜è®¤å€¼ä¸ºï¼š$priDBSERVERALIASES"
 			else
 				priDBSERVERALIASES=$tpriDBSERVERALIASES
-				log4s debug "ÊäÈëµÄÖ÷»úÒµÎñÊµÀıÃûÎª£º$tpriDBSERVERALIASES"
+				log4s debug "è¾“å…¥çš„ä¸»æœºä¸šåŠ¡å®ä¾‹åä¸ºï¼š$tpriDBSERVERALIASES"
 			fi
 			
 			#secDBSERVERALIASES
 			if [ X$peizhiqueren = XXXXXXX ]
 			then
-				read -p "ÇëÊäÈë±¸»úÒµÎñÊµÀıÃû£¬²»ÄÜÓëĞÄÌøÏßÊµÀıÃûÏàÍ¬£¬[Ä¬ÈÏÎªappdb2] £º " tsecDBSERVERALIASES
+				read -p "è¯·è¾“å…¥å¤‡æœºä¸šåŠ¡å®ä¾‹åï¼Œä¸èƒ½ä¸å¿ƒè·³çº¿å®ä¾‹åç›¸åŒï¼Œ[é»˜è®¤ä¸ºappdb2] ï¼š " tsecDBSERVERALIASES
 			fi
 			if [ X$peizhiqueren != XXXXXXX ]
 			then
-				read -p "ÇëÊäÈë±¸»úÒµÎñÊµÀıÃû£¬¸Õ²ÅÊäÈëµÄÊÇ$secDBSERVERALIASES £º " tsecDBSERVERALIASES
+				read -p "è¯·è¾“å…¥å¤‡æœºä¸šåŠ¡å®ä¾‹åï¼Œåˆšæ‰è¾“å…¥çš„æ˜¯$secDBSERVERALIASES ï¼š " tsecDBSERVERALIASES
 			fi
-			log4s debug "ÊäÈëµÄ±¸»úÒµÎñÊµÀıÃûÎª£º$tsecDBSERVERALIASES"
+			log4s debug "è¾“å…¥çš„å¤‡æœºä¸šåŠ¡å®ä¾‹åä¸ºï¼š$tsecDBSERVERALIASES"
 			if [ X$tsecDBSERVERALIASES = X ]
 			then
 				secDBSERVERALIASES=appdb2
-				log4s debug "ÊäÈëµÄ±¸ÒµÎñÊµÀıÃûÎª¿Õ£¬ÉèÖÃÄ¬ÈÏÖµÎª£ºappdb2"
+				log4s debug "è¾“å…¥çš„å¤‡ä¸šåŠ¡å®ä¾‹åä¸ºç©ºï¼Œè®¾ç½®é»˜è®¤å€¼ä¸ºï¼šappdb2"
 			else
 				secDBSERVERALIASES=$tsecDBSERVERALIASES
-				log4s debug "ÊäÈëµÄ±¸»úÒµÎñÊµÀıÃûÎª£º$tsecDBSERVERALIASES"
+				log4s debug "è¾“å…¥çš„å¤‡æœºä¸šåŠ¡å®ä¾‹åä¸ºï¼š$tsecDBSERVERALIASES"
 			fi
 			if [ X$tsecDBSERVERALIASES = X ]
 			then
 				secDBSERVERALIASES=$secDBSERVERALIASES
-				log4s debug "ÊäÈëµÄ±¸ÒµÎñÊµÀıÃûÎª¿Õ£¬ÉèÖÃÄ¬ÈÏÖµÎª£º$secDBSERVERALIASES"
+				log4s debug "è¾“å…¥çš„å¤‡ä¸šåŠ¡å®ä¾‹åä¸ºç©ºï¼Œè®¾ç½®é»˜è®¤å€¼ä¸ºï¼š$secDBSERVERALIASES"
 			else
 				secDBSERVERALIASES=$tsecDBSERVERALIASES
-				log4s debug "ÊäÈëµÄ±¸»úÒµÎñÊµÀıÃûÎª£º$tsecDBSERVERALIASES"
+				log4s debug "è¾“å…¥çš„å¤‡æœºä¸šåŠ¡å®ä¾‹åä¸ºï¼š$tsecDBSERVERALIASES"
 			fi
 			
 			echo `ifconfig -a|grep "inet addr"|grep -v '127.0.0.1'|awk '{print $2}'|awk -F':' '{print $2}'`
-			echo "ÉÏÃæµÄipÊÇµ±Ç°Ö÷»úµÄËùÓĞip£¬Çë°´ÕÕÌáÊ¾ÊäÈëÖ÷±¸»úÏà¹Øip£¬±¸»úÏà¹ØipÇëÈ¥±¸»ú²é¿´"
+			echo "ä¸Šé¢çš„ipæ˜¯å½“å‰ä¸»æœºçš„æ‰€æœ‰ipï¼Œè¯·æŒ‰ç…§æç¤ºè¾“å…¥ä¸»å¤‡æœºç›¸å…³ipï¼Œå¤‡æœºç›¸å…³ipè¯·å»å¤‡æœºæŸ¥çœ‹"
 			#priip
 			if [ X$peizhiqueren = XXXXXXX ]
 			then
-				read -p "ÇëÊäÈëÖ÷»úĞÄÌøÏßip£¬[ÎŞÄ¬ÈÏÖµ]£º"	priip
+				read -p "è¯·è¾“å…¥ä¸»æœºå¿ƒè·³çº¿ipï¼Œ[æ— é»˜è®¤å€¼]ï¼š"	priip
 				while [[ X$priip = X || X$priip = XXXXXXX ]]
 				do
-					log4s info "ÊäÈëÖ÷»úĞÄÌøÏßip²»ÄÜÎª¿Õ£¬ÇëÖØĞÂÊäÈë"
-					read -p "ÇëÊäÈëÖ÷»úĞÄÌøÏßip£¬[ÎŞÄ¬ÈÏÖµ]£º" priip
+					log4s info "è¾“å…¥ä¸»æœºå¿ƒè·³çº¿ipä¸èƒ½ä¸ºç©ºï¼Œè¯·é‡æ–°è¾“å…¥"
+					read -p "è¯·è¾“å…¥ä¸»æœºå¿ƒè·³çº¿ipï¼Œ[æ— é»˜è®¤å€¼]ï¼š" priip
 				done
-				read -p "ÇëÊäÈë±¸»úĞÄÌøÏßip£¬[ÎŞÄ¬ÈÏÖµ]£º"	secip
+				read -p "è¯·è¾“å…¥å¤‡æœºå¿ƒè·³çº¿ipï¼Œ[æ— é»˜è®¤å€¼]ï¼š"	secip
 				while [[ X$secip = X || X$secip = XXXXXXX ]]
 				do
-					log4s info "ÊäÈë±¸»úĞÄÌøÏßip²»ÄÜÎª¿Õ£¬ÇëÖØĞÂÊäÈë"
-					read -p "ÇëÊäÈë±¸»úĞÄÌøÏßip£¬[ÎŞÄ¬ÈÏÖµ]£º" secip
+					log4s info "è¾“å…¥å¤‡æœºå¿ƒè·³çº¿ipä¸èƒ½ä¸ºç©ºï¼Œè¯·é‡æ–°è¾“å…¥"
+					read -p "è¯·è¾“å…¥å¤‡æœºå¿ƒè·³çº¿ipï¼Œ[æ— é»˜è®¤å€¼]ï¼š" secip
 				done
-				read -p "ÇëÊäÈëÖ÷»úÒµÎñip£¬[ÎŞÄ¬ÈÏÖµ]£º"		priappip
+				read -p "è¯·è¾“å…¥ä¸»æœºä¸šåŠ¡ipï¼Œ[æ— é»˜è®¤å€¼]ï¼š"		priappip
 				while [[ X$priappip = X || X$priappip = XXXXXXX ]]
 				do
-					log4s info "ÊäÈëÖ÷»úÒµÎñip²»ÄÜÎª¿Õ£¬ÇëÖØĞÂÊäÈë"
-					read -p "ÇëÊäÈëÖ÷»úÒµÎñip£¬[ÎŞÄ¬ÈÏÖµ]£º" priappip
+					log4s info "è¾“å…¥ä¸»æœºä¸šåŠ¡ipä¸èƒ½ä¸ºç©ºï¼Œè¯·é‡æ–°è¾“å…¥"
+					read -p "è¯·è¾“å…¥ä¸»æœºä¸šåŠ¡ipï¼Œ[æ— é»˜è®¤å€¼]ï¼š" priappip
 				done
-				read -p "ÇëÊäÈë±¸»úÒµÎñip£¬[ÎŞÄ¬ÈÏÖµ]£º"		secappip
+				read -p "è¯·è¾“å…¥å¤‡æœºä¸šåŠ¡ipï¼Œ[æ— é»˜è®¤å€¼]ï¼š"		secappip
 				while [[ X$secappip = X || X$secappip = XXXXXXX ]]
 				do
-					log4s info "ÊäÈë±¸»úÒµÎñip²»ÄÜÎª¿Õ£¬ÇëÖØĞÂÊäÈë"
-					read -p "ÇëÊäÈë±¸»úÒµÎñip£¬[ÎŞÄ¬ÈÏÖµ]£º" secappip
+					log4s info "è¾“å…¥å¤‡æœºä¸šåŠ¡ipä¸èƒ½ä¸ºç©ºï¼Œè¯·é‡æ–°è¾“å…¥"
+					read -p "è¯·è¾“å…¥å¤‡æœºä¸šåŠ¡ipï¼Œ[æ— é»˜è®¤å€¼]ï¼š" secappip
 				done
-				read -p "ÇëÊäÈëÂß¼­ÈÕÖ¾±¸·İ·½Ê½£¬alarmprogramÎªÆÕÍ¨·½Ê½£¬±¸·İÊ¹ÓÃalarmprogram±¸·İµ½/dev/null£»alarmAPIÎªÊ¹ÓÃalarmAPI·½Ê½£¬[½¨ÒéÎªalarmprogram]£º" templtapedev
-				while [[ X$templtapedev = X || X$templtapedev = XXXXXXX ]]
-				do
-					log4s info "ÊäÈëÂß¼­ÈÕÖ¾±¸·İ·½Ê½²»ÄÜÎª¿Õ£¬ÇëÖØĞÂÊäÈë"
-					read -p "ÇëÊäÈëÂß¼­ÈÕÖ¾±¸·İ·½Ê½£¬alarmprogramÎªÆÕÍ¨·½Ê½£¬±¸·İÊ¹ÓÃalarmprogram±¸·İµ½/dev/null£»alarmAPIÎªÊ¹ÓÃalarmAPI·½Ê½£¬[½¨ÒéÎªalarmprogram]£º" templtapedev
-				done
+				read -p "è¯·è¾“å…¥é€»è¾‘æ—¥å¿—å¤‡ä»½æ–¹å¼ï¼Œalarmprogramä¸ºæ™®é€šæ–¹å¼ï¼Œå¤‡ä»½ä½¿ç”¨alarmprogramå¤‡ä»½åˆ°/dev/nullï¼›alarmAPIä¸ºä½¿ç”¨alarmAPIæ–¹å¼ï¼Œ[é»˜è®¤ä¸ºalarmprogram]ï¼š" templtapedev
+				if [ X$templtapedev = X ] || [ X$templtapedev = XXXXXXX ]
+				then
+					templtapedev=alarmprogram
+				fi
 				while [[ $templtapedev != alarmprogram && $templtapedev != alarmAPI && $templtapedev != alarmapi ]]
 				do
-					log4s info "ÊäÈëÂß¼­ÈÕÖ¾±¸·İ·½Ê½ÊäÈë·Ç·¨£¬ÇëÖØĞÂÊäÈë"
-					read -p "ÇëÊäÈëÂß¼­ÈÕÖ¾±¸·İ·½Ê½£¬alarmprogramÎªÆÕÍ¨·½Ê½£¬±¸·İÊ¹ÓÃalarmprogram±¸·İµ½/dev/null£»alarmAPIÎªÊ¹ÓÃalarmAPI·½Ê½£¬[Ä¬ÈÏÎªalarmprogram]£º" templtapedev
+					log4s info "è¾“å…¥é€»è¾‘æ—¥å¿—å¤‡ä»½æ–¹å¼è¾“å…¥éæ³•ï¼Œè¯·é‡æ–°è¾“å…¥"
+					read -p "è¯·è¾“å…¥é€»è¾‘æ—¥å¿—å¤‡ä»½æ–¹å¼ï¼Œalarmprogramä¸ºæ™®é€šæ–¹å¼ï¼Œå¤‡ä»½ä½¿ç”¨alarmprogramå¤‡ä»½åˆ°/dev/nullï¼›alarmAPIä¸ºä½¿ç”¨alarmAPIæ–¹å¼ï¼Œ[é»˜è®¤ä¸ºalarmprogram]ï¼š" templtapedev
+					if [ X$templtapedev = X ] || [ X$templtapedev = XXXXXXX ]
+					then
+						templtapedev=alarmprogram
+					fi
 				done
 			fi
 			if [ X$peizhiqueren != XXXXXXX ]
 			then
-				read -p "ÇëÊäÈëÖ÷»úĞÄÌøÏßip£¬¸Õ²ÅÊäÈëµÄÊÇ$priip£º"		priip
+				read -p "è¯·è¾“å…¥ä¸»æœºå¿ƒè·³çº¿ipï¼Œåˆšæ‰è¾“å…¥çš„æ˜¯$priipï¼š"		priip
 				while [[ X$priip = X || X$priip = XXXXXXX ]]
 				do
-					log4s info "ÊäÈëÖ÷»úĞÄÌøÏßip²»ÄÜÎª¿Õ£¬ÇëÖØĞÂÊäÈë"
-					read -p "ÇëÊäÈëÖ÷»úĞÄÌøÏßip£¬¸Õ²ÅÊäÈëµÄÊÇ$priip£º" priip
+					log4s info "è¾“å…¥ä¸»æœºå¿ƒè·³çº¿ipä¸èƒ½ä¸ºç©ºï¼Œè¯·é‡æ–°è¾“å…¥"
+					read -p "è¯·è¾“å…¥ä¸»æœºå¿ƒè·³çº¿ipï¼Œåˆšæ‰è¾“å…¥çš„æ˜¯$priipï¼š" priip
 				done
-				read -p "ÇëÊäÈë±¸»úĞÄÌøÏßip£¬¸Õ²ÅÊäÈëµÄÊÇ$secip£º"		secip
+				read -p "è¯·è¾“å…¥å¤‡æœºå¿ƒè·³çº¿ipï¼Œåˆšæ‰è¾“å…¥çš„æ˜¯$secipï¼š"		secip
 				while [[ X$secip = X || X$secip = XXXXXXX ]]
 				do
-					log4s info "ÊäÈë±¸»úĞÄÌøÏßip²»ÄÜÎª¿Õ£¬ÇëÖØĞÂÊäÈë"
-					read -p "ÇëÊäÈë±¸»úĞÄÌøÏßip£¬¸Õ²ÅÊäÈëµÄÊÇ$secip£º" secip
+					log4s info "è¾“å…¥å¤‡æœºå¿ƒè·³çº¿ipä¸èƒ½ä¸ºç©ºï¼Œè¯·é‡æ–°è¾“å…¥"
+					read -p "è¯·è¾“å…¥å¤‡æœºå¿ƒè·³çº¿ipï¼Œåˆšæ‰è¾“å…¥çš„æ˜¯$secipï¼š" secip
 				done
-				read -p "ÇëÊäÈëÖ÷»úÒµÎñip£¬¸Õ²ÅÊäÈëµÄÊÇ$priappip£º"		priappip
+				read -p "è¯·è¾“å…¥ä¸»æœºä¸šåŠ¡ipï¼Œåˆšæ‰è¾“å…¥çš„æ˜¯$priappipï¼š"		priappip
 				while [[ X$priappip = X || X$priappip = XXXXXXX ]]
 				do
-					log4s info "ÊäÈëÖ÷»úÒµÎñip²»ÄÜÎª¿Õ£¬ÇëÖØĞÂÊäÈë"
-					read -p "ÇëÊäÈëÖ÷»úÒµÎñip£¬¸Õ²ÅÊäÈëµÄÊÇ$priappip£º" priappip
+					log4s info "è¾“å…¥ä¸»æœºä¸šåŠ¡ipä¸èƒ½ä¸ºç©ºï¼Œè¯·é‡æ–°è¾“å…¥"
+					read -p "è¯·è¾“å…¥ä¸»æœºä¸šåŠ¡ipï¼Œåˆšæ‰è¾“å…¥çš„æ˜¯$priappipï¼š" priappip
 				done
-				read -p "ÇëÊäÈë±¸»úÒµÎñip£¬¸Õ²ÅÊäÈëµÄÊÇ$secappip£º"		secappip
+				read -p "è¯·è¾“å…¥å¤‡æœºä¸šåŠ¡ipï¼Œåˆšæ‰è¾“å…¥çš„æ˜¯$secappipï¼š"		secappip
 				while [[ X$secappip = X || X$secappip = XXXXXXX ]]
 				do
-					log4s info "ÊäÈë±¸»úÒµÎñip²»ÄÜÎª¿Õ£¬ÇëÖØĞÂÊäÈë"
-					read -p "ÇëÊäÈë±¸»úÒµÎñip£¬¸Õ²ÅÊäÈëµÄÊÇ$secappip£º" secappip
+					log4s info "è¾“å…¥å¤‡æœºä¸šåŠ¡ipä¸èƒ½ä¸ºç©ºï¼Œè¯·é‡æ–°è¾“å…¥"
+					read -p "è¯·è¾“å…¥å¤‡æœºä¸šåŠ¡ipï¼Œåˆšæ‰è¾“å…¥çš„æ˜¯$secappipï¼š" secappip
 				done
-				read -p "ÇëÊäÈëÂß¼­ÈÕÖ¾±¸·İ·½Ê½£¬¸Õ²ÅÊäÈëµÄÊÇ$templtapedev£º" templtapedev
+				read -p "è¯·è¾“å…¥é€»è¾‘æ—¥å¿—å¤‡ä»½æ–¹å¼ï¼Œåˆšæ‰è¾“å…¥çš„æ˜¯$templtapedevï¼š" templtapedev
 				while [[ X$templtapedev = X || X$templtapedev = XXXXXXX ]]
 				do
-					log4s info "ÊäÈëÂß¼­ÈÕÖ¾±¸·İ·½Ê½²»ÄÜÎª¿Õ£¬ÇëÖØĞÂÊäÈë"
-					read -p "ÇëÊäÈëÂß¼­ÈÕÖ¾±¸·İ·½Ê½£¬¸Õ²ÅÊäÈëµÄÊÇ$templtapedev£º" templtapedev
+					log4s info "è¾“å…¥é€»è¾‘æ—¥å¿—å¤‡ä»½æ–¹å¼ä¸èƒ½ä¸ºç©ºï¼Œè¯·é‡æ–°è¾“å…¥"
+					read -p "è¯·è¾“å…¥é€»è¾‘æ—¥å¿—å¤‡ä»½æ–¹å¼ï¼Œåˆšæ‰è¾“å…¥çš„æ˜¯$templtapedevï¼š" templtapedev
 				done
 			fi
-			log4s debug "ÇëÊäÈëÖ÷»úĞÄÌøÏßip£¬[ÎŞÄ¬ÈÏÖµ]£º $priip"
-			log4s debug "ÇëÊäÈë±¸»úĞÄÌøÏßip£¬[ÎŞÄ¬ÈÏÖµ]£º $secip"
-			log4s debug "ÇëÊäÈëÖ÷»úÒµÎñip£¬[ÎŞÄ¬ÈÏÖµ]£º   $priappip"
-			log4s debug "ÇëÊäÈë±¸»úÒµÎñip£¬[ÎŞÄ¬ÈÏÖµ]£º   $secappip"
-			log4s debug "ÇëÊäÈëÂß¼­ÈÕÖ¾±¸·İ·½Ê½£º         $templtapedev"
+			log4s debug "è¯·è¾“å…¥ä¸»æœºå¿ƒè·³çº¿ipï¼Œ[æ— é»˜è®¤å€¼]ï¼š $priip"
+			log4s debug "è¯·è¾“å…¥å¤‡æœºå¿ƒè·³çº¿ipï¼Œ[æ— é»˜è®¤å€¼]ï¼š $secip"
+			log4s debug "è¯·è¾“å…¥ä¸»æœºä¸šåŠ¡ipï¼Œ[æ— é»˜è®¤å€¼]ï¼š   $priappip"
+			log4s debug "è¯·è¾“å…¥å¤‡æœºä¸šåŠ¡ipï¼Œ[æ— é»˜è®¤å€¼]ï¼š   $secappip"
+			log4s debug "è¯·è¾“å…¥é€»è¾‘æ—¥å¿—å¤‡ä»½æ–¹å¼ï¼š         $templtapedev"
 			
 			ltapedev=`echo $templtapedev|tr '[A-Z]' '[a-z]'`
 			if [ X$ltapedev = XALARMAPI ] || [ X$ltapedev = Xalarmapi ] || [ X$ltapedev = XalarmAPI ]
@@ -1071,37 +1066,37 @@ InputAndCheck()
 			else
 				ltapedev=alarmprogram
 			fi
-			echo "ÏÂÃæÊÇ¸Õ²ÅÊäÈëµÄÅäÖÃ"
-			echo "Ö÷»úĞÄÌøÏßÊµÀıÃû£º  ${priINFORMIXSERVER}"
-			echo "±¸»úĞÄÌøÏßÊµÀıÃû£º  ${secINFORMIXSERVER}"
-			echo "Ö÷»úÒµÎñÊµÀıÃû£º    ${priDBSERVERALIASES}"
-			echo "±¸»úÒµÎñÊµÀıÃû£º    ${secDBSERVERALIASES}"
-			echo "Ö÷»úĞÄÌøÏßip£º      ${priip}"
-			echo "±¸»úĞÄÌøÏßip£º      ${secip}"
-			echo "Ö÷»úÒµÎñip£º        ${priappip}"
-			echo "±¸»úÒµÎñip£º        ${secappip}"
-			echo "Âß¼­ÈÕÖ¾±¸·İ·½Ê½Îª£º$ltapedev"
+			echo "ä¸‹é¢æ˜¯åˆšæ‰è¾“å…¥çš„é…ç½®"
+			echo "ä¸»æœºå¿ƒè·³çº¿å®ä¾‹åï¼š  ${priINFORMIXSERVER}"
+			echo "å¤‡æœºå¿ƒè·³çº¿å®ä¾‹åï¼š  ${secINFORMIXSERVER}"
+			echo "ä¸»æœºä¸šåŠ¡å®ä¾‹åï¼š    ${priDBSERVERALIASES}"
+			echo "å¤‡æœºä¸šåŠ¡å®ä¾‹åï¼š    ${secDBSERVERALIASES}"
+			echo "ä¸»æœºå¿ƒè·³çº¿ipï¼š      ${priip}"
+			echo "å¤‡æœºå¿ƒè·³çº¿ipï¼š      ${secip}"
+			echo "ä¸»æœºä¸šåŠ¡ipï¼š        ${priappip}"
+			echo "å¤‡æœºä¸šåŠ¡ipï¼š        ${secappip}"
+			echo "é€»è¾‘æ—¥å¿—å¤‡ä»½æ–¹å¼ä¸ºï¼š$ltapedev"
 	
-			read -p "ÅäÖÃÊÇ·ñÕıÈ·£¬ÇëÊäÈëy/n£º" peizhiqueren
+			read -p "é…ç½®æ˜¯å¦æ­£ç¡®ï¼Œè¯·è¾“å…¥y/nï¼š" peizhiqueren
 			while [[ X$peizhiqueren = X ]]
 			do
-				log4s info "ÅäÖÃÈ·ÈÏ²»ÄÜÊäÈë¿Õ£¬ÇëÖØĞÂÊäÈë"
-				read -p "ÅäÖÃÊÇ·ñÕıÈ·£¬ÇëÊäÈëy/n£º" peizhiqueren
+				log4s info "é…ç½®ç¡®è®¤ä¸èƒ½è¾“å…¥ç©ºï¼Œè¯·é‡æ–°è¾“å…¥"
+				read -p "é…ç½®æ˜¯å¦æ­£ç¡®ï¼Œè¯·è¾“å…¥y/nï¼š" peizhiqueren
 			done
 			while [[ $peizhiqueren != [YyNn] ]]
 			do
-				log4s info "ÅäÖÃÈ·ÈÏÊäÈë·Ç·¨£¬ÇëÖØĞÂÊäÈë"
-				read -p "ÅäÖÃÊÇ·ñÕıÈ·£¬ÇëÊäÈëy/n£º" peizhiqueren
+				log4s info "é…ç½®ç¡®è®¤è¾“å…¥éæ³•ï¼Œè¯·é‡æ–°è¾“å…¥"
+				read -p "é…ç½®æ˜¯å¦æ­£ç¡®ï¼Œè¯·è¾“å…¥y/nï¼š" peizhiqueren
 			done
-			log4s debug "ÊäÈëµÄÈ·ÈÏÅäÖÃpeizhiquerenÎª£º$peizhiqueren"
-			#·ÀÖ¹ÅöÇÉpeizhiqueren=XXXXXXµ¼ÖÂ»ØÏÔ³öÎÊÌâ
+			log4s debug "è¾“å…¥çš„ç¡®è®¤é…ç½®peizhiquerenä¸ºï¼š$peizhiqueren"
+			#é˜²æ­¢ç¢°å·§peizhiqueren=XXXXXXå¯¼è‡´å›æ˜¾å‡ºé—®é¢˜
 			if [ X$peizhiqueren = XXXXXXX ]
 			then
 				peizhiqueren=N
 			fi
 			
 
-			#Ğ£ÑéÊäÈë²ÎÊı
+			#æ ¡éªŒè¾“å…¥å‚æ•°
 			if [ X$peizhiqueren = XY ] || [ X$peizhiqueren = Xy ]
 			then
 				PpriINFORMIXSERVER=`Pstr $priINFORMIXSERVER`
@@ -1116,63 +1111,63 @@ InputAndCheck()
 				then
 					if [ ! -f /tmp/alarmAPI.tar ]
 					then
-						log4s error "ÅäÖÃĞèÒªÊ¹ÓÃalarmAPI£¬µ«ÊÇÔÚ/tmpÏÂÃ»ÓĞalarmAPI.tar£¬ËùÒÔ½«Ê¹ÓÃÄ¬ÈÏÂß¼­ÈÕÖ¾±¸·İÅäÖÃ"
+						log4s error "é…ç½®éœ€è¦ä½¿ç”¨alarmAPIï¼Œä½†æ˜¯åœ¨/tmpä¸‹æ²¡æœ‰alarmAPI.tarï¼Œæ‰€ä»¥å°†ä½¿ç”¨é»˜è®¤é€»è¾‘æ—¥å¿—å¤‡ä»½é…ç½®"
 						ltapedev=alarmprogram
 					fi
 				fi
 				if [ X$PpriINFORMIXSERVER != Xok ]
 				then
-					log4s error "Ö÷»úĞÄÌøÏßÊµÀıÃûÊäÈëÓĞÎó£¬Çë×ĞÏ¸¼ì²é"
+					log4s error "ä¸»æœºå¿ƒè·³çº¿å®ä¾‹åè¾“å…¥æœ‰è¯¯ï¼Œè¯·ä»”ç»†æ£€æŸ¥"
 					peizhiqueren=N
 				fi
 				if [ X$PsecINFORMIXSERVER != Xok ]
 				then
-					log4s error "±¸»úĞÄÌøÏßÊµÀıÃûÊäÈëÓĞÎó£¬Çë×ĞÏ¸¼ì²é"
+					log4s error "å¤‡æœºå¿ƒè·³çº¿å®ä¾‹åè¾“å…¥æœ‰è¯¯ï¼Œè¯·ä»”ç»†æ£€æŸ¥"
 					peizhiqueren=N
 				fi
 				if [ X$PpriDBSERVERALIASES != Xok ]
 				then
-					log4s error "Ö÷»úÒµÎñÊµÀıÃûÊäÈëÓĞÎó£¬Çë×ĞÏ¸¼ì²é"
+					log4s error "ä¸»æœºä¸šåŠ¡å®ä¾‹åè¾“å…¥æœ‰è¯¯ï¼Œè¯·ä»”ç»†æ£€æŸ¥"
 					peizhiqueren=N
 				fi
 				if [ X$PsecDBSERVERALIASES != Xok ]
 				then
-					log4s error "±¸»úÒµÎñÊµÀıÃûÊäÈëÓĞÎó£¬Çë×ĞÏ¸¼ì²é"
+					log4s error "å¤‡æœºä¸šåŠ¡å®ä¾‹åè¾“å…¥æœ‰è¯¯ï¼Œè¯·ä»”ç»†æ£€æŸ¥"
 					peizhiqueren=N
 				fi
 				
 				if [ X$Ppriip != Xok ]
 				then
-					log4s error "Ö÷»úĞÄÌøÏßipÊäÈëÓĞÎó£¬Çë×ĞÏ¸¼ì²é"
+					log4s error "ä¸»æœºå¿ƒè·³çº¿ipè¾“å…¥æœ‰è¯¯ï¼Œè¯·ä»”ç»†æ£€æŸ¥"
 					peizhiqueren=N
 				fi
 				if [ X$Psecip != Xok ]
 				then
-					log4s error "±¸»úĞÄÌøÏßipÊäÈëÓĞÎó£¬Çë×ĞÏ¸¼ì²é"
+					log4s error "å¤‡æœºå¿ƒè·³çº¿ipè¾“å…¥æœ‰è¯¯ï¼Œè¯·ä»”ç»†æ£€æŸ¥"
 					peizhiqueren=N
 				fi
 				if [ X$Ppriappip != Xok ]
 				then
-					log4s error "Ö÷»úÒµÎñipÊäÈëÓĞÎó£¬Çë×ĞÏ¸¼ì²é"
+					log4s error "ä¸»æœºä¸šåŠ¡ipè¾“å…¥æœ‰è¯¯ï¼Œè¯·ä»”ç»†æ£€æŸ¥"
 					peizhiqueren=N
 				fi
 				if [ X$Psecappip != Xok ]
 				then
-					log4s error "±¸»úÒµÎñipÊäÈëÓĞÎó£¬Çë×ĞÏ¸¼ì²é"
+					log4s error "å¤‡æœºä¸šåŠ¡ipè¾“å…¥æœ‰è¯¯ï¼Œè¯·ä»”ç»†æ£€æŸ¥"
 					peizhiqueren=N
 				fi
 			fi
 		fi
-		#hdrÄ£Ê½½áÊø
+		#hdræ¨¡å¼ç»“æŸ
 		
-		#clientÄ£Ê½
+		#clientæ¨¡å¼
 		if [ X$hdrflaginput = Xclient ]
 		then
 			client
 		fi
-		#clientÄ£Ê½½áÊø
+		#clientæ¨¡å¼ç»“æŸ
 	done
-	#ÉèÖÃÅäÖÃÎÄ¼ş
+	#è®¾ç½®é…ç½®æ–‡ä»¶
 	if [ X$hdrflag = Xpri ]
 	then
 		ONCONFIG=$priONCONFIG
@@ -1197,64 +1192,64 @@ InputAndCheck()
 	
 	while [[ $shifouquerenlvorfs != [Yy] ]]
 	do
-		read -p "ÇëÑ¡ÔñÊ¹ÓÃÂãÉè±¸·½Ê½»¹ÊÇÊìÎÄ¼ş·½Ê½[ÂãÉè±¸ÇëÊäÈë£ºlv    ÊìÎÄ¼şÇëÊäÈë£ºfs]£º" lvorfs
+		read -p "è¯·é€‰æ‹©ä½¿ç”¨è£¸è®¾å¤‡æ–¹å¼è¿˜æ˜¯ç†Ÿæ–‡ä»¶æ–¹å¼[è£¸è®¾å¤‡è¯·è¾“å…¥ï¼šlv    ç†Ÿæ–‡ä»¶è¯·è¾“å…¥ï¼šfs]ï¼š" lvorfs
 		lvorfs=`echo $lvorfs|tr '[A-Z]' '[a-z]'`
 		if [ X$lvorfs = Xlv ]
 		then
-			read -p "ÄúÑ¡ÔñµÄÂãÉè±¸·½Ê½£¬ÊÇ·ñÈ·ÈÏ[y/n]£º" shifouquerenlvorfs
+			read -p "æ‚¨é€‰æ‹©çš„è£¸è®¾å¤‡æ–¹å¼ï¼Œæ˜¯å¦ç¡®è®¤[y/n]ï¼š" shifouquerenlvorfs
 		elif [ X$lvorfs = Xfs ]
 		then
-			read -p "ÄúÑ¡ÔñµÄÊìÎÄ¼ş·½Ê½£¬ÊÇ·ñÈ·ÈÏ[y/n]£º" shifouquerenlvorfs
+			read -p "æ‚¨é€‰æ‹©çš„ç†Ÿæ–‡ä»¶æ–¹å¼ï¼Œæ˜¯å¦ç¡®è®¤[y/n]ï¼š" shifouquerenlvorfs
 		else
-			log4s info "ÄúÊäÈëµÄÊÇ[$lvorfs]£¬ÊäÈë²»ºÏ·¨£¬ÇëÖØĞÂÊäÈëlv»òfs"
+			log4s info "æ‚¨è¾“å…¥çš„æ˜¯[$lvorfs]ï¼Œè¾“å…¥ä¸åˆæ³•ï¼Œè¯·é‡æ–°è¾“å…¥lvæˆ–fs"
 		fi
 	done
-	log4s debug "µ±Ç°ÊäÈëµÄdbs·½Ê½Îª$lvorfs"
+	log4s debug "å½“å‰è¾“å…¥çš„dbsæ–¹å¼ä¸º$lvorfs"
 	
-	#Ê¹ÓÃlv·½Ê½
+	#ä½¿ç”¨lvæ–¹å¼
 	if [ X$lvorfs = Xlv ]
 	then
-		#´ÅÅÌ»®·Ö
+		#ç£ç›˜åˆ’åˆ†
 		
-		#´´½¨pv
+		#åˆ›å»ºpv
 		while [[ $shifouchuangjianpv != [YyNn] ]]
 		do
-			read -p "ÊÇ·ñĞèÒª´´½¨PV£¬Èç¹û´´½¨pv£¬ÇëÊäÈë[y/n]£º" shifouchuangjianpv;
+			read -p "æ˜¯å¦éœ€è¦åˆ›å»ºPVï¼Œå¦‚æœåˆ›å»ºpvï¼Œè¯·è¾“å…¥[y/n]ï¼š" shifouchuangjianpv;
 			if [ X$shifouchuangjianpv = X ]
 			then
-				#·ÀÖ¹whileÖĞÅĞ¶ÏÒì³£
+				#é˜²æ­¢whileä¸­åˆ¤æ–­å¼‚å¸¸
 				shifouchuangjianpv=x
 			fi
 		done
 		if [ X$shifouchuangjianpv = Xy ] || [ X$shifouchuangjianpv = XY ]
 		then
-			#ÕâÀïµÄÅĞ¶ÏdevnameÊÇÎªÁË±¸»úµÃµ½µÄdevnameÊÇĞèÒª´´½¨µÄdevnameÁË£¬²»ĞèÒªÔÚÊäÈë
+			#è¿™é‡Œçš„åˆ¤æ–­devnameæ˜¯ä¸ºäº†å¤‡æœºå¾—åˆ°çš„devnameæ˜¯éœ€è¦åˆ›å»ºçš„devnameäº†ï¼Œä¸éœ€è¦åœ¨è¾“å…¥
 			shifouchuangjianpv=y
-			log4s info "ĞèÒª´´½¨pv"
+			log4s info "éœ€è¦åˆ›å»ºpv"
 			if [ X$devname = XXXXXXX ]
 			then
 				while [[ $shifouqueredevname != [Yy] ]]
 				do
 					shifouqueredevname=y
-					read -p "ÇëÊäÈëÓ²ÅÌÈ«Â·¾¶£¬±ÈÈç/dev/sdb£¬[Ã»ÓĞÄ¬ÈÏÖµ]£º"  devname
+					read -p "è¯·è¾“å…¥ç¡¬ç›˜å…¨è·¯å¾„ï¼Œæ¯”å¦‚/dev/sdbï¼Œ[æ²¡æœ‰é»˜è®¤å€¼]ï¼š"  devname
 					while [[ X$devname = X ]]
 					do
-						log4s info "Ó²ÅÌÈ«Â·¾¶²»ÄÜÎª¿Õ£¬ÇëÖØĞÂÊäÈë"
-						read -p "ÇëÊäÈëÓ²ÅÌÈ«Â·¾¶£¬±ÈÈç/dev/sdb£¬[Ã»ÓĞÄ¬ÈÏÖµ]£º" devname
+						log4s info "ç¡¬ç›˜å…¨è·¯å¾„ä¸èƒ½ä¸ºç©ºï¼Œè¯·é‡æ–°è¾“å…¥"
+						read -p "è¯·è¾“å…¥ç¡¬ç›˜å…¨è·¯å¾„ï¼Œæ¯”å¦‚/dev/sdbï¼Œ[æ²¡æœ‰é»˜è®¤å€¼]ï¼š" devname
 					done
-					read -p "ÇëÎñ±ØÈ·ÈÏÓ²ÅÌÂ·¾¶ÊÇ·ñÎª$devname£¬Èç¹ûÊäÈë´íÎó½«Ôì³É²»¿ÉÔ¤ÖªµÄÎÊÌâ[y/n]£º" shifouqueredevname
+					read -p "è¯·åŠ¡å¿…ç¡®è®¤ç¡¬ç›˜è·¯å¾„æ˜¯å¦ä¸º$devnameï¼Œå¦‚æœè¾“å…¥é”™è¯¯å°†é€ æˆä¸å¯é¢„çŸ¥çš„é—®é¢˜[y/n]ï¼š" shifouqueredevname
 					while [[ X$shifouqueredevname = X ]]
 					do
-						log4s info "ÊÇ·ñÈ·ÈÏÓ²ÅÌÂ·¾¶²»ÄÜÎª¿Õ£¬ÇëÖØĞÂÊäÈë"
-						read -p "ÇëÎñ±ØÈ·ÈÏÓ²ÅÌÂ·¾¶ÊÇ·ñÎª$devname£¬Èç¹ûÊäÈë´íÎó½«Ôì³É²»¿ÉÔ¤ÖªµÄÎÊÌâ[y/n]£º" shifouqueredevname
+						log4s info "æ˜¯å¦ç¡®è®¤ç¡¬ç›˜è·¯å¾„ä¸èƒ½ä¸ºç©ºï¼Œè¯·é‡æ–°è¾“å…¥"
+						read -p "è¯·åŠ¡å¿…ç¡®è®¤ç¡¬ç›˜è·¯å¾„æ˜¯å¦ä¸º$devnameï¼Œå¦‚æœè¾“å…¥é”™è¯¯å°†é€ æˆä¸å¯é¢„çŸ¥çš„é—®é¢˜[y/n]ï¼š" shifouqueredevname
 					done
 					while [[ $shifouqueredevname != [YyNn] ]]
 					do
-						log4s info "ÊÇ·ñÈ·ÈÏÓ²ÅÌÂ·¾¶ÊäÈë·Ç·¨£¬ÇëÖØĞÂÊäÈë"
-						read -p "ÇëÎñ±ØÈ·ÈÏÓ²ÅÌÂ·¾¶ÊÇ·ñÎª$devname£¬Èç¹ûÊäÈë´íÎó½«Ôì³É²»¿ÉÔ¤ÖªµÄÎÊÌâ[y/n]£º" shifouqueredevname
+						log4s info "æ˜¯å¦ç¡®è®¤ç¡¬ç›˜è·¯å¾„è¾“å…¥éæ³•ï¼Œè¯·é‡æ–°è¾“å…¥"
+						read -p "è¯·åŠ¡å¿…ç¡®è®¤ç¡¬ç›˜è·¯å¾„æ˜¯å¦ä¸º$devnameï¼Œå¦‚æœè¾“å…¥é”™è¯¯å°†é€ æˆä¸å¯é¢„çŸ¥çš„é—®é¢˜[y/n]ï¼š" shifouqueredevname
 					done
-					log4s debug "shifouqueredevnameµÄÖµÎª$shifouqueredevname"
-					log4s debug "´´½¨pvµÄÂ·¾¶Îª$devname"
+					log4s debug "shifouqueredevnameçš„å€¼ä¸º$shifouqueredevname"
+					log4s debug "åˆ›å»ºpvçš„è·¯å¾„ä¸º$devname"
 					if [ X$shifouqueredevname != XY ] && [ X$shifouqueredevname != Xy ]
 					then
 						shifouqueredevname=N
@@ -1264,12 +1259,12 @@ InputAndCheck()
 		else
 			shifouchuangjianpv=n
 		fi
-		#´´½¨pv½áÊø
+		#åˆ›å»ºpvç»“æŸ
 		
-		#´´½¨vg
+		#åˆ›å»ºvg
 		while [[ $shifouchuangjianvg != [YyNn] ]]
 		do
-			read -p "ÊÇ·ñĞèÒª´´½¨VG£¬Èç¹û´´½¨vg£¬ÇëÊäÈëy/n £º" shifouchuangjianvg;
+			read -p "æ˜¯å¦éœ€è¦åˆ›å»ºVGï¼Œå¦‚æœåˆ›å»ºvgï¼Œè¯·è¾“å…¥y/n ï¼š" shifouchuangjianvg;
 			if [ X$shifouchuangjianvg = X ]
 			then
 				shifouchuangjianvg=x
@@ -1277,35 +1272,35 @@ InputAndCheck()
 		done
 		if [ X$shifouchuangjianvg = Xy ] || [ X$shifouchuangjianvg = XY ]
 		then
-			log4s info "ĞèÒª´´½¨vg"
+			log4s info "éœ€è¦åˆ›å»ºvg"
 			while [[ $shifouqueredevname1 != [Yy] ]]
 			do
 				if [ X$devname = XXXXXXX ]
 				then
-					read -p "ÇëÊäÈëvgµÄÄ¿Â¼£¬±ÈÈç/dev/sdb£¬[Ã»ÓĞÄ¬ÈÏÖµ]£º"  devname
+					read -p "è¯·è¾“å…¥vgçš„ç›®å½•ï¼Œæ¯”å¦‚/dev/sdbï¼Œ[æ²¡æœ‰é»˜è®¤å€¼]ï¼š"  devname
 					while [[ X$devname = X ]]
 					do
-						log4s info "vgµÄÄ¿Â¼²»ÄÜÎª¿Õ£¬ÇëÖØĞÂÊäÈë"
-						read -p "ÇëÊäÈëvgµÄÄ¿Â¼£¬±ÈÈç/dev/sdb£¬[Ã»ÓĞÄ¬ÈÏÖµ]£º" devname
+						log4s info "vgçš„ç›®å½•ä¸èƒ½ä¸ºç©ºï¼Œè¯·é‡æ–°è¾“å…¥"
+						read -p "è¯·è¾“å…¥vgçš„ç›®å½•ï¼Œæ¯”å¦‚/dev/sdbï¼Œ[æ²¡æœ‰é»˜è®¤å€¼]ï¼š" devname
 					done 
-					log4s info "pvÊÇÊÖ¶¯´´½¨£¬ËùÒÔĞèÒªÊäÈë´´½¨µÄvgµÄÄ¿Â¼£¬Îª£º$devname"
+					log4s info "pvæ˜¯æ‰‹åŠ¨åˆ›å»ºï¼Œæ‰€ä»¥éœ€è¦è¾“å…¥åˆ›å»ºçš„vgçš„ç›®å½•ï¼Œä¸ºï¼š$devname"
 				fi
-				read -p "ÇëÊäÈëvgµÄÃû³Æ£¬±ÈÈçdbvg£¬[Ã»ÓĞÄ¬ÈÏÖµ]£º" vgname;
+				read -p "è¯·è¾“å…¥vgçš„åç§°ï¼Œæ¯”å¦‚dbvgï¼Œ[æ²¡æœ‰é»˜è®¤å€¼]ï¼š" vgname;
 				while [[ X$vgname = X ]]
 				do
-					log4s info "vgµÄÃû³Æ²»ÄÜÎª¿Õ£¬ÇëÖØĞÂÊäÈë"
-					read -p "ÇëÊäÈëvgµÄÃû³Æ£¬±ÈÈçdbvg£¬[Ã»ÓĞÄ¬ÈÏÖµ]£º" vgname
+					log4s info "vgçš„åç§°ä¸èƒ½ä¸ºç©ºï¼Œè¯·é‡æ–°è¾“å…¥"
+					read -p "è¯·è¾“å…¥vgçš„åç§°ï¼Œæ¯”å¦‚dbvgï¼Œ[æ²¡æœ‰é»˜è®¤å€¼]ï¼š" vgname
 				done 
-				read -p "ÇëÎñ±ØÈ·ÈÏvgÃû³ÆÊÇ·ñÎª$vgname£¬Èç¹ûÊäÈë´íÎó½«Ôì³É²»¿ÉÔ¤ÖªµÄÎÊÌâ[Y/N]£º" shifouqueredevname1
+				read -p "è¯·åŠ¡å¿…ç¡®è®¤vgåç§°æ˜¯å¦ä¸º$vgnameï¼Œå¦‚æœè¾“å…¥é”™è¯¯å°†é€ æˆä¸å¯é¢„çŸ¥çš„é—®é¢˜[Y/N]ï¼š" shifouqueredevname1
 				while [[ X$shifouqueredevname1 = X ]]
 				do
-					log4s info "ÊÇ·ñÈ·ÈÏvgÃû³Æ£¬²»ÄÜÎª¿ÕÇëÖØĞÂÊäÈë"
-					read -p "ÇëÎñ±ØÈ·ÈÏvgÃû³ÆÊÇ·ñÎª$vgname£¬Èç¹ûÊäÈë´íÎó½«Ôì³É²»¿ÉÔ¤ÖªµÄÎÊÌâ[Y/N]£º" shifouqueredevname1
+					log4s info "æ˜¯å¦ç¡®è®¤vgåç§°ï¼Œä¸èƒ½ä¸ºç©ºè¯·é‡æ–°è¾“å…¥"
+					read -p "è¯·åŠ¡å¿…ç¡®è®¤vgåç§°æ˜¯å¦ä¸º$vgnameï¼Œå¦‚æœè¾“å…¥é”™è¯¯å°†é€ æˆä¸å¯é¢„çŸ¥çš„é—®é¢˜[Y/N]ï¼š" shifouqueredevname1
 				done
 				while [[ $shifouqueredevname1 != [YyNn] ]]
 				do
-					log4s info "ÊÇ·ñÈ·ÈÏvgÃû³Æ£¬ÊäÈë·Ç·¨£¬ÇëÖØĞÂÊäÈë"
-					read -p "ÇëÎñ±ØÈ·ÈÏvgÃû³ÆÊÇ·ñÎª$vgname£¬Èç¹ûÊäÈë´íÎó½«Ôì³É²»¿ÉÔ¤ÖªµÄÎÊÌâ[Y/N]£º" shifouqueredevname1
+					log4s info "æ˜¯å¦ç¡®è®¤vgåç§°ï¼Œè¾“å…¥éæ³•ï¼Œè¯·é‡æ–°è¾“å…¥"
+					read -p "è¯·åŠ¡å¿…ç¡®è®¤vgåç§°æ˜¯å¦ä¸º$vgnameï¼Œå¦‚æœè¾“å…¥é”™è¯¯å°†é€ æˆä¸å¯é¢„çŸ¥çš„é—®é¢˜[Y/N]ï¼š" shifouqueredevname1
 				done
 				if [ X$shifouqueredevname1 != XY ] && [ X$shifouqueredevname1 != Xy ]
 				then
@@ -1315,12 +1310,12 @@ InputAndCheck()
 		else
 		shifouchuangjianvg=n
 		fi
-		#´´½¨vg½áÊø
+		#åˆ›å»ºvgç»“æŸ
 		
-		#´´½¨lv
+		#åˆ›å»ºlv
 		while [[ $shifouchuangjianlv != [YyNn] ]]
 		do
-			read -p "ÊÇ·ñĞèÒª´´½¨LV£¬Èç¹û´´½¨LV£¬ÇëÊäÈëy/n£º" shifouchuangjianlv;
+			read -p "æ˜¯å¦éœ€è¦åˆ›å»ºLVï¼Œå¦‚æœåˆ›å»ºLVï¼Œè¯·è¾“å…¥y/nï¼š" shifouchuangjianlv;
 			if [ X$shifouchuangjianlv = X ] || [ X$shifouchuangjianlv = XXXXXXXX ]
 			then
 				shifouchuangjianlv=x
@@ -1328,42 +1323,42 @@ InputAndCheck()
 		done
 		if [ X$shifouchuangjianlv = Xy ] || [ X$shifouchuangjianlv = XY ]
 		then
-			log4s info "ĞèÒª´´½¨lv"
+			log4s info "éœ€è¦åˆ›å»ºlv"
 			if [ X$shifouchuangjianvg = XN ] || [ X$shifouchuangjianvg = Xn ]
 			then
-				log4s info "Ö®Ç°Ã»ÓĞÍ¨¹ı½Å±¾´´½¨vg£¬ĞèÒªÖ¸¶¨vgÃû³ÆºÍdevname"
+				log4s info "ä¹‹å‰æ²¡æœ‰é€šè¿‡è„šæœ¬åˆ›å»ºvgï¼Œéœ€è¦æŒ‡å®švgåç§°å’Œdevname"
 				if [ X$hdrflag = Xsec ]
 				then
-					log4s info "±¸»ú×Ô¶¯×Ô¶¯¶ÁÈ¡ÅäÖÃ"
+					log4s info "å¤‡æœºè‡ªåŠ¨è‡ªåŠ¨è¯»å–é…ç½®"
 				else
-					read -p "ÇëÊäÈëvgÃû³Æ£¬±ÈÈçdbvg£¬[Ã»ÓĞÄ¬ÈÏÖµ]£º"  vgname
+					read -p "è¯·è¾“å…¥vgåç§°ï¼Œæ¯”å¦‚dbvgï¼Œ[æ²¡æœ‰é»˜è®¤å€¼]ï¼š"  vgname
 					while [[ X$vgname = X ]]
 					do
-						log4s info "vgÃû³Æ²»ÄÜÎª¿Õ£¬ÇëÖØĞÂÊäÈë"
-						read -p "ÇëÊäÈëvgÃû³Æ£¬±ÈÈçdbvg£¬[Ã»ÓĞÄ¬ÈÏÖµ]£º" vgname
+						log4s info "vgåç§°ä¸èƒ½ä¸ºç©ºï¼Œè¯·é‡æ–°è¾“å…¥"
+						read -p "è¯·è¾“å…¥vgåç§°ï¼Œæ¯”å¦‚dbvgï¼Œ[æ²¡æœ‰é»˜è®¤å€¼]ï¼š" vgname
 					done
-					read -p "ÇëÊäÈëvgµÄÄ¿Â¼£¬±ÈÈç/dev/sdb£¬[Ã»ÓĞÄ¬ÈÏÖµ]£º"  devname
+					read -p "è¯·è¾“å…¥vgçš„ç›®å½•ï¼Œæ¯”å¦‚/dev/sdbï¼Œ[æ²¡æœ‰é»˜è®¤å€¼]ï¼š"  devname
 					while [[ X$devname = X ]]
 					do
-						log4s info "pvÃû³Æ²»ÄÜÎª¿Õ£¬ÇëÖØĞÂÊäÈë"
-						read -p "ÇëÊäÈëvgµÄÄ¿Â¼£¬±ÈÈç/dev/sdb£¬[Ã»ÓĞÄ¬ÈÏÖµ]£º" devname
+						log4s info "pvåç§°ä¸èƒ½ä¸ºç©ºï¼Œè¯·é‡æ–°è¾“å…¥"
+						read -p "è¯·è¾“å…¥vgçš„ç›®å½•ï¼Œæ¯”å¦‚/dev/sdbï¼Œ[æ²¡æœ‰é»˜è®¤å€¼]ï¼š" devname
 					done
-					log4s info "vgÊÇÊÖ¶¯´´½¨µÄ£¬ĞèÒªÊäÈëvgºÍpvµÄÃû³Æ£¬vgÃû³ÆÎª£º$vgname£¬vgµÄÄ¿Â¼Îª$devname"
+					log4s info "vgæ˜¯æ‰‹åŠ¨åˆ›å»ºçš„ï¼Œéœ€è¦è¾“å…¥vgå’Œpvçš„åç§°ï¼Œvgåç§°ä¸ºï¼š$vgnameï¼Œvgçš„ç›®å½•ä¸º$devname"
 				fi
 			fi
 			while [[ $shifoutiaozhenglvsize != [YyNn] ]]
 			do
-				echo "Ä¬ÈÏlv´óĞ¡Îªrootdbs=$tsizerootdbs1G,tempdbs1=$tsizetempdbs1G,tempdbs2=$tsizetempdbs2G,logdbs1=$tsizelogdbs1G,phydbs1=$tsizephydbs1G,userdbs1=$tsizeuserdbs1G£¬µ¥Î»ÎªG"
-				read -p "ÊÇ·ñĞèÒªµ÷Õûlv´óĞ¡£¬ÇëÊäÈë[y/n] £º" shifoutiaozhenglvsize;
+				echo "é»˜è®¤lvå¤§å°ä¸ºrootdbs=$tsizerootdbs1G,tempdbs1=$tsizetempdbs1G,tempdbs2=$tsizetempdbs2G,logdbs1=$tsizelogdbs1G,phydbs1=$tsizephydbs1G,userdbs1=$tsizeuserdbs1Gï¼Œå•ä½ä¸ºG"
+				read -p "æ˜¯å¦éœ€è¦è°ƒæ•´lvå¤§å°ï¼Œè¯·è¾“å…¥[y/n] ï¼š" shifoutiaozhenglvsize;
 				while [[ X$shifoutiaozhenglvsize = X ]]
 				do
-					log4s info "ÊÇ·ñµ÷Õûlv´óĞ¡²»ÄÜÎª¿Õ£¬ÇëÖØĞÂÊäÈë"
-					read -p "ÊÇ·ñĞèÒªµ÷Õûlv´óĞ¡£¬ÇëÊäÈë[y/n] £º" shifoutiaozhenglvsize
+					log4s info "æ˜¯å¦è°ƒæ•´lvå¤§å°ä¸èƒ½ä¸ºç©ºï¼Œè¯·é‡æ–°è¾“å…¥"
+					read -p "æ˜¯å¦éœ€è¦è°ƒæ•´lvå¤§å°ï¼Œè¯·è¾“å…¥[y/n] ï¼š" shifoutiaozhenglvsize
 				done
 				while [[ $shifoutiaozhenglvsize != [YyNn] ]]
 				do
-					log4s info "ÊÇ·ñµ÷Õûlv´óĞ¡ÊäÈë·Ç·¨£¬ÇëÖØĞÂÊäÈë"
-					read -p "ÊÇ·ñĞèÒªµ÷Õûlv´óĞ¡£¬ÇëÊäÈë[y/n] £º" shifoutiaozhenglvsize
+					log4s info "æ˜¯å¦è°ƒæ•´lvå¤§å°è¾“å…¥éæ³•ï¼Œè¯·é‡æ–°è¾“å…¥"
+					read -p "æ˜¯å¦éœ€è¦è°ƒæ•´lvå¤§å°ï¼Œè¯·è¾“å…¥[y/n] ï¼š" shifoutiaozhenglvsize
 				done
 				if [ X$shifoutiaozhenglvsize != XY ] && [ X$shifoutiaozhenglvsize != Xy ]
 				then
@@ -1374,66 +1369,66 @@ InputAndCheck()
 			then
 				while [[ $shifouquerenlvsize != [Yy] ]]
 				do
-					echo "ÇëÊäÈëµ÷ÕûºóµÄ´óĞ¡£¬µ¥Î»ÎªG£¬Ö»ĞèÒªÊäÈëÊı×Ö¼´¿É£¬ÇëÈ·±£Ó²ÅÌ´óĞ¡¿ÉÒÔÂú×ãµ÷ÕûºóµÄlv"
-					echo "Èç¹û²»ĞèÒªÄ³¸ödbsÔò£¬[Ä¬ÈÏÎª0]¡£"
-					read -p "rootdbs1´óĞ¡£¬  [±ØĞë´´½¨]£º"					sizerootdbs1G
+					echo "è¯·è¾“å…¥è°ƒæ•´åçš„å¤§å°ï¼Œå•ä½ä¸ºGï¼Œåªéœ€è¦è¾“å…¥æ•°å­—å³å¯ï¼Œè¯·ç¡®ä¿ç¡¬ç›˜å¤§å°å¯ä»¥æ»¡è¶³è°ƒæ•´åçš„lv"
+					echo "å¦‚æœä¸éœ€è¦æŸä¸ªdbsåˆ™ï¼Œ[é»˜è®¤ä¸º0]ã€‚"
+					read -p "rootdbs1å¤§å°ï¼Œ  [å¿…é¡»åˆ›å»º]ï¼š"					sizerootdbs1G
 					Pnum_sizerootdbs1G=`Pnum $sizerootdbs1G`
 					while [[ X$sizerootdbs1G = X || X$sizerootdbs1G = XN || X$sizerootdbs1G = Xn || X$sizerootdbs1G = X0 || X$Pnum_sizerootdbs1G = Xno ]]
 					do
-						log4s info "rootdbs1´óĞ¡ÊäÈë·Ç·¨£¬ÇëÖØĞÂÊäÈë"
-						read -p "rootdbs1´óĞ¡£¬  [±ØĞë´´½¨]£º" 			sizerootdbs1G
+						log4s info "rootdbs1å¤§å°è¾“å…¥éæ³•ï¼Œè¯·é‡æ–°è¾“å…¥"
+						read -p "rootdbs1å¤§å°ï¼Œ  [å¿…é¡»åˆ›å»º]ï¼š" 			sizerootdbs1G
 						Pnum_sizerootdbs1G=`Pnum $sizerootdbs1G`
 					done
-					read -p "tempdbs1´óĞ¡£¬  [±ØĞë´´½¨]£º"					sizetempdbs1G
+					read -p "tempdbs1å¤§å°ï¼Œ  [å¿…é¡»åˆ›å»º]ï¼š"					sizetempdbs1G
 					Pnum_sizetempdbs1G=`Pnum $sizetempdbs1G`
 					while [[ X$sizetempdbs1G = X || X$sizetempdbs1G = XN || X$sizetempdbs1G = Xn || X$sizetempdbs1G = X0 || X$Pnum_sizetempdbs1G = Xno ]]
 					do
-						log4s info "tempdbs1´óĞ¡ÊäÈë·Ç·¨£¬ÇëÖØĞÂÊäÈë"
-						read -p "tempdbs1´óĞ¡£¬  [±ØĞë´´½¨]£º" 			sizetempdbs1G
+						log4s info "tempdbs1å¤§å°è¾“å…¥éæ³•ï¼Œè¯·é‡æ–°è¾“å…¥"
+						read -p "tempdbs1å¤§å°ï¼Œ  [å¿…é¡»åˆ›å»º]ï¼š" 			sizetempdbs1G
 						Pnum_sizetempdbs1G=`Pnum $sizetempdbs1G`
 					done
-					read -p "tempdbs2´óĞ¡£¬  [±ØĞë´´½¨]£º"					sizetempdbs2G
+					read -p "tempdbs2å¤§å°ï¼Œ  [å¿…é¡»åˆ›å»º]ï¼š"					sizetempdbs2G
 					Pnum_sizetempdbs2G=`Pnum $sizetempdbs2G`
 					while [[ X$sizetempdbs2G = X || X$sizetempdbs2G = XN || X$sizetempdbs2G = Xn || X$sizetempdbs2G = X0 || X$Pnum_sizetempdbs2G = Xno ]]
 					do
-						log4s info "tempdbs2´óĞ¡ÊäÈë·Ç·¨£¬ÇëÖØĞÂÊäÈë"
-						read -p "tempdbs2´óĞ¡£¬  [±ØĞë´´½¨]£º" 			sizetempdbs2G
+						log4s info "tempdbs2å¤§å°è¾“å…¥éæ³•ï¼Œè¯·é‡æ–°è¾“å…¥"
+						read -p "tempdbs2å¤§å°ï¼Œ  [å¿…é¡»åˆ›å»º]ï¼š" 			sizetempdbs2G
 						Pnum_sizetempdbs2G=`Pnum $sizetempdbs2G`
 					done
-					read -p "logdbs1´óĞ¡£¬   [±ØĞë´´½¨]£º"					sizelogdbs1G
+					read -p "logdbs1å¤§å°ï¼Œ   [å¿…é¡»åˆ›å»º]ï¼š"					sizelogdbs1G
 					Pnum_sizelogdbs1G=`Pnum $sizelogdbs1G`
 					while [[ X$sizelogdbs1G = X || X$sizelogdbs1G = XN || X$sizelogdbs1G = Xn || X$sizelogdbs1G = X0 || X$Pnum_sizelogdbs1G = Xno ]]
 					do
-						log4s info "logdbs1´óĞ¡ÊäÈë·Ç·¨£¬ÇëÖØĞÂÊäÈë"
-						read -p "logdbs1´óĞ¡£¬   [±ØĞë´´½¨]£º" 			sizelogdbs1G
+						log4s info "logdbs1å¤§å°è¾“å…¥éæ³•ï¼Œè¯·é‡æ–°è¾“å…¥"
+						read -p "logdbs1å¤§å°ï¼Œ   [å¿…é¡»åˆ›å»º]ï¼š" 			sizelogdbs1G
 						Pnum_sizelogdbs1G=`Pnum $sizelogdbs1G`
 					done
-					read -p "phydbs1´óĞ¡£¬   [±ØĞë´´½¨]£º"					sizephydbs1G
+					read -p "phydbs1å¤§å°ï¼Œ   [å¿…é¡»åˆ›å»º]ï¼š"					sizephydbs1G
 					Pnum_sizephydbs1G=`Pnum $sizephydbs1G`
 					while [[ X$sizephydbs1G = X || X$sizephydbs1G = XN || X$sizephydbs1G = Xn || X$sizephydbs1G = X0 || X$Pnum_sizephydbs1G = Xno ]]
 					do
-						log4s info "phydbs1´óĞ¡ÊäÈë·Ç·¨£¬ÇëÖØĞÂÊäÈë"
-						read -p "phydbs1´óĞ¡£¬   [±ØĞë´´½¨]£º" 			sizephydbs1G
+						log4s info "phydbs1å¤§å°è¾“å…¥éæ³•ï¼Œè¯·é‡æ–°è¾“å…¥"
+						read -p "phydbs1å¤§å°ï¼Œ   [å¿…é¡»åˆ›å»º]ï¼š" 			sizephydbs1G
 						Pnum_sizephydbs1G=`Pnum $sizephydbs1G`
 					done
-					read -p "userdbs1´óĞ¡£¬  [±ØĞë´´½¨]£º"					sizeuserdbs1G
+					read -p "userdbs1å¤§å°ï¼Œ  [å¿…é¡»åˆ›å»º]ï¼š"					sizeuserdbs1G
 					Pnum_sizeuserdbs1G=`Pnum $sizeuserdbs1G`
 					while [[ X$sizeuserdbs1G = X || X$sizeuserdbs1G = XN || X$sizeuserdbs1G = Xn || X$sizeuserdbs1G = X0 || X$Pnum_sizeuserdbs1G = Xno ]]
 					do
-						log4s info "userdbs1´óĞ¡ÊäÈë·Ç·¨£¬ÇëÖØĞÂÊäÈë"
-						read -p "userdbs1´óĞ¡£¬  [±ØĞë´´½¨]£º" 			sizeuserdbs1G
+						log4s info "userdbs1å¤§å°è¾“å…¥éæ³•ï¼Œè¯·é‡æ–°è¾“å…¥"
+						read -p "userdbs1å¤§å°ï¼Œ  [å¿…é¡»åˆ›å»º]ï¼š" 			sizeuserdbs1G
 						Pnum_sizeuserdbs1G=`Pnum $sizeuserdbs1G`
 					done
-					read -p "userdbs2´óĞ¡£¬  [²»ÊäÈëÄ¬ÈÏÎª²»´´½¨]£º"		sizeuserdbs2G
-					read -p "userdbs3´óĞ¡£¬  [²»ÊäÈëÄ¬ÈÏÎª²»´´½¨]£º"		sizeuserdbs3G
-					read -p "userdbs4´óĞ¡£¬  [²»ÊäÈëÄ¬ÈÏÎª²»´´½¨]£º"		sizeuserdbs4G
-					read -p "userdbs5´óĞ¡£¬  [²»ÊäÈëÄ¬ÈÏÎª²»´´½¨]£º"		sizeuserdbs5G
-					read -p "chargedbs1´óĞ¡£¬[²»ÊäÈëÄ¬ÈÏÎª²»´´½¨]£º"		sizechargedbs1G
-					read -p "chargedbs2´óĞ¡£¬[²»ÊäÈëÄ¬ÈÏÎª²»´´½¨]£º"		sizechargedbs2G
-					read -p "minfodbs1´óĞ¡£¬ [²»ÊäÈëÄ¬ÈÏÎª²»´´½¨]£º"		sizeminfodbs1G
-					read -p "minfodbs2´óĞ¡£¬ [²»ÊäÈëÄ¬ÈÏÎª²»´´½¨]£º"		sizeminfodbs2G
-					read -p "servdbs1´óĞ¡£¬  [²»ÊäÈëÄ¬ÈÏÎª²»´´½¨]£º"		sizeservdbs1G
-					read -p "servdbs2´óĞ¡£¬  [²»ÊäÈëÄ¬ÈÏÎª²»´´½¨]£º"		sizeservdbs2G
+					read -p "userdbs2å¤§å°ï¼Œ  [ä¸è¾“å…¥é»˜è®¤ä¸ºä¸åˆ›å»º]ï¼š"		sizeuserdbs2G
+					read -p "userdbs3å¤§å°ï¼Œ  [ä¸è¾“å…¥é»˜è®¤ä¸ºä¸åˆ›å»º]ï¼š"		sizeuserdbs3G
+					read -p "userdbs4å¤§å°ï¼Œ  [ä¸è¾“å…¥é»˜è®¤ä¸ºä¸åˆ›å»º]ï¼š"		sizeuserdbs4G
+					read -p "userdbs5å¤§å°ï¼Œ  [ä¸è¾“å…¥é»˜è®¤ä¸ºä¸åˆ›å»º]ï¼š"		sizeuserdbs5G
+					read -p "chargedbs1å¤§å°ï¼Œ[ä¸è¾“å…¥é»˜è®¤ä¸ºä¸åˆ›å»º]ï¼š"		sizechargedbs1G
+					read -p "chargedbs2å¤§å°ï¼Œ[ä¸è¾“å…¥é»˜è®¤ä¸ºä¸åˆ›å»º]ï¼š"		sizechargedbs2G
+					read -p "minfodbs1å¤§å°ï¼Œ [ä¸è¾“å…¥é»˜è®¤ä¸ºä¸åˆ›å»º]ï¼š"		sizeminfodbs1G
+					read -p "minfodbs2å¤§å°ï¼Œ [ä¸è¾“å…¥é»˜è®¤ä¸ºä¸åˆ›å»º]ï¼š"		sizeminfodbs2G
+					read -p "servdbs1å¤§å°ï¼Œ  [ä¸è¾“å…¥é»˜è®¤ä¸ºä¸åˆ›å»º]ï¼š"		sizeservdbs1G
+					read -p "servdbs2å¤§å°ï¼Œ  [ä¸è¾“å…¥é»˜è®¤ä¸ºä¸åˆ›å»º]ï¼š"		sizeservdbs2G
 					if [ X$sizerootdbs1G = X ] || [ X$sizerootdbs1G = XN ] || [ X$sizerootdbs1G = Xn ] || [ X$sizerootdbs1G = X0 ]
 					then
 						sizerootdbs1G=0
@@ -1498,39 +1493,39 @@ InputAndCheck()
 					then
 						sizeservdbs2G=0
 					fi
-					echo "ÖØĞÂµ÷ÕûºóµÄ´óĞ¡ÈçÏÂ£º"
-					echo "rootdbs1´óĞ¡£º      $sizerootdbs1G"
-					echo "tempdbs1´óĞ¡£º      $sizetempdbs1G"
-					echo "tempdbs2´óĞ¡£º      $sizetempdbs2G"
-					echo "logdbs1´óĞ¡£º       $sizelogdbs1G"
-					echo "phydbs1´óĞ¡£º       $sizephydbs1G"
-					echo "userdbs1´óĞ¡£º      $sizeuserdbs1G"
-					echo "userdbs2´óĞ¡£º      $sizeuserdbs2G"
-					echo "userdbs3´óĞ¡£º      $sizeuserdbs3G"
-					echo "userdbs4´óĞ¡£º      $sizeuserdbs4G"
-					echo "userdbs5´óĞ¡£º      $sizeuserdbs5G"
-					echo "chargedbs1´óĞ¡£º    $sizechargedbs1G"
-					echo "chargedbs2´óĞ¡£º    $sizechargedbs2G"
-					echo "minfodbs1´óĞ¡£º     $sizeminfodbs1G"
-					echo "minfodbs2´óĞ¡£º     $sizeminfodbs2G"
-					echo "sizeservdbs1´óĞ¡£º  $sizeservdbs1G"
-					echo "sizeservdbs2´óĞ¡£º  $sizeservdbs2G"
-					read -p "ÊÇ·ñÈ·ÈÏµ÷ÕûºóµÄ´óĞ¡£¬ÇëÊäÈë[y/n]£º" shifouquerenlvsize
+					echo "é‡æ–°è°ƒæ•´åçš„å¤§å°å¦‚ä¸‹ï¼š"
+					echo "rootdbs1å¤§å°ï¼š      $sizerootdbs1G"
+					echo "tempdbs1å¤§å°ï¼š      $sizetempdbs1G"
+					echo "tempdbs2å¤§å°ï¼š      $sizetempdbs2G"
+					echo "logdbs1å¤§å°ï¼š       $sizelogdbs1G"
+					echo "phydbs1å¤§å°ï¼š       $sizephydbs1G"
+					echo "userdbs1å¤§å°ï¼š      $sizeuserdbs1G"
+					echo "userdbs2å¤§å°ï¼š      $sizeuserdbs2G"
+					echo "userdbs3å¤§å°ï¼š      $sizeuserdbs3G"
+					echo "userdbs4å¤§å°ï¼š      $sizeuserdbs4G"
+					echo "userdbs5å¤§å°ï¼š      $sizeuserdbs5G"
+					echo "chargedbs1å¤§å°ï¼š    $sizechargedbs1G"
+					echo "chargedbs2å¤§å°ï¼š    $sizechargedbs2G"
+					echo "minfodbs1å¤§å°ï¼š     $sizeminfodbs1G"
+					echo "minfodbs2å¤§å°ï¼š     $sizeminfodbs2G"
+					echo "sizeservdbs1å¤§å°ï¼š  $sizeservdbs1G"
+					echo "sizeservdbs2å¤§å°ï¼š  $sizeservdbs2G"
+					read -p "æ˜¯å¦ç¡®è®¤è°ƒæ•´åçš„å¤§å°ï¼Œè¯·è¾“å…¥[y/n]ï¼š" shifouquerenlvsize
 					while [[ X$shifouquerenlvsize = X ]]
 					do
-						log4s info "ÊÇ·ñÈ·ÈÏµ÷Õûºó´óĞ¡£¬ÊäÈë²»ÄÜÎª¿Õ£¬ÇëÖØĞÂÊäÈë"
-						read -p "ÊÇ·ñÈ·ÈÏµ÷ÕûºóµÄ´óĞ¡£¬ÇëÊäÈë[y/n]£º" shifouquerenlvsize
+						log4s info "æ˜¯å¦ç¡®è®¤è°ƒæ•´åå¤§å°ï¼Œè¾“å…¥ä¸èƒ½ä¸ºç©ºï¼Œè¯·é‡æ–°è¾“å…¥"
+						read -p "æ˜¯å¦ç¡®è®¤è°ƒæ•´åçš„å¤§å°ï¼Œè¯·è¾“å…¥[y/n]ï¼š" shifouquerenlvsize
 					done
 					while [[ $shifouquerenlvsize != [Yy] ]]
 					do
-						log4s info "ÊÇ·ñÈ·ÈÏµ÷Õûºó´óĞ¡£¬ÊäÈë·Ç·¨£¬ÇëÖØĞÂÊäÈë"
-						read -p "ÊÇ·ñÈ·ÈÏµ÷ÕûºóµÄ´óĞ¡£¬ÇëÊäÈë[y/n]£º" shifouquerenlvsize
+						log4s info "æ˜¯å¦ç¡®è®¤è°ƒæ•´åå¤§å°ï¼Œè¾“å…¥éæ³•ï¼Œè¯·é‡æ–°è¾“å…¥"
+						read -p "æ˜¯å¦ç¡®è®¤è°ƒæ•´åçš„å¤§å°ï¼Œè¯·è¾“å…¥[y/n]ï¼š" shifouquerenlvsize
 					done
 					if [ X$shifouquerenlvsize = X ]
 					then
 						shifouquerenlvsize=n
 					fi
-					#ÏÈÅĞ¶ÏÊÇ·ñËùÓĞ´óĞ¡¶¼ÊÇÊı×Ö
+					#å…ˆåˆ¤æ–­æ˜¯å¦æ‰€æœ‰å¤§å°éƒ½æ˜¯æ•°å­—
 					Prootdbs1=`Pnum "$sizerootdbs1G"`
 					Ptempdbs1=`Pnum "$sizetempdbs1G"`
 					Ptempdbs2=`Pnum "$sizetempdbs2G"`
@@ -1549,13 +1544,13 @@ InputAndCheck()
 					Psizeservdbs2G=`Pnum "$sizeservdbs2G"`
 					if [ $Prootdbs1 = no ] || [ $Ptempdbs1 = no ] || [ $Ptempdbs2 = no ] || [ $Plogdbs1 = no ] || [ $Pphydbs1 = no ] || [ $Puserdbs1 = no ] || [ $Puserdbs2 = no ] || [ $Puserdbs3 = no ] || [ $Puserdbs4 = no ] || [ $Puserdbs5 = no ] || [ $Pchargedbs1 = no ] || [ $Pchargedbs2 = no ] || [ $Pminfodbs1 = no ] || [ $Pminfodbs2 = no ] || [ $Psizeservdbs1G = no ] || [ $Psizeservdbs2G = no ]
 					then
-						echo "ÊäÈëdbsÓĞ²»ÎªÊı×ÖµÄÇé¿ö£¬ÇëÖØĞÂÊäÈë¡£"
+						echo "è¾“å…¥dbsæœ‰ä¸ä¸ºæ•°å­—çš„æƒ…å†µï¼Œè¯·é‡æ–°è¾“å…¥ã€‚"
 						shifouquerenlvsize=n
 						continue;
 					fi
 					if [ X$sizerootdbs1G = X0 ]
 					then
-						echo "rootdbs1²»ÄÜÎª0"
+						echo "rootdbs1ä¸èƒ½ä¸º0"
 						shifouquerenlvsize=n
 						continue;
 					fi
@@ -1567,19 +1562,19 @@ InputAndCheck()
 					fi
 					if [ X$sizelogdbs1G = X0 ]
 					then
-						echo "logdbs1²»ÄÜÎª0"
+						echo "logdbs1ä¸èƒ½ä¸º0"
 						shifouquerenlvsize=n
 						continue;
 					fi
 					if [ X$sizephydbs1G = X0 ]
 					then
-						echo "phydbs1²»ÄÜÎª0"
+						echo "phydbs1ä¸èƒ½ä¸º0"
 						shifouquerenlvsize=n
 						continue;
 					fi
 					if [ X$sizeuserdbs1G = X0 ]
 					then
-						echo "userdbs1²»ÄÜÎª0"
+						echo "userdbs1ä¸èƒ½ä¸º0"
 						shifouquerenlvsize=n
 						continue;
 					fi
@@ -1628,70 +1623,70 @@ InputAndCheck()
 			shifouquerenlvsize=y
 			lvmuluqueren=y
 		fi
-		#´´½¨lv½áÊø
+		#åˆ›å»ºlvç»“æŸ
 		
-		#²»´´½¨lv£¬Ö¸¶¨lvÂ·¾¶
+		#ä¸åˆ›å»ºlvï¼ŒæŒ‡å®šlvè·¯å¾„
 		if [ $shifouchuangjianlv = N ] || [ $shifouchuangjianlv = n ]
 		then
-			log4s info "²»ĞèÒª´´½¨lv£¬Ö¸¶¨lvÄ¿Â¼"
+			log4s info "ä¸éœ€è¦åˆ›å»ºlvï¼ŒæŒ‡å®šlvç›®å½•"
 			while [[ $lvmuluqueren != [Yy] ]]
 			do
 				if [ $muban = cl ]
 				then
-					read -p "ÇëÊäÈëvgÃû³Æ£¬±ÈÈçdbvg£¬[Ã»ÓĞÄ¬ÈÏÖµ]£º" vgname
+					read -p "è¯·è¾“å…¥vgåç§°ï¼Œæ¯”å¦‚dbvgï¼Œ[æ²¡æœ‰é»˜è®¤å€¼]ï¼š" vgname
 					while [[ X$vgname = X ]]
 					do
-						log4s info "vgÃû³Æ²»ÄÜÎª¿Õ£¬ÇëÖØĞÂÊäÈë"
-						read -p "ÇëÊäÈëvgÃû³Æ£¬±ÈÈçdbvg£¬[Ã»ÓĞÄ¬ÈÏÖµ]£º" vgname
+						log4s info "vgåç§°ä¸èƒ½ä¸ºç©ºï¼Œè¯·é‡æ–°è¾“å…¥"
+						read -p "è¯·è¾“å…¥vgåç§°ï¼Œæ¯”å¦‚dbvgï¼Œ[æ²¡æœ‰é»˜è®¤å€¼]ï¼š" vgname
 					done
-					echo "Çë¸ù¾İÌáÊ¾ÊäÈë¸÷lvµÄÄ¿Â¼£¬¾ÙÀı/dev/$vgname/rootdbs1"
-					echo "Èç¹û²»ĞèÒªÕâ¸ödbs£¬ÔòÖ±½Ó»Ø³µ¼´¿É"
-					read -p "rootdbs1µÄÄ¿Â¼£¬[±ØĞë´´½¨]£º"		lvrootdbs1
+					echo "è¯·æ ¹æ®æç¤ºè¾“å…¥å„lvçš„ç›®å½•ï¼Œä¸¾ä¾‹/dev/$vgname/rootdbs1"
+					echo "å¦‚æœä¸éœ€è¦è¿™ä¸ªdbsï¼Œåˆ™ç›´æ¥å›è½¦å³å¯"
+					read -p "rootdbs1çš„ç›®å½•ï¼Œ[å¿…é¡»åˆ›å»º]ï¼š"		lvrootdbs1
 					while [[ X$lvrootdbs1 = X ]]
 					do
-						log4s info "rootdbs1µÄÄ¿Â¼±ØĞë´´½¨£¬ÇëÖØĞÂÊäÈë:"
-						read -p "rootdbs1µÄÄ¿Â¼£¬[±ØĞë´´½¨]£º"	lvrootdbs1
+						log4s info "rootdbs1çš„ç›®å½•å¿…é¡»åˆ›å»ºï¼Œè¯·é‡æ–°è¾“å…¥:"
+						read -p "rootdbs1çš„ç›®å½•ï¼Œ[å¿…é¡»åˆ›å»º]ï¼š"	lvrootdbs1
 					done
-					read -p "tempdbs1µÄÄ¿Â¼£¬[±ØĞë´´½¨]£º"		lvtempdbs1
+					read -p "tempdbs1çš„ç›®å½•ï¼Œ[å¿…é¡»åˆ›å»º]ï¼š"		lvtempdbs1
 					while [[ X$lvtempdbs1 = X ]]
 					do
-						log4s info "tempdbs1µÄÄ¿Â¼±ØĞë´´½¨£¬ÇëÖØĞÂÊäÈë:"
-						read -p "tempdbs1µÄÄ¿Â¼£¬[±ØĞë´´½¨]£º"	lvtempdbs1
+						log4s info "tempdbs1çš„ç›®å½•å¿…é¡»åˆ›å»ºï¼Œè¯·é‡æ–°è¾“å…¥:"
+						read -p "tempdbs1çš„ç›®å½•ï¼Œ[å¿…é¡»åˆ›å»º]ï¼š"	lvtempdbs1
 					done
-					read -p "tempdbs2µÄÄ¿Â¼£¬[±ØĞë´´½¨]£º"		lvtempdbs2
+					read -p "tempdbs2çš„ç›®å½•ï¼Œ[å¿…é¡»åˆ›å»º]ï¼š"		lvtempdbs2
 					while [[ X$lvtempdbs2 = X ]]
 					do
-						log4s info "tempdbs2µÄÄ¿Â¼±ØĞë´´½¨£¬ÇëÖØĞÂÊäÈë:"
-						read -p "tempdbs2µÄÄ¿Â¼£¬[±ØĞë´´½¨]£º"	lvtempdbs2
+						log4s info "tempdbs2çš„ç›®å½•å¿…é¡»åˆ›å»ºï¼Œè¯·é‡æ–°è¾“å…¥:"
+						read -p "tempdbs2çš„ç›®å½•ï¼Œ[å¿…é¡»åˆ›å»º]ï¼š"	lvtempdbs2
 					done
-					read -p "logdbs1µÄÄ¿Â¼£¬ [±ØĞë´´½¨]£º"		lvlogdbs1
+					read -p "logdbs1çš„ç›®å½•ï¼Œ [å¿…é¡»åˆ›å»º]ï¼š"		lvlogdbs1
 					while [[ X$lvlogdbs1 = X ]]
 					do
-						log4s info "logdbs1µÄÄ¿Â¼±ØĞë´´½¨£¬ÇëÖØĞÂÊäÈë:"
-						read -p "logdbs1µÄÄ¿Â¼£¬[±ØĞë´´½¨]£º"	  logdbs1
+						log4s info "logdbs1çš„ç›®å½•å¿…é¡»åˆ›å»ºï¼Œè¯·é‡æ–°è¾“å…¥:"
+						read -p "logdbs1çš„ç›®å½•ï¼Œ[å¿…é¡»åˆ›å»º]ï¼š"	  logdbs1
 					done
-					read -p "phydbs1µÄÄ¿Â¼£¬ [±ØĞë´´½¨]£º"		lvphydbs1
+					read -p "phydbs1çš„ç›®å½•ï¼Œ [å¿…é¡»åˆ›å»º]ï¼š"		lvphydbs1
 					while [[ X$lvphydbs1 = X ]]
 					do
-						log4s info "phydbs1µÄÄ¿Â¼±ØĞë´´½¨£¬ÇëÖØĞÂÊäÈë:"
-						read -p "phydbs1µÄÄ¿Â¼£¬[±ØĞë´´½¨]£º"	  phydbs1
+						log4s info "phydbs1çš„ç›®å½•å¿…é¡»åˆ›å»ºï¼Œè¯·é‡æ–°è¾“å…¥:"
+						read -p "phydbs1çš„ç›®å½•ï¼Œ[å¿…é¡»åˆ›å»º]ï¼š"	  phydbs1
 					done
-					read -p "userdbs1µÄÄ¿Â¼£¬[±ØĞë´´½¨]£º"		lvuserdbs1
+					read -p "userdbs1çš„ç›®å½•ï¼Œ[å¿…é¡»åˆ›å»º]ï¼š"		lvuserdbs1
 					while [[ X$lvuserdbs1 = X ]]
 					do
-						log4s info "userdbs1µÄÄ¿Â¼±ØĞë´´½¨£¬ÇëÖØĞÂÊäÈë:"
-						read -p "userdbs1µÄÄ¿Â¼£¬[±ØĞë´´½¨]£º"	userdbs1
+						log4s info "userdbs1çš„ç›®å½•å¿…é¡»åˆ›å»ºï¼Œè¯·é‡æ–°è¾“å…¥:"
+						read -p "userdbs1çš„ç›®å½•ï¼Œ[å¿…é¡»åˆ›å»º]ï¼š"	userdbs1
 					done
-					read -p "userdbs2µÄÄ¿Â¼£¬[²»ÊäÈëÄ¬ÈÏÎª²»´´½¨]£º"		lvuserdbs2
-					read -p "userdbs3µÄÄ¿Â¼£¬[²»ÊäÈëÄ¬ÈÏÎª²»´´½¨]£º"		lvuserdbs3
-					read -p "userdbs4µÄÄ¿Â¼£¬[²»ÊäÈëÄ¬ÈÏÎª²»´´½¨]£º"		lvuserdbs4
-					read -p "userdbs5µÄÄ¿Â¼£¬[²»ÊäÈëÄ¬ÈÏÎª²»´´½¨]£º"		lvuserdbs5
-					read -p "chargedbs1µÄÄ¿Â¼£¬[²»ÊäÈëÄ¬ÈÏÎª²»´´½¨]£º"	lvchargedbs1
-					read -p "chargedbs2µÄÄ¿Â¼£¬[²»ÊäÈëÄ¬ÈÏÎª²»´´½¨]£º"	lvchargedbs2
-					read -p "minfodbs1µÄÄ¿Â¼£¬[²»ÊäÈëÄ¬ÈÏÎª²»´´½¨]£º"		lvminfodbs1
-					read -p "minfodbs2µÄÄ¿Â¼£¬[²»ÊäÈëÄ¬ÈÏÎª²»´´½¨]£º"		lvminfodbs2
-					read -p "servdbs1µÄÄ¿Â¼£¬[²»ÊäÈëÄ¬ÈÏÎª²»´´½¨]£º"		lvservdbs1
-					read -p "servdbs2µÄÄ¿Â¼£¬[²»ÊäÈëÄ¬ÈÏÎª²»´´½¨]£º"		lvservdbs2
+					read -p "userdbs2çš„ç›®å½•ï¼Œ[ä¸è¾“å…¥é»˜è®¤ä¸ºä¸åˆ›å»º]ï¼š"		lvuserdbs2
+					read -p "userdbs3çš„ç›®å½•ï¼Œ[ä¸è¾“å…¥é»˜è®¤ä¸ºä¸åˆ›å»º]ï¼š"		lvuserdbs3
+					read -p "userdbs4çš„ç›®å½•ï¼Œ[ä¸è¾“å…¥é»˜è®¤ä¸ºä¸åˆ›å»º]ï¼š"		lvuserdbs4
+					read -p "userdbs5çš„ç›®å½•ï¼Œ[ä¸è¾“å…¥é»˜è®¤ä¸ºä¸åˆ›å»º]ï¼š"		lvuserdbs5
+					read -p "chargedbs1çš„ç›®å½•ï¼Œ[ä¸è¾“å…¥é»˜è®¤ä¸ºä¸åˆ›å»º]ï¼š"	lvchargedbs1
+					read -p "chargedbs2çš„ç›®å½•ï¼Œ[ä¸è¾“å…¥é»˜è®¤ä¸ºä¸åˆ›å»º]ï¼š"	lvchargedbs2
+					read -p "minfodbs1çš„ç›®å½•ï¼Œ[ä¸è¾“å…¥é»˜è®¤ä¸ºä¸åˆ›å»º]ï¼š"		lvminfodbs1
+					read -p "minfodbs2çš„ç›®å½•ï¼Œ[ä¸è¾“å…¥é»˜è®¤ä¸ºä¸åˆ›å»º]ï¼š"		lvminfodbs2
+					read -p "servdbs1çš„ç›®å½•ï¼Œ[ä¸è¾“å…¥é»˜è®¤ä¸ºä¸åˆ›å»º]ï¼š"		lvservdbs1
+					read -p "servdbs2çš„ç›®å½•ï¼Œ[ä¸è¾“å…¥é»˜è®¤ä¸ºä¸åˆ›å»º]ï¼š"		lvservdbs2
 					if [ X$lvrootdbs1 = X ] || [ X$lvrootdbs1 = XN ] || [ X$lvrootdbs1 = Xn ] || [ X$lvrootdbs1 = X0 ]
 					then
 						lvrootdbs1=0
@@ -1757,33 +1752,33 @@ InputAndCheck()
 						lvservdbs2=0
 					fi
 
-					echo "ÉèÖÃµÄdbsÄ¿Â¼ÅäÖÃÈçÏÂ£¬ÇëÈ·ÈÏ[Y/N]£º"
-					echo "rootdbs1µÄÄ¿Â¼£º    $lvrootdbs1" 
-					echo "tempdbs1µÄÄ¿Â¼£º    $lvtempdbs1" 
-					echo "tempdbs2µÄÄ¿Â¼£º    $lvtempdbs2" 
-					echo "logdbs1µÄÄ¿Â¼£º     $lvlogdbs1"
-					echo "phydbs1µÄÄ¿Â¼£º     $lvphydbs1"
-					echo "userdbs1µÄÄ¿Â¼£º    $lvuserdbs1"
-					echo "userdbs2µÄÄ¿Â¼£º    $lvuserdbs2"
-					echo "userdbs3µÄÄ¿Â¼£º    $lvuserdbs3"
-					echo "userdbs4µÄÄ¿Â¼£º    $lvuserdbs4"
-					echo "userdbs5µÄÄ¿Â¼£º    $lvuserdbs5"
-					echo "chargedbs1µÄÄ¿Â¼£º  $lvchargedbs1"
-					echo "chargedbs2µÄÄ¿Â¼£º  $lvchargedbs2"
-					echo "minfodbs1µÄÄ¿Â¼£º   $lvminfodbs1"
-					echo "minfodbs2µÄÄ¿Â¼£º   $lvminfodbs2"
-					echo "servdbs1µÄÄ¿Â¼£º    $lvservdbs1"
-					echo "servdbs2µÄÄ¿Â¼£º    $lvservdbs2"
-					read -p "ÊÇ·ñÈ·ÈÏ£º[y/n]£º" lvmuluqueren
+					echo "è®¾ç½®çš„dbsç›®å½•é…ç½®å¦‚ä¸‹ï¼Œè¯·ç¡®è®¤[Y/N]ï¼š"
+					echo "rootdbs1çš„ç›®å½•ï¼š    $lvrootdbs1" 
+					echo "tempdbs1çš„ç›®å½•ï¼š    $lvtempdbs1" 
+					echo "tempdbs2çš„ç›®å½•ï¼š    $lvtempdbs2" 
+					echo "logdbs1çš„ç›®å½•ï¼š     $lvlogdbs1"
+					echo "phydbs1çš„ç›®å½•ï¼š     $lvphydbs1"
+					echo "userdbs1çš„ç›®å½•ï¼š    $lvuserdbs1"
+					echo "userdbs2çš„ç›®å½•ï¼š    $lvuserdbs2"
+					echo "userdbs3çš„ç›®å½•ï¼š    $lvuserdbs3"
+					echo "userdbs4çš„ç›®å½•ï¼š    $lvuserdbs4"
+					echo "userdbs5çš„ç›®å½•ï¼š    $lvuserdbs5"
+					echo "chargedbs1çš„ç›®å½•ï¼š  $lvchargedbs1"
+					echo "chargedbs2çš„ç›®å½•ï¼š  $lvchargedbs2"
+					echo "minfodbs1çš„ç›®å½•ï¼š   $lvminfodbs1"
+					echo "minfodbs2çš„ç›®å½•ï¼š   $lvminfodbs2"
+					echo "servdbs1çš„ç›®å½•ï¼š    $lvservdbs1"
+					echo "servdbs2çš„ç›®å½•ï¼š    $lvservdbs2"
+					read -p "æ˜¯å¦ç¡®è®¤ï¼š[y/n]ï¼š" lvmuluqueren
 					while [[ X$lvmuluqueren = X ]]
 					do
-						log4s info "ÊÇ·ñÈ·ÈÏÄ¿Â¼£¬²»ÄÜÎª¿Õ£¬ÇëÖØĞÂÊäÈë"
-						read -p "ÊÇ·ñÈ·ÈÏ£º[y/n]£º" lvmuluqueren
+						log4s info "æ˜¯å¦ç¡®è®¤ç›®å½•ï¼Œä¸èƒ½ä¸ºç©ºï¼Œè¯·é‡æ–°è¾“å…¥"
+						read -p "æ˜¯å¦ç¡®è®¤ï¼š[y/n]ï¼š" lvmuluqueren
 					done
 					while [[ $lvmuluqueren != [YyNn] ]]
 					do
-						log4s info "ÊÇ·ñÈ·ÈÏÄ¿Â¼£¬ÊäÈë·Ç·¨£¬ÇëÖØĞÂÊäÈë"
-						read -p "ÊÇ·ñÈ·ÈÏ£º[y/n]£º" lvmuluqueren
+						log4s info "æ˜¯å¦ç¡®è®¤ç›®å½•ï¼Œè¾“å…¥éæ³•ï¼Œè¯·é‡æ–°è¾“å…¥"
+						read -p "æ˜¯å¦ç¡®è®¤ï¼š[y/n]ï¼š" lvmuluqueren
 					done
 					if [ X$lvmuluqueren != XY ] && [ X$lvmuluqueren != Xy ]
 					then
@@ -1797,141 +1792,141 @@ InputAndCheck()
 			done
 			while [[ $shifouquerenlvsize != [Yy] ]]
 			do
-				echo "ÇëÊäÉèÖÃµÄ¸÷dbsµÄ´óĞ¡£¬µ¥Î»ÎªG£¬Ö»ĞèÒªÊäÈëÊı×Ö¼´¿É£¬ÇëÈ·±£Êµ¼Êlv´óĞ¡Âú×ãdbs"
-				echo "Èç¹û²»ĞèÒªÄ³¸ödbsÔòÉèÖÃ´óĞ¡Îª0»òÕßN»òÕßn»òÕß²»ÊäÈë¶¼¿ÉÒÔ¡£"
-				echo "rootdbs1µÄÄ¿Â¼£º    $lvrootdbs1" 
-				read -p "rootdbs1´óĞ¡£¬  [±ØĞë´´½¨]£º"					sizerootdbs1G
+				echo "è¯·è¾“è®¾ç½®çš„å„dbsçš„å¤§å°ï¼Œå•ä½ä¸ºGï¼Œåªéœ€è¦è¾“å…¥æ•°å­—å³å¯ï¼Œè¯·ç¡®ä¿å®é™…lvå¤§å°æ»¡è¶³dbs"
+				echo "å¦‚æœä¸éœ€è¦æŸä¸ªdbsåˆ™è®¾ç½®å¤§å°ä¸º0æˆ–è€…Næˆ–è€…næˆ–è€…ä¸è¾“å…¥éƒ½å¯ä»¥ã€‚"
+				echo "rootdbs1çš„ç›®å½•ï¼š    $lvrootdbs1" 
+				read -p "rootdbs1å¤§å°ï¼Œ  [å¿…é¡»åˆ›å»º]ï¼š"					sizerootdbs1G
 				Pnum_sizerootdbs1G=`Pnum $sizerootdbs1G`
 				while [[ X$sizerootdbs1G = X || X$sizerootdbs1G = XN || X$sizerootdbs1G = Xn || X$sizerootdbs1G = X0 || X$Pnum_sizerootdbs1G = Xno ]]
 				do
-					log4s info "rootdbs1´óĞ¡ÊäÈë·Ç·¨£¬ÇëÖØĞÂÊäÈë"
-					read -p "rootdbs1´óĞ¡£¬  [±ØĞë´´½¨]£º" 			sizerootdbs1G
+					log4s info "rootdbs1å¤§å°è¾“å…¥éæ³•ï¼Œè¯·é‡æ–°è¾“å…¥"
+					read -p "rootdbs1å¤§å°ï¼Œ  [å¿…é¡»åˆ›å»º]ï¼š" 			sizerootdbs1G
 					Pnum_sizerootdbs1G=`Pnum $sizerootdbs1G`
 				done
-				echo "tempdbs1µÄÄ¿Â¼£º    $lvtempdbs1" 
-				read -p "tempdbs1´óĞ¡£¬  [±ØĞë´´½¨]£º"					sizetempdbs1G
+				echo "tempdbs1çš„ç›®å½•ï¼š    $lvtempdbs1" 
+				read -p "tempdbs1å¤§å°ï¼Œ  [å¿…é¡»åˆ›å»º]ï¼š"					sizetempdbs1G
 				Pnum_sizetempdbs1G=`Pnum $sizetempdbs1G`
 				while [[ X$sizetempdbs1G = X || X$sizetempdbs1G = XN || X$sizetempdbs1G = Xn || X$sizetempdbs1G = X0 || X$Pnum_sizetempdbs1G = Xno ]]
 				do
-					log4s info "tempdbs1´óĞ¡ÊäÈë·Ç·¨£¬ÇëÖØĞÂÊäÈë"
-					read -p "tempdbs1´óĞ¡£¬  [±ØĞë´´½¨]£º" 			sizetempdbs1G
+					log4s info "tempdbs1å¤§å°è¾“å…¥éæ³•ï¼Œè¯·é‡æ–°è¾“å…¥"
+					read -p "tempdbs1å¤§å°ï¼Œ  [å¿…é¡»åˆ›å»º]ï¼š" 			sizetempdbs1G
 					Pnum_sizetempdbs1G=`Pnum $sizetempdbs1G`
 				done
-				echo "tempdbs2µÄÄ¿Â¼£º    $lvtempdbs2" 
-				read -p "tempdbs2´óĞ¡£¬  [±ØĞë´´½¨]£º"					sizetempdbs2G
+				echo "tempdbs2çš„ç›®å½•ï¼š    $lvtempdbs2" 
+				read -p "tempdbs2å¤§å°ï¼Œ  [å¿…é¡»åˆ›å»º]ï¼š"					sizetempdbs2G
 				Pnum_sizetempdbs2G=`Pnum $sizetempdbs2G`
 				while [[ X$sizetempdbs2G = X || X$sizetempdbs2G = XN || X$sizetempdbs2G = Xn || X$sizetempdbs2G = X0 || X$Pnum_sizetempdbs2G = Xno ]]
 				do
-					log4s info "tempdbs2´óĞ¡ÊäÈë·Ç·¨£¬ÇëÖØĞÂÊäÈë"
-					read -p "tempdbs2´óĞ¡£¬  [±ØĞë´´½¨]£º" 			sizetempdbs2G
+					log4s info "tempdbs2å¤§å°è¾“å…¥éæ³•ï¼Œè¯·é‡æ–°è¾“å…¥"
+					read -p "tempdbs2å¤§å°ï¼Œ  [å¿…é¡»åˆ›å»º]ï¼š" 			sizetempdbs2G
 					Pnum_sizetempdbs2G=`Pnum $sizetempdbs2G`
 				done
-				echo "logdbs1µÄÄ¿Â¼£º     $lvlogdbs1"
-				read -p "logdbs1´óĞ¡£¬   [±ØĞë´´½¨]£º"					sizelogdbs1G
+				echo "logdbs1çš„ç›®å½•ï¼š     $lvlogdbs1"
+				read -p "logdbs1å¤§å°ï¼Œ   [å¿…é¡»åˆ›å»º]ï¼š"					sizelogdbs1G
 				Pnum_sizelogdbs1G=`Pnum $sizelogdbs1G`
 				while [[ X$sizelogdbs1G = X || X$sizelogdbs1G = XN || X$sizelogdbs1G = Xn || X$sizelogdbs1G = X0 || X$Pnum_sizelogdbs1G = Xno ]]
 				do
-					log4s info "logdbs1´óĞ¡ÊäÈë·Ç·¨£¬ÇëÖØĞÂÊäÈë"
-					read -p "logdbs1´óĞ¡£¬   [±ØĞë´´½¨]£º" 			sizelogdbs1G
+					log4s info "logdbs1å¤§å°è¾“å…¥éæ³•ï¼Œè¯·é‡æ–°è¾“å…¥"
+					read -p "logdbs1å¤§å°ï¼Œ   [å¿…é¡»åˆ›å»º]ï¼š" 			sizelogdbs1G
 					Pnum_sizelogdbs1G=`Pnum $sizelogdbs1G`
 				done
-				echo "phydbs1µÄÄ¿Â¼£º     $lvphydbs1"
-				read -p "phydbs1´óĞ¡£¬   [±ØĞë´´½¨]£º"					sizephydbs1G
+				echo "phydbs1çš„ç›®å½•ï¼š     $lvphydbs1"
+				read -p "phydbs1å¤§å°ï¼Œ   [å¿…é¡»åˆ›å»º]ï¼š"					sizephydbs1G
 				Pnum_sizephydbs1G=`Pnum $sizephydbs1G`
 				while [[ X$sizephydbs1G = X || X$sizephydbs1G = XN || X$sizephydbs1G = Xn || X$sizephydbs1G = X0 || X$Pnum_sizephydbs1G = Xno ]]
 				do
-					log4s info "phydbs1´óĞ¡ÊäÈë·Ç·¨£¬ÇëÖØĞÂÊäÈë"
-					read -p "phydbs1´óĞ¡£¬   [±ØĞë´´½¨]£º" 			sizephydbs1G
+					log4s info "phydbs1å¤§å°è¾“å…¥éæ³•ï¼Œè¯·é‡æ–°è¾“å…¥"
+					read -p "phydbs1å¤§å°ï¼Œ   [å¿…é¡»åˆ›å»º]ï¼š" 			sizephydbs1G
 					Pnum_sizephydbs1G=`Pnum $sizephydbs1G`
 				done
-				echo "userdbs1µÄÄ¿Â¼£º    $lvuserdbs1"
-				read -p "userdbs1´óĞ¡£¬  [±ØĞë´´½¨]£º"					sizeuserdbs1G
+				echo "userdbs1çš„ç›®å½•ï¼š    $lvuserdbs1"
+				read -p "userdbs1å¤§å°ï¼Œ  [å¿…é¡»åˆ›å»º]ï¼š"					sizeuserdbs1G
 				Pnum_sizeuserdbs1G=`Pnum $sizeuserdbs1G`
 				while [[ X$sizeuserdbs1G = X || X$sizeuserdbs1G = XN || X$sizeuserdbs1G = Xn || X$sizeuserdbs1G = X0 || X$Pnum_sizeuserdbs1G = Xno ]]
 				do
-					log4s info "userdbs1´óĞ¡ÊäÈë·Ç·¨£¬ÇëÖØĞÂÊäÈë"
-					read -p "userdbs1´óĞ¡£¬  [±ØĞë´´½¨]£º" 			sizeuserdbs1G
+					log4s info "userdbs1å¤§å°è¾“å…¥éæ³•ï¼Œè¯·é‡æ–°è¾“å…¥"
+					read -p "userdbs1å¤§å°ï¼Œ  [å¿…é¡»åˆ›å»º]ï¼š" 			sizeuserdbs1G
 					Pnum_sizeuserdbs1G=`Pnum $sizeuserdbs1G`
 				done
 				if [ X$lvuserdbs2 = X0 ]
 				then
-					log4s info "²»´´½¨userdbs2"
+					log4s info "ä¸åˆ›å»ºuserdbs2"
 					sizeuserdbs2G=0
 				else
-					echo "userdbs2µÄÄ¿Â¼£º    $lvuserdbs2"
-					read -p "userdbs2´óĞ¡£¬[²»ÊäÈëÄ¬ÈÏÎª0]£º"		sizeuserdbs2G
+					echo "userdbs2çš„ç›®å½•ï¼š    $lvuserdbs2"
+					read -p "userdbs2å¤§å°ï¼Œ[ä¸è¾“å…¥é»˜è®¤ä¸º0]ï¼š"		sizeuserdbs2G
 				fi
 				if [ X$lvuserdbs3 = X0 ]
 				then
-					log4s info "²»´´½¨userdbs3"
+					log4s info "ä¸åˆ›å»ºuserdbs3"
 					sizeuserdbs3G=0
 				else
-					echo "userdbs3µÄÄ¿Â¼£º    $lvuserdbs3"
-					read -p "userdbs3´óĞ¡£¬[²»ÊäÈëÄ¬ÈÏÎª0]£º"		sizeuserdbs3G
+					echo "userdbs3çš„ç›®å½•ï¼š    $lvuserdbs3"
+					read -p "userdbs3å¤§å°ï¼Œ[ä¸è¾“å…¥é»˜è®¤ä¸º0]ï¼š"		sizeuserdbs3G
 				fi
 				if [ X$lvuserdbs4 = X0 ]
 				then
-					log4s info "²»´´½¨userdbs4"
+					log4s info "ä¸åˆ›å»ºuserdbs4"
 					sizeuserdbs4G=0
 				else
-					echo "userdbs4µÄÄ¿Â¼£º    $lvuserdbs4"
-					read -p "userdbs4´óĞ¡£¬[²»ÊäÈëÄ¬ÈÏÎª0]£º"		sizeuserdbs4G
+					echo "userdbs4çš„ç›®å½•ï¼š    $lvuserdbs4"
+					read -p "userdbs4å¤§å°ï¼Œ[ä¸è¾“å…¥é»˜è®¤ä¸º0]ï¼š"		sizeuserdbs4G
 				fi
 				if [ X$lvuserdbs5 = X0 ]
 				then
-					log4s info "²»´´½¨userdbs5"
+					log4s info "ä¸åˆ›å»ºuserdbs5"
 					sizeuserdbs5G=0
 				else
-					echo "userdbs5µÄÄ¿Â¼£º    $lvuserdbs5"
-					read -p "userdbs5´óĞ¡£¬[²»ÊäÈëÄ¬ÈÏÎª0]£º"		sizeuserdbs5G
+					echo "userdbs5çš„ç›®å½•ï¼š    $lvuserdbs5"
+					read -p "userdbs5å¤§å°ï¼Œ[ä¸è¾“å…¥é»˜è®¤ä¸º0]ï¼š"		sizeuserdbs5G
 				fi
 				if [ X$lvchargedbs1 = X0 ]
 				then
-					log4s info "²»´´½¨chargedbs1"
+					log4s info "ä¸åˆ›å»ºchargedbs1"
 					sizechargedbs1G=0
 				else
-					echo "chargedbs1µÄÄ¿Â¼£º  $lvchargedbs1"
-					read -p "chargedbs1´óĞ¡£¬[²»ÊäÈëÄ¬ÈÏÎª0]£º"	sizechargedbs1G
+					echo "chargedbs1çš„ç›®å½•ï¼š  $lvchargedbs1"
+					read -p "chargedbs1å¤§å°ï¼Œ[ä¸è¾“å…¥é»˜è®¤ä¸º0]ï¼š"	sizechargedbs1G
 				fi
 				if [ X$lvchargedbs2 = X0 ]
 				then
-					log4s info "²»´´½¨chargedbs2"
+					log4s info "ä¸åˆ›å»ºchargedbs2"
 					sizechargedbs2G=0
 				else
-					echo "chargedbs2µÄÄ¿Â¼£º  $lvchargedbs2"
-					read -p "chargedbs2´óĞ¡£¬[²»ÊäÈëÄ¬ÈÏÎª0]£º"	sizechargedbs2G
+					echo "chargedbs2çš„ç›®å½•ï¼š  $lvchargedbs2"
+					read -p "chargedbs2å¤§å°ï¼Œ[ä¸è¾“å…¥é»˜è®¤ä¸º0]ï¼š"	sizechargedbs2G
 				fi
 				if [ X$lvminfodbs1 = X0 ]
 				then
-					log4s info "²»´´½¨minfodbs1"
+					log4s info "ä¸åˆ›å»ºminfodbs1"
 					sizeminfodbs1G=0
 				else
-					echo "minfodbs1µÄÄ¿Â¼£º   $lvminfodbs1"
-					read -p "minfodbs1´óĞ¡£¬[²»ÊäÈëÄ¬ÈÏÎª0]£º"  sizeminfodbs1G
+					echo "minfodbs1çš„ç›®å½•ï¼š   $lvminfodbs1"
+					read -p "minfodbs1å¤§å°ï¼Œ[ä¸è¾“å…¥é»˜è®¤ä¸º0]ï¼š"  sizeminfodbs1G
 				fi
 				if [ X$lvminfodbs2 = X0 ]
 				then
-					log4s info "²»´´½¨minfodbs2"
+					log4s info "ä¸åˆ›å»ºminfodbs2"
 					sizeminfodbs2G=0
 				else
-					echo "minfodbs2µÄÄ¿Â¼£º   $lvminfodbs2"
-					read -p "minfodbs2´óĞ¡£¬[²»ÊäÈëÄ¬ÈÏÎª0]£º"  sizeminfodbs2G
+					echo "minfodbs2çš„ç›®å½•ï¼š   $lvminfodbs2"
+					read -p "minfodbs2å¤§å°ï¼Œ[ä¸è¾“å…¥é»˜è®¤ä¸º0]ï¼š"  sizeminfodbs2G
 				fi
 				if [ X$lvservdbs1 = X0 ]
 				then
-					log4s info "²»´´½¨servdbs1"
+					log4s info "ä¸åˆ›å»ºservdbs1"
 					sizeservdbs1G=0
 				else
-					echo "servdbs1µÄÄ¿Â¼£º    $lvservdbs1"
-					read -p "servdbs1´óĞ¡£¬[²»ÊäÈëÄ¬ÈÏÎª0]£º"		sizeservdbs1G
+					echo "servdbs1çš„ç›®å½•ï¼š    $lvservdbs1"
+					read -p "servdbs1å¤§å°ï¼Œ[ä¸è¾“å…¥é»˜è®¤ä¸º0]ï¼š"		sizeservdbs1G
 				fi
 				if [ X$lvservdbs2 = X0 ]
 				then
-					log4s info "²»´´½¨servdbs2"
+					log4s info "ä¸åˆ›å»ºservdbs2"
 					sizeservdbs2G=0
 				else
-					echo "servdbs2µÄÄ¿Â¼£º    $lvservdbs2"
-					read -p "servdbs2´óĞ¡£¬[²»ÊäÈëÄ¬ÈÏÎª0]£º"		sizeservdbs2G
+					echo "servdbs2çš„ç›®å½•ï¼š    $lvservdbs2"
+					read -p "servdbs2å¤§å°ï¼Œ[ä¸è¾“å…¥é»˜è®¤ä¸º0]ï¼š"		sizeservdbs2G
 				fi
 
 				if [ X$sizerootdbs1G = X ] || [ X$sizerootdbs1G = XN ] || [ X$sizerootdbs1G = Xn ] || [ X$sizerootdbs1G = X0 ]
@@ -1998,35 +1993,35 @@ InputAndCheck()
 				then
 					sizeservdbs2G=0
 				fi
-				echo "ÉèÖÃµÄdbsµÄ´óĞ¡ÈçÏÂ£º"
-				echo "rootdbs1´óĞ¡£º      $sizerootdbs1G"
-				echo "tempdbs1´óĞ¡£º      $sizetempdbs1G"
-				echo "tempdbs2´óĞ¡£º      $sizetempdbs2G"
-				echo "logdbs1´óĞ¡£º       $sizelogdbs1G"
-				echo "phydbs1´óĞ¡£º       $sizephydbs1G"
-				echo "userdbs1´óĞ¡£º      $sizeuserdbs1G"
-				echo "userdbs2´óĞ¡£º      $sizeuserdbs2G"
-				echo "userdbs3´óĞ¡£º      $sizeuserdbs3G"
-				echo "userdbs4´óĞ¡£º      $sizeuserdbs4G"
-				echo "userdbs5´óĞ¡£º      $sizeuserdbs5G"
-				echo "chargedbs1´óĞ¡£º    $sizechargedbs1G"
-				echo "chargedbs2´óĞ¡£º    $sizechargedbs2G"
-				echo "minfodbs1´óĞ¡£º     $sizeminfodbs1G"
-				echo "minfodbs2´óĞ¡£º     $sizeminfodbs2G"
-				echo "sizeservdbs1´óĞ¡£º $sizeservdbs1G"
-				echo "sizeservdbs2´óĞ¡£º $sizeservdbs2G"
-				read -p "ÊÇ·ñÈ·ÈÏµ÷ÕûºóµÄ´óĞ¡[Y/N]£¬[Ä¬ÈÏÎªn]£º" shifouquerenlvsize
+				echo "è®¾ç½®çš„dbsçš„å¤§å°å¦‚ä¸‹ï¼š"
+				echo "rootdbs1å¤§å°ï¼š      $sizerootdbs1G"
+				echo "tempdbs1å¤§å°ï¼š      $sizetempdbs1G"
+				echo "tempdbs2å¤§å°ï¼š      $sizetempdbs2G"
+				echo "logdbs1å¤§å°ï¼š       $sizelogdbs1G"
+				echo "phydbs1å¤§å°ï¼š       $sizephydbs1G"
+				echo "userdbs1å¤§å°ï¼š      $sizeuserdbs1G"
+				echo "userdbs2å¤§å°ï¼š      $sizeuserdbs2G"
+				echo "userdbs3å¤§å°ï¼š      $sizeuserdbs3G"
+				echo "userdbs4å¤§å°ï¼š      $sizeuserdbs4G"
+				echo "userdbs5å¤§å°ï¼š      $sizeuserdbs5G"
+				echo "chargedbs1å¤§å°ï¼š    $sizechargedbs1G"
+				echo "chargedbs2å¤§å°ï¼š    $sizechargedbs2G"
+				echo "minfodbs1å¤§å°ï¼š     $sizeminfodbs1G"
+				echo "minfodbs2å¤§å°ï¼š     $sizeminfodbs2G"
+				echo "sizeservdbs1å¤§å°ï¼š $sizeservdbs1G"
+				echo "sizeservdbs2å¤§å°ï¼š $sizeservdbs2G"
+				read -p "æ˜¯å¦ç¡®è®¤è°ƒæ•´åçš„å¤§å°[Y/N]ï¼Œ[é»˜è®¤ä¸ºn]ï¼š" shifouquerenlvsize
 				while [[ X$shifouquerenlvsize = X ]]
 				do
-					log4s info "ÊÇ·ñÈ·ÈÏµ÷ÕûºóµÄ´óĞ¡£¬²»ÄÜÎª¿Õ£¬ÇëÖØĞÂÊäÈë"
-					read -p "ÊÇ·ñÈ·ÈÏµ÷ÕûºóµÄ´óĞ¡[Y/N]£¬[Ä¬ÈÏÎªn]£º" shifouquerenlvsize
+					log4s info "æ˜¯å¦ç¡®è®¤è°ƒæ•´åçš„å¤§å°ï¼Œä¸èƒ½ä¸ºç©ºï¼Œè¯·é‡æ–°è¾“å…¥"
+					read -p "æ˜¯å¦ç¡®è®¤è°ƒæ•´åçš„å¤§å°[Y/N]ï¼Œ[é»˜è®¤ä¸ºn]ï¼š" shifouquerenlvsize
 				done
 				while [[ $shifouquerenlvsize != [YyNn] ]]
 				do
-					log4s info "ÊÇ·ñÈ·ÈÏµ÷ÕûºóµÄ´óĞ¡£¬ÊäÈë·Ç·¨£¬ÇëÖØĞÂÊäÈë"
-					read -p "ÊÇ·ñÈ·ÈÏµ÷ÕûºóµÄ´óĞ¡[Y/N]£¬[Ä¬ÈÏÎªn]£º" shifouquerenlvsize
+					log4s info "æ˜¯å¦ç¡®è®¤è°ƒæ•´åçš„å¤§å°ï¼Œè¾“å…¥éæ³•ï¼Œè¯·é‡æ–°è¾“å…¥"
+					read -p "æ˜¯å¦ç¡®è®¤è°ƒæ•´åçš„å¤§å°[Y/N]ï¼Œ[é»˜è®¤ä¸ºn]ï¼š" shifouquerenlvsize
 				done
-				#ÏÈÅĞ¶ÏÊÇ·ñËùÓĞ´óĞ¡¶¼ÊÇÊı×Ö
+				#å…ˆåˆ¤æ–­æ˜¯å¦æ‰€æœ‰å¤§å°éƒ½æ˜¯æ•°å­—
 				Prootdbs1=`Pnum "$sizerootdbs1G"`
 				Ptempdbs1=`Pnum "$sizetempdbs1G"`
 				Ptempdbs2=`Pnum "$sizetempdbs2G"`
@@ -2045,7 +2040,7 @@ InputAndCheck()
 				Psizeservdbs2G=`Pnum "$sizeservdbs2G"`
 				if [ $Prootdbs1 = no ] || [ $Ptempdbs1 = no ] || [ $Ptempdbs2 = no ] || [ $Plogdbs1 = no ] || [ $Pphydbs1 = no ] || [ $Puserdbs1 = no ] || [ $Puserdbs2 = no ] || [ $Puserdbs3 = no ] || [ $Puserdbs4 = no ] || [ $Puserdbs5 = no ] || [ $Pchargedbs1 = no ] || [ $Pchargedbs2 = no ] || [ $Pminfodbs1 = no ] || [ $Pminfodbs2 = no ] || [ $Psizeservdbs1G = no ] || [ $Psizeservdbs2G = no ]
 				then
-					echo "ÊäÈëdbsÓĞ²»ÎªÊı×ÖµÄÇé¿ö£¬ÇëÖØĞÂÊäÈë¡£"
+					echo "è¾“å…¥dbsæœ‰ä¸ä¸ºæ•°å­—çš„æƒ…å†µï¼Œè¯·é‡æ–°è¾“å…¥ã€‚"
 					shifouquerenlvsize=n
 					continue;
 				fi
@@ -2071,15 +2066,15 @@ InputAndCheck()
 				Plvsize  $lvservdbs2      $sizeservdbs2G           servdbs2   
 			done
 		fi
-		#²»´´½¨lv£¬Ö¸¶¨lvÂ·¾¶½áÊø
+		#ä¸åˆ›å»ºlvï¼ŒæŒ‡å®šlvè·¯å¾„ç»“æŸ
 	fi
-	#Ê¹ÓÃlv·½Ê½½áÊø
+	#ä½¿ç”¨lvæ–¹å¼ç»“æŸ
 	
-	#Ê¹ÓÃfs·½Ê½¿ªÊ¼
+	#ä½¿ç”¨fsæ–¹å¼å¼€å§‹
 	if [ X$lvorfs = Xfs ]
 	then
-		#Ğ´ÕâÀï
-		log4s info "Ñ¡ÔñÊ¹ÓÃÎÄ¼şÏµÍ³·½Ê½´´½¨dbs£¬Ä¿Â¼Îª$idshome/dbfiles£¬ÇëÊäÈë¸÷dbs´óĞ¡"
+		#å†™è¿™é‡Œ
+		log4s info "é€‰æ‹©ä½¿ç”¨æ–‡ä»¶ç³»ç»Ÿæ–¹å¼åˆ›å»ºdbsï¼Œç›®å½•ä¸º$idshome/dbfilesï¼Œè¯·è¾“å…¥å„dbså¤§å°"
 		lvrootdbs1=$idshome/dbfiles/rootdbs1
 		lvtempdbs1=$idshome/dbfiles/tempdbs1
 		lvtempdbs2=$idshome/dbfiles/tempdbs2
@@ -2098,82 +2093,82 @@ InputAndCheck()
 		lvservdbs2=$idshome/dbfiles/servdbs2
 		while [[ $shifouquerendbssize != [Yy] ]]
 		do
-			echo "ÇëÊäÉèÖÃµÄ¸÷dbsµÄ´óĞ¡£¬µ¥Î»ÎªG£¬Ö»ĞèÒªÊäÈëÊı×Ö¼´¿É£¬ÇëÈ·±£Êµ¼ÊÓ²ÅÌ´óĞ¡Âú×ãdbs"
-			echo "Èç¹û²»ĞèÒªÄ³¸ödbsÔòÉèÖÃ´óĞ¡Îª0»òÕßN»òÕßn»òÕß²»ÊäÈë¶¼¿ÉÒÔ¡£"
-			echo "rootdbs1µÄÄ¿Â¼£º    $lvrootdbs1" 
-			read -p "rootdbs1´óĞ¡£¬  [±ØĞë´´½¨]£º"					sizerootdbs1G
+			echo "è¯·è¾“è®¾ç½®çš„å„dbsçš„å¤§å°ï¼Œå•ä½ä¸ºGï¼Œåªéœ€è¦è¾“å…¥æ•°å­—å³å¯ï¼Œè¯·ç¡®ä¿å®é™…ç¡¬ç›˜å¤§å°æ»¡è¶³dbs"
+			echo "å¦‚æœä¸éœ€è¦æŸä¸ªdbsåˆ™è®¾ç½®å¤§å°ä¸º0æˆ–è€…Næˆ–è€…næˆ–è€…ä¸è¾“å…¥éƒ½å¯ä»¥ã€‚"
+			echo "rootdbs1çš„ç›®å½•ï¼š    $lvrootdbs1" 
+			read -p "rootdbs1å¤§å°ï¼Œ  [å¿…é¡»åˆ›å»º]ï¼š"					sizerootdbs1G
 			Pnum_sizerootdbs1G=`Pnum $sizerootdbs1G`
 			while [[ X$sizerootdbs1G = X || X$sizerootdbs1G = XN || X$sizerootdbs1G = Xn || X$sizerootdbs1G = X0 || X$Pnum_sizerootdbs1G = Xno ]]
 			do
-				log4s info "rootdbs1´óĞ¡ÊäÈë·Ç·¨£¬ÇëÖØĞÂÊäÈë"
-				read -p "rootdbs1´óĞ¡£¬  [±ØĞë´´½¨]£º" 			sizerootdbs1G
+				log4s info "rootdbs1å¤§å°è¾“å…¥éæ³•ï¼Œè¯·é‡æ–°è¾“å…¥"
+				read -p "rootdbs1å¤§å°ï¼Œ  [å¿…é¡»åˆ›å»º]ï¼š" 			sizerootdbs1G
 				Pnum_sizerootdbs1G=`Pnum $sizerootdbs1G`
 			done
-			echo "tempdbs1µÄÄ¿Â¼£º    $lvtempdbs1" 
-			read -p "tempdbs1´óĞ¡£¬  [±ØĞë´´½¨]£º"					sizetempdbs1G
+			echo "tempdbs1çš„ç›®å½•ï¼š    $lvtempdbs1" 
+			read -p "tempdbs1å¤§å°ï¼Œ  [å¿…é¡»åˆ›å»º]ï¼š"					sizetempdbs1G
 			Pnum_sizetempdbs1G=`Pnum $sizetempdbs1G`
 			while [[ X$sizetempdbs1G = X || X$sizetempdbs1G = XN || X$sizetempdbs1G = Xn || X$sizetempdbs1G = X0 || X$Pnum_sizetempdbs1G = Xno ]]
 			do
-				log4s info "tempdbs1´óĞ¡ÊäÈë·Ç·¨£¬ÇëÖØĞÂÊäÈë"
-				read -p "tempdbs1´óĞ¡£¬  [±ØĞë´´½¨]£º" 			sizetempdbs1G
+				log4s info "tempdbs1å¤§å°è¾“å…¥éæ³•ï¼Œè¯·é‡æ–°è¾“å…¥"
+				read -p "tempdbs1å¤§å°ï¼Œ  [å¿…é¡»åˆ›å»º]ï¼š" 			sizetempdbs1G
 				Pnum_sizetempdbs1G=`Pnum $sizetempdbs1G`
 			done
-			echo "tempdbs2µÄÄ¿Â¼£º    $lvtempdbs2" 
-			read -p "tempdbs2´óĞ¡£¬  [±ØĞë´´½¨]£º"					sizetempdbs2G
+			echo "tempdbs2çš„ç›®å½•ï¼š    $lvtempdbs2" 
+			read -p "tempdbs2å¤§å°ï¼Œ  [å¿…é¡»åˆ›å»º]ï¼š"					sizetempdbs2G
 			Pnum_sizetempdbs2G=`Pnum $sizetempdbs2G`
 			while [[ X$sizetempdbs2G = X || X$sizetempdbs2G = XN || X$sizetempdbs2G = Xn || X$sizetempdbs2G = X0 || X$Pnum_sizetempdbs2G = Xno ]]
 			do
-				log4s info "tempdbs2´óĞ¡ÊäÈë·Ç·¨£¬ÇëÖØĞÂÊäÈë"
-				read -p "tempdbs2´óĞ¡£¬  [±ØĞë´´½¨]£º" 			sizetempdbs2G
+				log4s info "tempdbs2å¤§å°è¾“å…¥éæ³•ï¼Œè¯·é‡æ–°è¾“å…¥"
+				read -p "tempdbs2å¤§å°ï¼Œ  [å¿…é¡»åˆ›å»º]ï¼š" 			sizetempdbs2G
 				Pnum_sizetempdbs2G=`Pnum $sizetempdbs2G`
 			done
-			echo "logdbs1µÄÄ¿Â¼£º     $lvlogdbs1"
-			read -p "logdbs1´óĞ¡£¬   [±ØĞë´´½¨]£º"					sizelogdbs1G
+			echo "logdbs1çš„ç›®å½•ï¼š     $lvlogdbs1"
+			read -p "logdbs1å¤§å°ï¼Œ   [å¿…é¡»åˆ›å»º]ï¼š"					sizelogdbs1G
 			Pnum_sizelogdbs1G=`Pnum $sizelogdbs1G`
 			while [[ X$sizelogdbs1G = X || X$sizelogdbs1G = XN || X$sizelogdbs1G = Xn || X$sizelogdbs1G = X0 || X$Pnum_sizelogdbs1G = Xno ]]
 			do
-				log4s info "logdbs1´óĞ¡ÊäÈë·Ç·¨£¬ÇëÖØĞÂÊäÈë"
-				read -p "logdbs1´óĞ¡£¬   [±ØĞë´´½¨]£º" 			sizelogdbs1G
+				log4s info "logdbs1å¤§å°è¾“å…¥éæ³•ï¼Œè¯·é‡æ–°è¾“å…¥"
+				read -p "logdbs1å¤§å°ï¼Œ   [å¿…é¡»åˆ›å»º]ï¼š" 			sizelogdbs1G
 				Pnum_sizelogdbs1G=`Pnum $sizelogdbs1G`
 			done
-			echo "phydbs1µÄÄ¿Â¼£º     $lvphydbs1"
-			read -p "phydbs1´óĞ¡£¬   [±ØĞë´´½¨]£º"					sizephydbs1G
+			echo "phydbs1çš„ç›®å½•ï¼š     $lvphydbs1"
+			read -p "phydbs1å¤§å°ï¼Œ   [å¿…é¡»åˆ›å»º]ï¼š"					sizephydbs1G
 			Pnum_sizephydbs1G=`Pnum $sizephydbs1G`
 			while [[ X$sizephydbs1G = X || X$sizephydbs1G = XN || X$sizephydbs1G = Xn || X$sizephydbs1G = X0 || X$Pnum_sizephydbs1G = Xno ]]
 			do
-				log4s info "phydbs1´óĞ¡ÊäÈë·Ç·¨£¬ÇëÖØĞÂÊäÈë"
-				read -p "phydbs1´óĞ¡£¬   [±ØĞë´´½¨]£º" 			sizephydbs1G
+				log4s info "phydbs1å¤§å°è¾“å…¥éæ³•ï¼Œè¯·é‡æ–°è¾“å…¥"
+				read -p "phydbs1å¤§å°ï¼Œ   [å¿…é¡»åˆ›å»º]ï¼š" 			sizephydbs1G
 				Pnum_sizephydbs1G=`Pnum $sizephydbs1G`
 			done
-			echo "userdbs1µÄÄ¿Â¼£º    $lvuserdbs1"
-			read -p "userdbs1´óĞ¡£¬  [±ØĞë´´½¨]£º"					sizeuserdbs1G
+			echo "userdbs1çš„ç›®å½•ï¼š    $lvuserdbs1"
+			read -p "userdbs1å¤§å°ï¼Œ  [å¿…é¡»åˆ›å»º]ï¼š"					sizeuserdbs1G
 			Pnum_sizeuserdbs1G=`Pnum $sizeuserdbs1G`
 			while [[ X$sizeuserdbs1G = X || X$sizeuserdbs1G = XN || X$sizeuserdbs1G = Xn || X$sizeuserdbs1G = X0 || X$Pnum_sizeuserdbs1G = Xno ]]
 			do
-				log4s info "userdbs1´óĞ¡ÊäÈë·Ç·¨£¬ÇëÖØĞÂÊäÈë"
-				read -p "userdbs1´óĞ¡£¬  [±ØĞë´´½¨]£º" 			sizeuserdbs1G
+				log4s info "userdbs1å¤§å°è¾“å…¥éæ³•ï¼Œè¯·é‡æ–°è¾“å…¥"
+				read -p "userdbs1å¤§å°ï¼Œ  [å¿…é¡»åˆ›å»º]ï¼š" 			sizeuserdbs1G
 				Pnum_sizeuserdbs1G=`Pnum $sizeuserdbs1G`
 			done
-			echo "userdbs2µÄÄ¿Â¼£º    $lvuserdbs2"
-			read -p "userdbs2´óĞ¡£¬[²»ÊäÈëÄ¬ÈÏÎª0]£º"		sizeuserdbs2G
-			echo "userdbs3µÄÄ¿Â¼£º    $lvuserdbs3"
-			read -p "userdbs3´óĞ¡£¬[²»ÊäÈëÄ¬ÈÏÎª0]£º"		sizeuserdbs3G
-			echo "userdbs4µÄÄ¿Â¼£º    $lvuserdbs4"
-			read -p "userdbs4´óĞ¡£¬[²»ÊäÈëÄ¬ÈÏÎª0]£º"		sizeuserdbs4G
-			echo "userdbs5µÄÄ¿Â¼£º    $lvuserdbs5"
-			read -p "userdbs5´óĞ¡£¬[²»ÊäÈëÄ¬ÈÏÎª0]£º"		sizeuserdbs5G
-			echo "chargedbs1µÄÄ¿Â¼£º  $lvchargedbs1"
-			read -p "chargedbs1´óĞ¡£¬[²»ÊäÈëÄ¬ÈÏÎª0]£º"	sizechargedbs1G
-			echo "chargedbs2µÄÄ¿Â¼£º  $lvchargedbs2"
-			read -p "chargedbs2´óĞ¡£¬[²»ÊäÈëÄ¬ÈÏÎª0]£º"	sizechargedbs2G
-			echo "minfodbs1µÄÄ¿Â¼£º   $lvminfodbs1"
-			read -p "minfodbs1´óĞ¡£¬[²»ÊäÈëÄ¬ÈÏÎª0]£º"		sizeminfodbs1G
-			echo "minfodbs2µÄÄ¿Â¼£º   $lvminfodbs2"
-			read -p "minfodbs2´óĞ¡£¬[²»ÊäÈëÄ¬ÈÏÎª0]£º"		sizeminfodbs2G
-			echo "servdbs1µÄÄ¿Â¼£º    $lvservdbs1"
-			read -p "servdbs1´óĞ¡£¬[²»ÊäÈëÄ¬ÈÏÎª0]£º"		sizeservdbs1G
-			echo "servdbs2µÄÄ¿Â¼£º    $lvservdbs2"
-			read -p "servdbs2´óĞ¡£¬[²»ÊäÈëÄ¬ÈÏÎª0]£º"		sizeservdbs2G
+			echo "userdbs2çš„ç›®å½•ï¼š    $lvuserdbs2"
+			read -p "userdbs2å¤§å°ï¼Œ[ä¸è¾“å…¥é»˜è®¤ä¸º0]ï¼š"		sizeuserdbs2G
+			echo "userdbs3çš„ç›®å½•ï¼š    $lvuserdbs3"
+			read -p "userdbs3å¤§å°ï¼Œ[ä¸è¾“å…¥é»˜è®¤ä¸º0]ï¼š"		sizeuserdbs3G
+			echo "userdbs4çš„ç›®å½•ï¼š    $lvuserdbs4"
+			read -p "userdbs4å¤§å°ï¼Œ[ä¸è¾“å…¥é»˜è®¤ä¸º0]ï¼š"		sizeuserdbs4G
+			echo "userdbs5çš„ç›®å½•ï¼š    $lvuserdbs5"
+			read -p "userdbs5å¤§å°ï¼Œ[ä¸è¾“å…¥é»˜è®¤ä¸º0]ï¼š"		sizeuserdbs5G
+			echo "chargedbs1çš„ç›®å½•ï¼š  $lvchargedbs1"
+			read -p "chargedbs1å¤§å°ï¼Œ[ä¸è¾“å…¥é»˜è®¤ä¸º0]ï¼š"	sizechargedbs1G
+			echo "chargedbs2çš„ç›®å½•ï¼š  $lvchargedbs2"
+			read -p "chargedbs2å¤§å°ï¼Œ[ä¸è¾“å…¥é»˜è®¤ä¸º0]ï¼š"	sizechargedbs2G
+			echo "minfodbs1çš„ç›®å½•ï¼š   $lvminfodbs1"
+			read -p "minfodbs1å¤§å°ï¼Œ[ä¸è¾“å…¥é»˜è®¤ä¸º0]ï¼š"		sizeminfodbs1G
+			echo "minfodbs2çš„ç›®å½•ï¼š   $lvminfodbs2"
+			read -p "minfodbs2å¤§å°ï¼Œ[ä¸è¾“å…¥é»˜è®¤ä¸º0]ï¼š"		sizeminfodbs2G
+			echo "servdbs1çš„ç›®å½•ï¼š    $lvservdbs1"
+			read -p "servdbs1å¤§å°ï¼Œ[ä¸è¾“å…¥é»˜è®¤ä¸º0]ï¼š"		sizeservdbs1G
+			echo "servdbs2çš„ç›®å½•ï¼š    $lvservdbs2"
+			read -p "servdbs2å¤§å°ï¼Œ[ä¸è¾“å…¥é»˜è®¤ä¸º0]ï¼š"		sizeservdbs2G
 			if [ X$sizerootdbs1G = X ] || [ X$sizerootdbs1G = XN ] || [ X$sizerootdbs1G = Xn ] || [ X$sizerootdbs1G = X0 ]
 			then
 				sizerootdbs1G=0
@@ -2238,27 +2233,27 @@ InputAndCheck()
 			then
 				sizeservdbs2G=0
 			fi
-			echo "ÉèÖÃµÄdbsµÄ´óĞ¡ÈçÏÂ£º"
-			echo "rootdbs1´óĞ¡£º      $sizerootdbs1G"
-			echo "tempdbs1´óĞ¡£º      $sizetempdbs1G"
-			echo "tempdbs2´óĞ¡£º      $sizetempdbs2G"
-			echo "logdbs1´óĞ¡£º       $sizelogdbs1G"
-			echo "phydbs1´óĞ¡£º       $sizephydbs1G"
-			echo "userdbs1´óĞ¡£º      $sizeuserdbs1G"
-			echo "userdbs2´óĞ¡£º      $sizeuserdbs2G"
-			echo "userdbs3´óĞ¡£º      $sizeuserdbs3G"
-			echo "userdbs4´óĞ¡£º      $sizeuserdbs4G"
-			echo "userdbs5´óĞ¡£º      $sizeuserdbs5G"
-			echo "chargedbs1´óĞ¡£º    $sizechargedbs1G"
-			echo "chargedbs2´óĞ¡£º    $sizechargedbs2G"
-			echo "minfodbs1´óĞ¡£º     $sizeminfodbs1G"
-			echo "minfodbs2´óĞ¡£º     $sizeminfodbs2G"
-			echo "sizeservdbs1´óĞ¡£º $sizeservdbs1G"
-			echo "sizeservdbs2´óĞ¡£º $sizeservdbs2G"
-			read -p "ÊÇ·ñÈ·ÈÏÉèÖÃ´óĞ¡[y/n]£º" shifouquerendbssize
+			echo "è®¾ç½®çš„dbsçš„å¤§å°å¦‚ä¸‹ï¼š"
+			echo "rootdbs1å¤§å°ï¼š      $sizerootdbs1G"
+			echo "tempdbs1å¤§å°ï¼š      $sizetempdbs1G"
+			echo "tempdbs2å¤§å°ï¼š      $sizetempdbs2G"
+			echo "logdbs1å¤§å°ï¼š       $sizelogdbs1G"
+			echo "phydbs1å¤§å°ï¼š       $sizephydbs1G"
+			echo "userdbs1å¤§å°ï¼š      $sizeuserdbs1G"
+			echo "userdbs2å¤§å°ï¼š      $sizeuserdbs2G"
+			echo "userdbs3å¤§å°ï¼š      $sizeuserdbs3G"
+			echo "userdbs4å¤§å°ï¼š      $sizeuserdbs4G"
+			echo "userdbs5å¤§å°ï¼š      $sizeuserdbs5G"
+			echo "chargedbs1å¤§å°ï¼š    $sizechargedbs1G"
+			echo "chargedbs2å¤§å°ï¼š    $sizechargedbs2G"
+			echo "minfodbs1å¤§å°ï¼š     $sizeminfodbs1G"
+			echo "minfodbs2å¤§å°ï¼š     $sizeminfodbs2G"
+			echo "sizeservdbs1å¤§å°ï¼š $sizeservdbs1G"
+			echo "sizeservdbs2å¤§å°ï¼š $sizeservdbs2G"
+			read -p "æ˜¯å¦ç¡®è®¤è®¾ç½®å¤§å°[y/n]ï¼š" shifouquerendbssize
 			while [[ $shifouquerendbssize != [YyNn] ]]
 			do
-				read -p "ÊäÈë²»ÄÜÎª¿Õ£¬ÊÇ·ñÈ·ÈÏÉèÖÃ´óĞ¡[y/n]£º" shifouquerendbssize
+				read -p "è¾“å…¥ä¸èƒ½ä¸ºç©ºï¼Œæ˜¯å¦ç¡®è®¤è®¾ç½®å¤§å°[y/n]ï¼š" shifouquerendbssize
 			done
 		done
 	fi
@@ -2281,14 +2276,14 @@ InputAndCheck()
 }
 ZhanWeiflag()
 {
-	#µÚÒ»½×¶Î£¬»ù±¾²ÎÊıÕ¼Î»·ûĞŞ¸Ä
+	#ç¬¬ä¸€é˜¶æ®µï¼ŒåŸºæœ¬å‚æ•°å ä½ç¬¦ä¿®æ”¹
 	if [ X$hdrflag = Xonly ]
 	then
 		xiugai "hdrflag=XXXXXX"                 "hdrflag=only"
 	fi
 	if [ X$hdrflag = Xpri ]
 	then
-		#ÕâÀïÄÚ´æºÍÎÄ¼ş²»Ò»ÖÂ£¬ÊÇÒòÎªÎÄ¼şÊÇ¸ø±¸»úÓÃµÄ
+		#è¿™é‡Œå†…å­˜å’Œæ–‡ä»¶ä¸ä¸€è‡´ï¼Œæ˜¯å› ä¸ºæ–‡ä»¶æ˜¯ç»™å¤‡æœºç”¨çš„
 		xiugai "hdrflag=XXXXXX"                 "hdrflag=sec"
 	fi
 	xiugai "^peizhiqueren=XXXXXX"               "peizhiqueren=$peizhiqueren"
@@ -2303,7 +2298,7 @@ ZhanWeiflag()
 	xiugai "^priONCONFIG=XXXXXX"                "priONCONFIG=$priONCONFIG"
 	xiugai "^secONCONFIG=XXXXXX"                "secONCONFIG=$secONCONFIG"
 	xiugai "^ltapedev=XXXXXX"                   "ltapedev=$ltapedev"
-	#µÚ¶ş½×¶Î£¬Ó²ÅÌ»®·ÖÕ¼Î»·ûĞŞ¸Ä
+	#ç¬¬äºŒé˜¶æ®µï¼Œç¡¬ç›˜åˆ’åˆ†å ä½ç¬¦ä¿®æ”¹
 	xiugai "^shifouquerenlvorfs=XXXXXX"         "shifouquerenlvorfs=$shifouquerenlvorfs"
 	xiugai "^lvorfs=XXXXXX"                     "lvorfs=$lvorfs"
 	xiugai "^shifouquerendbssize=XXXXXX"        "shifouquerendbssize=$shifouquerendbssize"
@@ -2357,18 +2352,18 @@ ZhanWeiflag()
 }
 touchfsdbs()
 {
-	#$1ÊÇdbsÄ¿Â¼£¬$2ÊÇdbs´óĞ¡£¬´óĞ¡Îª0µÄ²»´´½¨£¬$3ÊÇdbsÃû³Æ
+	#$1æ˜¯dbsç›®å½•ï¼Œ$2æ˜¯dbså¤§å°ï¼Œå¤§å°ä¸º0çš„ä¸åˆ›å»ºï¼Œ$3æ˜¯dbsåç§°
 	if [ $2  = 0 ]
 	then
-		log4s info "$3 ÉèÖÃ´óĞ¡Îª0£¬²»´´½¨"
+		log4s info "$3 è®¾ç½®å¤§å°ä¸º0ï¼Œä¸åˆ›å»º"
 	else
-		log4s info "$3 ÉèÖÃ´óĞ¡Îª${2}G£¬¿ªÊ¼´´½¨"
+		log4s info "$3 è®¾ç½®å¤§å°ä¸º${2}Gï¼Œå¼€å§‹åˆ›å»º"
 		touch $1
 		if [ $? = 0 ]
 		then
-			log4s info "$3´´½¨³É¹¦"
+			log4s info "$3åˆ›å»ºæˆåŠŸ"
 		else
-			log4s error "$3´´½¨Ê§°Ü£¬Çë¼ì²éÄ¿Â¼$1"
+			log4s error "$3åˆ›å»ºå¤±è´¥ï¼Œè¯·æ£€æŸ¥ç›®å½•$1"
 			exit 1;
 		fi
 	fi
@@ -2383,7 +2378,7 @@ startdisk()
 			then
 				if [ $shifouqueredevname = Y ] || [ $shifouqueredevname = y ]
 				then
-					log4s info "¿ªÊ¼´´½¨pv"
+					log4s info "å¼€å§‹åˆ›å»ºpv"
 					makepv $devname
 				fi
 			fi
@@ -2395,7 +2390,7 @@ startdisk()
 			then
 				if [ $devname != XXXXXX ] && [ $vgname != XXXXXX ]
 				then
-					log4s info "¿ªÊ¼´´½¨vg£¬vgÃûÎª£º$vgname£¬pvÃûÎª£º$devname"
+					log4s info "å¼€å§‹åˆ›å»ºvgï¼Œvgåä¸ºï¼š$vgnameï¼Œpvåä¸ºï¼š$devname"
 					makevg $vgname $devname
 				fi
 			fi
@@ -2409,7 +2404,7 @@ startdisk()
 				then
 					if [ $lvmuluqueren = y ] || [ $lvmuluqueren = Y ]
 					then
-						log4s info "¿ªÊ¼´´½¨lv"
+						log4s info "å¼€å§‹åˆ›å»ºlv"
 						makelv rootdbs1		$sizerootdbs1G		$vgname
 						makelv tempdbs1		$sizetempdbs1G		$vgname
 						makelv tempdbs2		$sizetempdbs2G		$vgname
@@ -2454,7 +2449,7 @@ startdisk()
 		truesize=`df -kP $idshome|tail -1|awk '{print $4}'`
 		if [ $truesize -lt $needsize ]
 		then
-			log4s error "ĞèÒªµÄ¿Õ¼ä´óĞ¡Îª${needsize}G£¬µ«Êµ¼ÊÖ»ÓĞ${truesize}G£¬ÇëÖØĞÂÉèÖÃ"
+			log4s error "éœ€è¦çš„ç©ºé—´å¤§å°ä¸º${needsize}Gï¼Œä½†å®é™…åªæœ‰${truesize}Gï¼Œè¯·é‡æ–°è®¾ç½®"
 			exit 1;
 		else
 			touchfsdbs   $lvrootdbs1     $sizerootdbs1G     rootdbs
@@ -2486,10 +2481,10 @@ startdisk()
 
 
 
-#####################±¸»úÇø############
+#####################å¤‡æœºåŒº############
 huifu()
 {
-	log4s info "È¡ÏûrshµÄÔÊĞíÆô¶¯"
+	log4s info "å–æ¶ˆrshçš„å…è®¸å¯åŠ¨"
 	tihuanbasic ".*disable.*" "        disable                 = yes" /etc/xinetd.d/rsh
 	/etc/rc.d/init.d/xinetd restart
 	tihuanbasic "rsh" "" /etc/securetty
@@ -2508,7 +2503,7 @@ beijihuifu()
 }
 zhujihuifu(){
 
-	log4s info "È¡Ïû½Å±¾µÄ×ÔÆô¶¯"
+	log4s info "å–æ¶ˆè„šæœ¬çš„è‡ªå¯åŠ¨"
 
 	rm -rf /tmp/temp.sh
 
@@ -2519,23 +2514,23 @@ beijijianting1()
 	tempflag=`nc -l $tongxinduankou1 </tmp/bootok.txt`
 	if [ X$tempflag = Xkaishihdr ]
 	then
-		log4s info  "ÒÑÍ¨ÖªÖ÷»ú±¸»ú°²×°Íê³É£¬µÈ´ıÖ÷»ú´î½¨hdr"
-		log4s debug "ÒÑ¾­Æô¶¯±¸»ú¼àÌı1"
+		log4s info  "å·²é€šçŸ¥ä¸»æœºå¤‡æœºå®‰è£…å®Œæˆï¼Œç­‰å¾…ä¸»æœºæ­å»ºhdr"
+		log4s debug "å·²ç»å¯åŠ¨å¤‡æœºç›‘å¬1"
 	  beijihuifu;
 	  killall nc
 	fi
 
 }
 
-#############°²×°Çø##########################
-#ÅĞ¶ÏÊÇ·ñÒÑ¾­½«Èí¼ş°²×°³É¹¦²¢ÖØÆô£¬Î´ÖØÆô¹ı¾ÍÕı³£°²×°¸ÄÄÚºË²ÎÊıÖØÆô£¬ÖØÆô¹ı¾Í½øĞĞÏÂÃæµÄ²½Öè¡£
+#############å®‰è£…åŒº##########################
+#åˆ¤æ–­æ˜¯å¦å·²ç»å°†è½¯ä»¶å®‰è£…æˆåŠŸå¹¶é‡å¯ï¼Œæœªé‡å¯è¿‡å°±æ­£å¸¸å®‰è£…æ”¹å†…æ ¸å‚æ•°é‡å¯ï¼Œé‡å¯è¿‡å°±è¿›è¡Œä¸‹é¢çš„æ­¥éª¤ã€‚
 anzhuang()
 {
 	stty erase ^H;
 	if [ ! -d $idshome ]
 	then
 		mkdir $idshome
-		log4s info "´´½¨°²×°Ä¿Â¼"
+		log4s info "åˆ›å»ºå®‰è£…ç›®å½•"
 	fi
 	querenanzhuangbao;
 	CheckP;
@@ -2543,69 +2538,69 @@ anzhuang()
 	ZhanWeiflag;
 	if [ ! -d $idshome/dbfiles ]
 	then
-		log4s info "´´½¨dbfilesÄ¿Â¼"
+		log4s info "åˆ›å»ºdbfilesç›®å½•"
 		mkdir $idshome/dbfiles 1>/dev/null 2>&1
 		chown informix:informix $idshome/dbfiles 1>/dev/null 2>&1
 		chmod 775 $idshome/dbfiles 1>/dev/null 2>&1
 	fi
 	startdisk;
-
+	chmod 777 /tmp
 
 	peizhi=$idshome/etc/$ONCONFIG
 	wai=`whoami`
 	if [ X$wai != Xroot ]
 	then
-	log4s error "ÇëÊ¹ÓÃrootÕË»§½øĞĞ°²×°"
+	log4s error "è¯·ä½¿ç”¨rootè´¦æˆ·è¿›è¡Œå®‰è£…"
 	exit 1;
 	fi
 	if [ X$X86 != Xx86_64 ]
 	then
-		log4s error "ÏµÍ³Îª32Î»°æ±¾£¬ÔİÊ±²»Ö§³Ö"
+		log4s error "ç³»ç»Ÿä¸º32ä½ç‰ˆæœ¬ï¼Œæš‚æ—¶ä¸æ”¯æŒ"
 		exit 1;
 	fi
 	if [ ! -f /tmp/$jiaobenming ]
 	then
-		log4s error "Çë½«±¾½Å±¾·ÅÔÚ/tmpÎÄ¼ş¼ĞÏÂ"
+		log4s error "è¯·å°†æœ¬è„šæœ¬æ”¾åœ¨/tmpæ–‡ä»¶å¤¹ä¸‹"
 		exit 1;
 	fi
 	if [ ! -f /tmp/$anzhuangbao ]
 	then
-		log4s error "Çë½«$anzhuangbao·Åµ½/tmpÏÂ";
+		log4s error "è¯·å°†$anzhuangbaoæ”¾åˆ°/tmpä¸‹";
 		exit 1;
 	fi
 	FILEsize=`stat -c %s /tmp/$anzhuangbao`
 	if [ X$FILEsize != X$filesize ]
 	then
-		log4s error "ÎÄ¼ş´óĞ¡²»ÕıÈ·£¬ÇëºË¶ÔºóÔÙ½øĞĞ£¬´óĞ¡Ó¦Îª${filesize}×Ö½Ú";
+		log4s error "æ–‡ä»¶å¤§å°ä¸æ­£ç¡®ï¼Œè¯·æ ¸å¯¹åå†è¿›è¡Œï¼Œå¤§å°åº”ä¸º${filesize}å­—èŠ‚";
 		exit 1;
 	fi
-	if [ $tXTBB -le 5009 ] || [ $tXTBB -ge 7006 ]
+	if [ $tXTBB -le 5009 ] || [ $tXTBB -ge 7906 ]
 	then
-		log4s error "ÏµÍ³°æ±¾Ôİ²»Ö§³Ö£¬ÇëÁªÏµ½Å±¾¿ª·¢ÈËÔ±"
+		log4s error "ç³»ç»Ÿç‰ˆæœ¬æš‚ä¸æ”¯æŒï¼Œè¯·è”ç³»è„šæœ¬å¼€å‘äººå‘˜"
 		exit 1;
 	fi
 	if [ ! -f $alreadyornolog ]
 	then
 		touch $alreadyornolog
-		log4s info "´´½¨Êı¾İ¿â±àÒë±êÊ¶ÎÄ¼ş$alreadyornolog"
+		log4s info "åˆ›å»ºæ•°æ®åº“ç¼–è¯‘æ ‡è¯†æ–‡ä»¶$alreadyornolog"
 		initflag=0
 	else
-		log4s info "°²×°±êÊ¶ÎÄ¼ş´æÔÚ"
+		log4s info "å®‰è£…æ ‡è¯†æ–‡ä»¶å­˜åœ¨"
 		initflag=`grep "alreadyinstall informix" $alreadyornolog|wc -l|awk '{print $1}'`
 	fi
 if [ $initflag = 0 ]
 then
-	#ÓÃ»§ÊÇ·ñ´æÔÚ£¬Èç¹û²»´æÔÚ¾Í½¨Á¢
-	log4s debug "°²×°±êÊ¶ÎÄ¼şÖĞ²»´æÔÚ°²×°±êÊ¶£¬¿ÉÒÔÕı³£°²×°"
+	#ç”¨æˆ·æ˜¯å¦å­˜åœ¨ï¼Œå¦‚æœä¸å­˜åœ¨å°±å»ºç«‹
+	log4s debug "å®‰è£…æ ‡è¯†æ–‡ä»¶ä¸­ä¸å­˜åœ¨å®‰è£…æ ‡è¯†ï¼Œå¯ä»¥æ­£å¸¸å®‰è£…"
 	userexistflag=`grep informix /etc/passwd|wc -l|awk '{print $1}'`
 	if [ X$userexistflag != X1 ]
 	then
-		#linux°²×°²½Öè
+		#linuxå®‰è£…æ­¥éª¤
 		if [ X$XITONG = XLINUX ]
 		then
-			log4s info "½¨Á¢ÓÃ»§×é"
+			log4s info "å»ºç«‹ç”¨æˆ·ç»„"
 			groupadd informix;
-			log4s info "½¨Á¢ÓÃ»§"
+			log4s info "å»ºç«‹ç”¨æˆ·"
 			useradd -g informix -d $informixhome informix;
 			chown informix:informix $idshome
 			chmod 770 $idshome
@@ -2614,7 +2609,7 @@ EBupt!@#456
 EBupt!@#456
 EOF
 		fi
-		#AIX°²×°²½Öè
+		#AIXå®‰è£…æ­¥éª¤
 		if [ X$XITONG = XAIX ]
 		then
 			mkgroup informix;
@@ -2636,7 +2631,7 @@ EOF
 	chmod 777 /tmp/tempIFX12.sh
 	if [ X$prionly = X1 ] && [ X$hdrflag = Xpri ]
 	then
-		log4s info "ÕıÔÚ½«½Å±¾ºÍ°²×°°ü¸´ÖÆµ½±¸»ú£¬ÇëÊÖ¶¯ÊäÈëÃÜÂë£¨ĞèÒª¶à´Î£©"
+		log4s info "æ­£åœ¨å°†è„šæœ¬å’Œå®‰è£…åŒ…å¤åˆ¶åˆ°å¤‡æœºï¼Œè¯·æ‰‹åŠ¨è¾“å…¥å¯†ç ï¼ˆéœ€è¦å¤šæ¬¡ï¼‰"
 		mkdir /tmp/scptempdir/
 		cp /tmp/tempIFX12.sh /tmp/scptempdir/$jiaobenming
 		if [ X$ltapedev = Xalarmapi ]
@@ -2647,21 +2642,21 @@ EOF
 		scp -oPort=$sshport -r /tmp/scptempdir/* root@$secip:/tmp/
 		mv /tmp/scptempdir/$anzhuangbao /tmp/
 		ssh -oPort=$sshport root@$secip "cd /tmp;nohup sh ./$jiaobenming anzhuang >/tmp/anzhuang.log 2>&1 &"
-		log4s info "ĞèÒª½»»¥µÄÄÚÈİ½áÊø£¬ºóÃæ¿ªÊ¼È«×Ô¶¯°²×°£¬°üÀ¨±àÒëÊı¾İ¿â£¬´î½¨HDR£¬ÇëÎğÔÚ°²×°¹ı³ÌÖĞ×öÈÎºÎ²Ù×÷"
-		echo "ĞèÒª½»»¥µÄÄÚÈİ½áÊø£¬ºóÃæ¿ªÊ¼È«×Ô¶¯°²×°£¬°üÀ¨±àÒëÊı¾İ¿â£¬´î½¨HDR£¬ÇëÎğÔÚ°²×°¹ı³ÌÖĞ×öÈÎºÎ²Ù×÷"
-		echo "ĞèÒª½»»¥µÄÄÚÈİ½áÊø£¬ºóÃæ¿ªÊ¼È«×Ô¶¯°²×°£¬°üÀ¨±àÒëÊı¾İ¿â£¬´î½¨HDR£¬ÇëÎğÔÚ°²×°¹ı³ÌÖĞ×öÈÎºÎ²Ù×÷"
+		log4s info "éœ€è¦äº¤äº’çš„å†…å®¹ç»“æŸï¼Œåé¢å¼€å§‹å…¨è‡ªåŠ¨å®‰è£…ï¼ŒåŒ…æ‹¬ç¼–è¯‘æ•°æ®åº“ï¼Œæ­å»ºHDRï¼Œè¯·å‹¿åœ¨å®‰è£…è¿‡ç¨‹ä¸­åšä»»ä½•æ“ä½œ"
+		echo "éœ€è¦äº¤äº’çš„å†…å®¹ç»“æŸï¼Œåé¢å¼€å§‹å…¨è‡ªåŠ¨å®‰è£…ï¼ŒåŒ…æ‹¬ç¼–è¯‘æ•°æ®åº“ï¼Œæ­å»ºHDRï¼Œè¯·å‹¿åœ¨å®‰è£…è¿‡ç¨‹ä¸­åšä»»ä½•æ“ä½œ"
+		echo "éœ€è¦äº¤äº’çš„å†…å®¹ç»“æŸï¼Œåé¢å¼€å§‹å…¨è‡ªåŠ¨å®‰è£…ï¼ŒåŒ…æ‹¬ç¼–è¯‘æ•°æ®åº“ï¼Œæ­å»ºHDRï¼Œè¯·å‹¿åœ¨å®‰è£…è¿‡ç¨‹ä¸­åšä»»ä½•æ“ä½œ"
 		sleep 10;
 	fi
 
 	
 	
-	log4s info "ÒÆ¶¯°²×°°üµ½°²×°Ä¿Â¼"
+	log4s info "ç§»åŠ¨å®‰è£…åŒ…åˆ°å®‰è£…ç›®å½•"
 	mv $anzhuangbao $idshome/
 	cd $idshome;
-	log4s info "½âÑ¹°²×°°ü"
+	log4s info "è§£å‹å®‰è£…åŒ…"
 	tar -xvf  $idshome/$anzhuangbao -C $idshome/
 	mv $idshome/$anzhuangbao /tmp
-	log4s info "¿ªÊ¼×Ô¶¯±àÒëÊı¾İ¿â"
+	log4s info "å¼€å§‹è‡ªåŠ¨ç¼–è¯‘æ•°æ®åº“"
 	$idshome/ids_install <<EOF
 
 1
@@ -2675,7 +2670,7 @@ Y
 
 EOF
 	
-	log4s info "±àÒëÍê³É"
+	log4s info "ç¼–è¯‘å®Œæˆ"
 	if [ X$ltapedev = Xalarmapi ]
 	then
 		cp /tmp/alarmAPI.tar $INFORMIXDIR/
@@ -2683,20 +2678,20 @@ EOF
 		ls alarmAPI.tar | xargs -n1 tar xf
 		if [[ ! -d "$INFORMIXDIR/alarmAPI" ]]
 		then
-			log4s error "alarmAPIÎÄ¼ş¼Ğ²»´æÔÚ£¬ÇëÈ·±£½âÑ¹ºóµÄgalarmAPIÎÄ¼ş¼ĞÔÚ\$INFORMIXDIRÖĞ"
+			log4s error "alarmAPIæ–‡ä»¶å¤¹ä¸å­˜åœ¨ï¼Œè¯·ç¡®ä¿è§£å‹åçš„galarmAPIæ–‡ä»¶å¤¹åœ¨\$INFORMIXDIRä¸­"
 			exit 1
 		fi
-		log4s info "¿ªÊ¼±àÒëalarmAPI"
+		log4s info "å¼€å§‹ç¼–è¯‘alarmAPI"
 		cd $INFORMIXDIR/alarmAPI
 		make -f makefile.$xtong
 		if [ $? -eq 0 ]
 		then
-			log4s info "alarmAPI±àÒë³É¹¦"
+			log4s info "alarmAPIç¼–è¯‘æˆåŠŸ"
 		else
-			log4s error "alarmAPI±àÒëÊ§°Ü"
+			log4s error "alarmAPIç¼–è¯‘å¤±è´¥"
 		fi
 	fi
-	log4s info "ĞŞ¸ÄÄÚºË²ÎÊı"
+	log4s info "ä¿®æ”¹å†…æ ¸å‚æ•°"
 	kernel_shmmaxnum=`grep "kernel.shmmax" /etc/sysctl.conf|wc -l`
 	kernel_shmmninum=`grep "kernel.shmmni" /etc/sysctl.conf|wc -l`
 	kernel_shmallnum=`grep "kernel.shmall" /etc/sysctl.conf|wc -l`
@@ -2705,29 +2700,29 @@ EOF
 	then
 		echo "kernel.shmmax = 4398046511104" >> /etc/sysctl.conf
 	else
-		log4s error "ÒÑ¾­´æÔÚkernel.shmmax ²ÎÊı£¬ÇëÈË¹¤ÅĞ¶Ï£¬informixĞèÒªÖµÎª \"kernel.shmmax = 4398046511104\""
+		log4s error "å·²ç»å­˜åœ¨kernel.shmmax å‚æ•°ï¼Œè¯·äººå·¥åˆ¤æ–­ï¼Œinformixéœ€è¦å€¼ä¸º \"kernel.shmmax = 4398046511104\""
 	fi
 	if [ $kernel_shmmninum = 0 ]
 	then
 		echo "kernel.shmmni = 4096" >> /etc/sysctl.conf
 	else
-		log4s error "ÒÑ¾­´æÔÚkernel.shmmni ²ÎÊı£¬ÇëÈË¹¤ÅĞ¶Ï£¬informixĞèÒªÖµÎª \"kernel.shmmni = 4096\""
+		log4s error "å·²ç»å­˜åœ¨kernel.shmmni å‚æ•°ï¼Œè¯·äººå·¥åˆ¤æ–­ï¼Œinformixéœ€è¦å€¼ä¸º \"kernel.shmmni = 4096\""
 	fi
 	if [ $kernel_shmallnum = 0 ]
 	then
 		echo "kernel.shmall = 67108864" >> /etc/sysctl.conf
 	else
-		log4s error "ÒÑ¾­´æÔÚkernel.shmall ²ÎÊı£¬ÇëÈË¹¤ÅĞ¶Ï£¬informixĞèÒªÖµÎª \"kernel.shmall = 67108864\""
+		log4s error "å·²ç»å­˜åœ¨kernel.shmall å‚æ•°ï¼Œè¯·äººå·¥åˆ¤æ–­ï¼Œinformixéœ€è¦å€¼ä¸º \"kernel.shmall = 67108864\""
 	fi
 	if [ $kernel_semnum = 0 ]
 	then
 		echo "kernel.sem = 250 32000 32 4096" >> /etc/sysctl.conf
 	else
-		log4s error "ÒÑ¾­´æÔÚkernel.sem ²ÎÊı£¬ÇëÈË¹¤ÅĞ¶Ï£¬informixĞèÒªÖµÎª \"kernel.sem = 250 32000 32 4096\""
+		log4s error "å·²ç»å­˜åœ¨kernel.sem å‚æ•°ï¼Œè¯·äººå·¥åˆ¤æ–­ï¼Œinformixéœ€è¦å€¼ä¸º \"kernel.sem = 250 32000 32 4096\""
 	fi
 
 
-	log4s info "¼ì²éÄÚºË²ÎÊıĞ´ÈëÊÇ·ñÕıÈ·"
+	log4s info "æ£€æŸ¥å†…æ ¸å‚æ•°å†™å…¥æ˜¯å¦æ­£ç¡®"
 
 	kernel_shmmaxok=`grep "kernel.shmmax = 4398046511104" /etc/sysctl.conf|wc -l`
 	kernel_shmmniok=`grep "kernel.shmmni = 4096" /etc/sysctl.conf|wc -l`
@@ -2735,15 +2730,15 @@ EOF
 	kernel_semok=`grep "kernel.sem = 250 32000 32 4096" /etc/sysctl.conf|wc -l`
 	if [ X$kernel_shmmaxok != X1 ] || [ X$kernel_shmmniok != X1 ] || [ X$kernel_shmallok != X1 ] || [ X$kernel_semok != X1 ]
 	then
-	log4s error "ÄÚºË²ÎÊıĞ´ÈëÒì³££¬Çë¼ì²é"
+	log4s error "å†…æ ¸å‚æ•°å†™å…¥å¼‚å¸¸ï¼Œè¯·æ£€æŸ¥"
 	fi
-	log4s info "Ğ´ÈëÄÚºËÊı¾İ¸üĞÂ±êÊ¶"
+	log4s info "å†™å…¥å†…æ ¸æ•°æ®æ›´æ–°æ ‡è¯†"
 	echo "alreadyinstall informix" >> $alreadyornolog
 	cp /tmp/$jiaobenming $idshome/
 
 	if [ ! -d $idshome/dbfiles ]
 	then
-		log4s info "´´½¨dbfilesÄ¿Â¼"
+		log4s info "åˆ›å»ºdbfilesç›®å½•"
 		mkdir $idshome/dbfiles
 		chown informix:informix $idshome/dbfiles
 		chmod 775 $idshome/dbfiles
@@ -2753,7 +2748,7 @@ EOF
 	chmod 777 $alreadyornolog
 
 
-	log4s info "´´½¨Á¬½ÓÎÄ¼şÖĞ"
+	log4s info "åˆ›å»ºè¿æ¥æ–‡ä»¶ä¸­"
 	makeln   $lvrootdbs1       $sizerootdbs1G           $idshome/dbfiles/rootdbs1   
 	makeln   $lvtempdbs1       $sizetempdbs1G           $idshome/dbfiles/tempdbs1   
 	makeln   $lvtempdbs2       $sizetempdbs2G           $idshome/dbfiles/tempdbs2   
@@ -2774,8 +2769,8 @@ EOF
 	chmod 660 $idshome/dbfiles/*
 	
 
-	log4s info "Ôö¼Ó5.9»òÕß6.5µÄÌØ¶¨ÅäÖÃ"
-	log4s info "ÏµÍ³°æ±¾Îª$XTBANBEN"
+	log4s info "å¢åŠ 5.9æˆ–è€…6.5çš„ç‰¹å®šé…ç½®"
+	log4s info "ç³»ç»Ÿç‰ˆæœ¬ä¸º$XTBANBEN"
 	if [ $tXTBB -ge 5009 ] && [ $tXTBB -le 6005 ]
 	then
 		gai59   $lvrootdbs1       $sizerootdbs1G
@@ -2813,7 +2808,7 @@ EOF
 		gai65  $vgname  servdbs1       $sizeservdbs1G
 		gai65  $vgname  servdbs2       $sizeservdbs2G
 	else
-		log4s error "tXTBBÖµÎª $tXTBB £¬ÎŞÔÚ5.9ºÍ7.5Ö®¼ä£¬ËùÒÔ½«Á½ÖÖ93rule¶¼¼Ó½øÈ¥³¢ÊÔÊ¹ÓÃ£¬ÈçÓĞÒì³£ÇëÊÖ¶¯½â¾ö"
+		log4s error "tXTBBå€¼ä¸º $tXTBB ï¼Œæ— åœ¨5.9å’Œ7.5ä¹‹é—´ï¼Œæ‰€ä»¥å°†ä¸¤ç§93ruleéƒ½åŠ è¿›å»å°è¯•ä½¿ç”¨ï¼Œå¦‚æœ‰å¼‚å¸¸è¯·æ‰‹åŠ¨è§£å†³"
 		gai59   $lvrootdbs1       $sizerootdbs1G
 		gai59   $lvtempdbs1       $sizetempdbs1G
 		gai59   $lvtempdbs2       $sizetempdbs2G
@@ -2880,7 +2875,7 @@ EOF
 		chmod  660       $lvservdbs2 
 	fi
 	
-	log4s info "ĞŞ¸ÄinformixµÄ»·¾³±äÁ¿ÅäÖÃÎÄ¼ş"
+	log4s info "ä¿®æ”¹informixçš„ç¯å¢ƒå˜é‡é…ç½®æ–‡ä»¶"
 	if [ X$XITONG = XLINUX ]
 	then
 		bashprofile=".bash_profile"
@@ -2906,13 +2901,14 @@ EOF
 		echo "export INFORMIXCONTIME INFORMIXCONRETRY " >> /home/informix/$bashprofile
 	fi
 	
-	log4s info "Ğ´Èë.rhostsÎÄ¼ş£¬Èç¹ûÓĞĞèÒªÇë×Ô¼ºĞŞ¸Ä.rhostÎÄ¼ş£¬Ä¬ÈÏÎª+"
+	log4s info "å†™å…¥.rhostsæ–‡ä»¶ï¼Œå¦‚æœæœ‰éœ€è¦è¯·è‡ªå·±ä¿®æ”¹.rhostæ–‡ä»¶ï¼Œé»˜è®¤ä¸º+"
 	echo '+' > /home/informix/.rhosts
 	chown informix:informix /home/informix/.rhosts
 	chmod 660 /home/informix/.rhosts
 	
-	log4s info "¿ªÊ¼ĞŞ¸ÄÅäÖÃÎÄ¼ş"
+	log4s info "å¼€å§‹ä¿®æ”¹é…ç½®æ–‡ä»¶"
 	cp $idshome/etc/onconfig.std $peizhi
+	chmod 660 $peizhi
 	chown informix:informix $peizhi
 	chown informix:informix $log4spath
 	chmod 777 $log4spath
@@ -2942,7 +2938,7 @@ EOF
 	tihuan "^MULTIPROCESSOR 0" "MULTIPROCESSOR 1";
 	tihuan "^VPCLASS cpu,num=1,noage" "VPCLASS cpu,num=${cpunum},noage";
 	tihuan "^LOCKS 20000" "LOCKS 200000";
-	tihuan "^SHMVIRTSIZE 32656" "SHMVIRTSIZE 500000";
+	tihuan "^SHMVIRTSIZE 32656" "SHMVIRTSIZE 1000000";
 	tihuan "^SHMADD 8192" "SHMADD 80000";
 	tihuan "^CKPTINTVL 300" "CKPTINTVL 3600";
 	tihuan "^TAPEDEV /dev/tapedev" "TAPEDEV /dev/null";
@@ -2973,14 +2969,13 @@ EOF
 		tihuan "^LISTEN_TIMEOUT.*" "LISTEN_TIMEOUT 10";
 		#tihuanaao "^ADTMODE.*" "ADTMODE 7"
 	fi
-	if [ $testflag = 1 ]
-	then
-		tihuan "^BUFFERPOOL default.*" "BUFFERPOOL default,buffers=300000,lrus=64,lru_min_dirty=0,lru_max_dirty=0.05";
-		tihuan "^BUFFERPOOL size.*" "";
-	else
-		tihuan "^BUFFERPOOL default.*" "BUFFERPOOL default,buffers=10000000,lrus=64,lru_min_dirty=0,lru_max_dirty=0.05";
-		tihuan "^BUFFERPOOL size.*" "";
-	fi
+
+	tihuan "^BUFFERPOOL default.*" "BUFFERPOOL default,buffers=$BUFFPOOLMEM,lrus=64,lru_min_dirty=0,lru_max_dirty=0.05";
+	tihuan "^BUFFERPOOL size.*" "";
+	#æ–°å¢ä¸¤ä¸ªstatç›‘æ§ï¼Œå¯ä»¥ä½¿ç”¨onstat -g wstå’Œonstat -g qstè¿›è¡Œç›‘æ§
+	tihuan "^QSTATS.*" "QSTATS 1"
+	tihuan "^WSTATS.*" "WSTATS 1"
+
 	chown informix:informix $peizhi
 	if [ X$hdrflag = Xonly ]
 	then
@@ -2999,9 +2994,9 @@ EOF
 	chmod a+r $idshome/etc/sqlhosts
 	if [ -f /etc/hosts.equiv ]
 	then
-		log4s info "¸üĞÂ/etc/hosts.equiv"
+		log4s info "æ›´æ–°/etc/hosts.equiv"
 		eq1=`grep "$priINFORMIXSERVER" /etc/hosts.equiv|wc -l|awk '{print $1}'`
-		log4s debug "eq1ÖµÎª$eq1"
+		log4s debug "eq1å€¼ä¸º$eq1"
 		if [ X$eq1 != X1 ]
 		then
 			echo $priINFORMIXSERVER >> /etc/hosts.equiv
@@ -3009,14 +3004,14 @@ EOF
 		if [ X$hdrflag != Xonly ]
 		then
 			eq2=`grep "$secINFORMIXSERVER" /etc/hosts.equiv|wc -l|awk '{print $1}'`
-			log4s debug "eq2ÖµÎª$eq2"
+			log4s debug "eq2å€¼ä¸º$eq2"
 			if [ X$eq2 != X1 ]
 			then
 				echo $secINFORMIXSERVER >> /etc/hosts.equiv
 			fi
 		fi
 		eq3=`grep "$priDBSERVERALIASES" /etc/hosts.equiv|wc -l|awk '{print $1}'`
-		log4s debug "eq3ÖµÎª$eq3"
+		log4s debug "eq3å€¼ä¸º$eq3"
 		if [ X$eq3 != X1 ]
 		then
 			echo $priDBSERVERALIASES >> /etc/hosts.equiv
@@ -3024,14 +3019,14 @@ EOF
 		if [ X$hdrflag != Xonly ]
 		then
 			eq4=`grep "$secDBSERVERALIASES" /etc/hosts.equiv|wc -l|awk '{print $1}'`
-			log4s debug "eq4ÖµÎª$eq4"
+			log4s debug "eq4å€¼ä¸º$eq4"
 			if [ X$eq4 != X1 ]
 			then
 				echo $secDBSERVERALIASES >> /etc/hosts.equiv
 			fi
 		fi
 		eq5=`grep "+" /etc/hosts.equiv|wc -l|awk '{print $1}'`
-		log4s debug "eq5ÖµÎª$eq5"
+		log4s debug "eq5å€¼ä¸º$eq5"
 		if [ X$eq5 != X1 ]
 		then
 			echo "+" >> /etc/hosts.equiv
@@ -3046,7 +3041,7 @@ EOF
 		fi
 		echo "+" >> /etc/hosts.equiv
 	fi
-	log4s info "¸üĞÂhostsÎÄ¼ş"
+	log4s info "æ›´æ–°hostsæ–‡ä»¶"
 	hosts1=`grep -F "$priip $priINFORMIXSERVER" /etc/hosts|wc -l|awk '{print $1}'`
 	hosts3=`grep -F "$priappip $priDBSERVERALIASES" /etc/hosts|wc -l|awk '{print $1}'`
 	if [ X$hdrflag != Xonly ]
@@ -3073,23 +3068,23 @@ EOF
 			echo "$secappip $secDBSERVERALIASES" >> /etc/hosts
 		fi
 	fi
-	log4s info "ÉúĞ§ÄÚºË²ÎÊı"
+	log4s info "ç”Ÿæ•ˆå†…æ ¸å‚æ•°"
 	sysctl -p;
-	#±¸»ú×Ô¶¯ÆôÅäÖÃ
+	#å¤‡æœºè‡ªåŠ¨å¯é…ç½®
 	if [ X$hdrflag = Xsec ]
 	then
 		chmod 775 $idshome;
-		log4s info "Æô¶¯±¸»úµÄrsh·şÎñ"
+		log4s info "å¯åŠ¨å¤‡æœºçš„rshæœåŠ¡"
 		tihuanbasic ".*disable.*" "        disable                 = no" /etc/xinetd.d/rsh
 		echo "rsh" >> /etc/securetty
 		/etc/rc.d/init.d/xinetd restart
-		log4s info "±¸»ú°²×°Íê³É£¬µÈ´ıÖ÷»ú½ÓÊÕÍ¨Öª"
+		log4s info "å¤‡æœºå®‰è£…å®Œæˆï¼Œç­‰å¾…ä¸»æœºæ¥æ”¶é€šçŸ¥"
 		beijijianting1
 	fi
-	#Ö÷»ú×ÔÆô¶¯ÅäÖÃ
+	#ä¸»æœºè‡ªå¯åŠ¨é…ç½®
 	if [ X$hdrflag = Xpri ] || [ X$hdrflag = Xonly ]
 	then
-		log4s info "Ö÷»ú¿ªÊ¼³õÊ¼»¯"
+		log4s info "ä¸»æœºå¼€å§‹åˆå§‹åŒ–"
 		chmod 775 $idshome 1>/dev/null 2>&1;
 		chmod 777 $log4slog 1>/dev/null 2>&1
 		echo "su - informix -c '. /home/informix/.bash_profile;sh /tmp/tempIFX12.sh chushihua'" >/tmp/temp.sh
@@ -3106,113 +3101,113 @@ EOF
 		
 	fi
 else
-	log4s info "°²×°±êÊ¶ÎÄ¼şÖĞ´æÔÚ°²×°±êÊ¶£¬ÇëÇåÀí°²×°Ä¿Â¼$idshomeºóÔÙÖØĞÂÔËĞĞ½Å±¾"
+	log4s info "å®‰è£…æ ‡è¯†æ–‡ä»¶ä¸­å­˜åœ¨å®‰è£…æ ‡è¯†ï¼Œè¯·æ¸…ç†å®‰è£…ç›®å½•$idshomeåå†é‡æ–°è¿è¡Œè„šæœ¬"
 fi
 
 
 }
-###################´î½¨hdrÇø###############
+###################æ­å»ºhdråŒº###############
 client()
 {
 	querenanzhuangbao
-	#°²×°¿Í»§¶ËÄ£Ê½
+	#å®‰è£…å®¢æˆ·ç«¯æ¨¡å¼
 	hdrflag=client
 	if [ X$hdrflag = Xclient ]
 	then
 		while [[ $clientpeizhiqueren != [Yy] ]]
 		do
 			isserver=server
-			read -p "ÇëÊäÈëÖ÷»úÊı¾İ¿â¶ÔÍâÌá¹©·şÎñµÄip£º"				client_pri_serverip
-			read -p "ÇëÊäÈëÖ÷»úÊı¾İ¿â¶ÔÍâÌá¹©·şÎñµÄ¶Ë¿Ú£º"			client_pri_serverport
-			read -p "ÇëÊäÈëÖ÷»úÊı¾İ¿â¶ÔÍâÌá¹©·şÎñµÄÊµÀıÃû£º"		client_pri_serverservername
-			read -p "ÇëÊäÈë±¸»úÊı¾İ¿â¶ÔÍâÌá¹©·şÎñµÄip£º"				client_sec_serverip
-			read -p "ÇëÊäÈë±¸»úÊı¾İ¿â¶ÔÍâÌá¹©·şÎñµÄ¶Ë¿Ú£º"			client_sec_serverport
-			read -p "ÇëÊäÈë±¸»úÊı¾İ¿â¶ÔÍâÌá¹©·şÎñµÄÊµÀıÃû£º"		client_sec_serverservername
-			read -p "ÇëÉèÖÃĞèÒª°²×°µÄ¿Í»§¶Ë¸öÊı£¬Ò»´Î×î¶à5¸ö£º"	clientcount
+			read -p "è¯·è¾“å…¥ä¸»æœºæ•°æ®åº“å¯¹å¤–æä¾›æœåŠ¡çš„ipï¼š"				client_pri_serverip
+			read -p "è¯·è¾“å…¥ä¸»æœºæ•°æ®åº“å¯¹å¤–æä¾›æœåŠ¡çš„ç«¯å£ï¼š"			client_pri_serverport
+			read -p "è¯·è¾“å…¥ä¸»æœºæ•°æ®åº“å¯¹å¤–æä¾›æœåŠ¡çš„å®ä¾‹åï¼š"		client_pri_serverservername
+			read -p "è¯·è¾“å…¥å¤‡æœºæ•°æ®åº“å¯¹å¤–æä¾›æœåŠ¡çš„ipï¼š"				client_sec_serverip
+			read -p "è¯·è¾“å…¥å¤‡æœºæ•°æ®åº“å¯¹å¤–æä¾›æœåŠ¡çš„ç«¯å£ï¼š"			client_sec_serverport
+			read -p "è¯·è¾“å…¥å¤‡æœºæ•°æ®åº“å¯¹å¤–æä¾›æœåŠ¡çš„å®ä¾‹åï¼š"		client_sec_serverservername
+			read -p "è¯·è®¾ç½®éœ€è¦å®‰è£…çš„å®¢æˆ·ç«¯ä¸ªæ•°ï¼Œä¸€æ¬¡æœ€å¤š5ä¸ªï¼š"	clientcount
 
 			if [ X$clientcount != X1 ] && [ X$clientcount != X2 ] && [ X$clientcount != X3 ] && [ X$clientcount != X4 ] && [ X$clientcount != X5 ]
 			then
-				echo "ÊäÈë²»Îª1-5£¬Ä¬ÈÏÈÏÎªÊÇ1¸ö¿Í»§¶Ë"
+				echo "è¾“å…¥ä¸ä¸º1-5ï¼Œé»˜è®¤è®¤ä¸ºæ˜¯1ä¸ªå®¢æˆ·ç«¯"
 				clientcount=1
 			fi
 			if [ $clientcount -ge 1 ]
 			then
-				read -p "ÇëÊäÈë¿Í»§¶Ë1µÄip£º"							clientip1
-				read -p "ÇëÊäÈë¿Í»§¶Ë1µÄÖ÷»úÃû£º"					clienthostname1
-				read -p "ÇëÊäÈë¿Í»§¶Ë1µÄsshµÄ¶Ë¿ÚºÅ£º"		clientport1
-				read -p "ÇëÊäÈë¿Í»§¶Ë1µÄÕË»§£º"						clientusername1
+				read -p "è¯·è¾“å…¥å®¢æˆ·ç«¯1çš„ipï¼š"							clientip1
+				read -p "è¯·è¾“å…¥å®¢æˆ·ç«¯1çš„ä¸»æœºåï¼š"					clienthostname1
+				read -p "è¯·è¾“å…¥å®¢æˆ·ç«¯1çš„sshçš„ç«¯å£å·ï¼š"		clientport1
+				read -p "è¯·è¾“å…¥å®¢æˆ·ç«¯1çš„è´¦æˆ·ï¼š"						clientusername1
 			fi
 			if [ $clientcount -ge 2 ]
 			then
-				read -p "ÇëÊäÈë¿Í»§¶Ë2µÄip£º"							clientip2
-				read -p "ÇëÊäÈë¿Í»§¶Ë2µÄÖ÷»úÃû£º"					clienthostname2
-				read -p "ÇëÊäÈë¿Í»§¶Ë2µÄsshµÄ¶Ë¿ÚºÅ£º"		clientport2
-				read -p "ÇëÊäÈë¿Í»§¶Ë2µÄÕË»§£º"						clientusername2
+				read -p "è¯·è¾“å…¥å®¢æˆ·ç«¯2çš„ipï¼š"							clientip2
+				read -p "è¯·è¾“å…¥å®¢æˆ·ç«¯2çš„ä¸»æœºåï¼š"					clienthostname2
+				read -p "è¯·è¾“å…¥å®¢æˆ·ç«¯2çš„sshçš„ç«¯å£å·ï¼š"		clientport2
+				read -p "è¯·è¾“å…¥å®¢æˆ·ç«¯2çš„è´¦æˆ·ï¼š"						clientusername2
 			fi
 			if [ $clientcount -ge 3 ]
 			then
-				read -p "ÇëÊäÈë¿Í»§¶Ë3µÄip£º"							clientip3
-				read -p "ÇëÊäÈë¿Í»§¶Ë3µÄÖ÷»úÃû£º"					clienthostname3
-				read -p "ÇëÊäÈë¿Í»§¶Ë3µÄsshµÄ¶Ë¿ÚºÅ£º"		clientport3
-				read -p "ÇëÊäÈë¿Í»§¶Ë3µÄÕË»§£º"						clientusername3
+				read -p "è¯·è¾“å…¥å®¢æˆ·ç«¯3çš„ipï¼š"							clientip3
+				read -p "è¯·è¾“å…¥å®¢æˆ·ç«¯3çš„ä¸»æœºåï¼š"					clienthostname3
+				read -p "è¯·è¾“å…¥å®¢æˆ·ç«¯3çš„sshçš„ç«¯å£å·ï¼š"		clientport3
+				read -p "è¯·è¾“å…¥å®¢æˆ·ç«¯3çš„è´¦æˆ·ï¼š"						clientusername3
 			fi
 			if [ $clientcount -ge 4 ]
 			then
-				read -p "ÇëÊäÈë¿Í»§¶Ë4µÄip£º"							clientip4
-				read -p "ÇëÊäÈë¿Í»§¶Ë4µÄÖ÷»úÃû£º"					clienthostname4
-				read -p "ÇëÊäÈë¿Í»§¶Ë4µÄsshµÄ¶Ë¿ÚºÅ£º"		clientport4
-				read -p "ÇëÊäÈë¿Í»§¶Ë4µÄÕË»§£º"						clientusername4
+				read -p "è¯·è¾“å…¥å®¢æˆ·ç«¯4çš„ipï¼š"							clientip4
+				read -p "è¯·è¾“å…¥å®¢æˆ·ç«¯4çš„ä¸»æœºåï¼š"					clienthostname4
+				read -p "è¯·è¾“å…¥å®¢æˆ·ç«¯4çš„sshçš„ç«¯å£å·ï¼š"		clientport4
+				read -p "è¯·è¾“å…¥å®¢æˆ·ç«¯4çš„è´¦æˆ·ï¼š"						clientusername4
 			fi
 			if [ $clientcount -ge 5 ]
 			then
-				read -p "ÇëÊäÈë¿Í»§¶Ë5µÄip£º"							clientip5
-				read -p "ÇëÊäÈë¿Í»§¶Ë5µÄÖ÷»úÃû£º"					clienthostname5
-				read -p "ÇëÊäÈë¿Í»§¶Ë5µÄsshµÄ¶Ë¿ÚºÅ£º"		clientport5
-				read -p "ÇëÊäÈë¿Í»§¶Ë5µÄÕË»§£º"						clientusername5
+				read -p "è¯·è¾“å…¥å®¢æˆ·ç«¯5çš„ipï¼š"							clientip5
+				read -p "è¯·è¾“å…¥å®¢æˆ·ç«¯5çš„ä¸»æœºåï¼š"					clienthostname5
+				read -p "è¯·è¾“å…¥å®¢æˆ·ç«¯5çš„sshçš„ç«¯å£å·ï¼š"		clientport5
+				read -p "è¯·è¾“å…¥å®¢æˆ·ç«¯5çš„è´¦æˆ·ï¼š"						clientusername5
 			fi
-			echo "Ö÷»úÊı¾İ¿â¶ÔÍâÌá¹©·şÎñµÄip£º        $client_pri_serverip"
-			echo "Ö÷»úÊı¾İ¿â¶ÔÍâÌá¹©·şÎñµÄ¶Ë¿Ú£º      $client_pri_serverport"
-			echo "Ö÷»úÊı¾İ¿â¶ÔÍâÌá¹©·şÎñµÄÊµÀıÃû£º    $client_pri_serverservername"
-			echo "±¸»úÊı¾İ¿â¶ÔÍâÌá¹©·şÎñµÄip£º        $client_sec_serverip"
-			echo "±¸»úÊı¾İ¿â¶ÔÍâÌá¹©·şÎñµÄ¶Ë¿Ú£º      $client_sec_serverport"
-			echo "±¸»úÊı¾İ¿â¶ÔÍâÌá¹©·şÎñµÄÊµÀıÃû£º    $client_sec_serverservername"
-			echo "ĞèÒª°²×°µÄ¿Í»§¶Ë¸öÊı£º              $clientcount"
+			echo "ä¸»æœºæ•°æ®åº“å¯¹å¤–æä¾›æœåŠ¡çš„ipï¼š        $client_pri_serverip"
+			echo "ä¸»æœºæ•°æ®åº“å¯¹å¤–æä¾›æœåŠ¡çš„ç«¯å£ï¼š      $client_pri_serverport"
+			echo "ä¸»æœºæ•°æ®åº“å¯¹å¤–æä¾›æœåŠ¡çš„å®ä¾‹åï¼š    $client_pri_serverservername"
+			echo "å¤‡æœºæ•°æ®åº“å¯¹å¤–æä¾›æœåŠ¡çš„ipï¼š        $client_sec_serverip"
+			echo "å¤‡æœºæ•°æ®åº“å¯¹å¤–æä¾›æœåŠ¡çš„ç«¯å£ï¼š      $client_sec_serverport"
+			echo "å¤‡æœºæ•°æ®åº“å¯¹å¤–æä¾›æœåŠ¡çš„å®ä¾‹åï¼š    $client_sec_serverservername"
+			echo "éœ€è¦å®‰è£…çš„å®¢æˆ·ç«¯ä¸ªæ•°ï¼š              $clientcount"
 			if [ $clientcount -ge 1 ]
 			then
-				echo "¿Í»§¶Ë1µÄipÎª£º                     $clientip1"
-				echo "¿Í»§¶Ë1µÄÖ÷»úÃûÎª£º                 $clienthostname1"
-				echo "¿Í»§¶Ë1µÄssh¶Ë¿ÚºÅÎª£º              $clientport1"
-				echo "¿Í»§¶Ë1µÄÕË»§Îª£º                   $clientusername1"
+				echo "å®¢æˆ·ç«¯1çš„ipä¸ºï¼š                     $clientip1"
+				echo "å®¢æˆ·ç«¯1çš„ä¸»æœºåä¸ºï¼š                 $clienthostname1"
+				echo "å®¢æˆ·ç«¯1çš„sshç«¯å£å·ä¸ºï¼š              $clientport1"
+				echo "å®¢æˆ·ç«¯1çš„è´¦æˆ·ä¸ºï¼š                   $clientusername1"
 			fi
 			if [ $clientcount -ge 2 ]
 			then
-				echo "¿Í»§¶Ë2µÄipÎª£º                     $clientip2"
-				echo "¿Í»§¶Ë2µÄÖ÷»úÃûÎª£º                 $clienthostname2"
-				echo "¿Í»§¶Ë2µÄssh¶Ë¿ÚºÅÎª£º              $clientport2"
-				echo "¿Í»§¶Ë2µÄÕË»§Îª£º                   $clientusername2"
+				echo "å®¢æˆ·ç«¯2çš„ipä¸ºï¼š                     $clientip2"
+				echo "å®¢æˆ·ç«¯2çš„ä¸»æœºåä¸ºï¼š                 $clienthostname2"
+				echo "å®¢æˆ·ç«¯2çš„sshç«¯å£å·ä¸ºï¼š              $clientport2"
+				echo "å®¢æˆ·ç«¯2çš„è´¦æˆ·ä¸ºï¼š                   $clientusername2"
 			fi
 			if [ $clientcount -ge 3 ]
 			then
-				echo "¿Í»§¶Ë3µÄipÎª£º                     $clientip3"
-				echo "¿Í»§¶Ë3µÄÖ÷»úÃûÎª£º                 $clienthostname3"
-				echo "¿Í»§¶Ë3µÄssh¶Ë¿ÚºÅÎª£º              $clientport3"
-				echo "¿Í»§¶Ë3µÄÕË»§Îª£º                   $clientusername3"
+				echo "å®¢æˆ·ç«¯3çš„ipä¸ºï¼š                     $clientip3"
+				echo "å®¢æˆ·ç«¯3çš„ä¸»æœºåä¸ºï¼š                 $clienthostname3"
+				echo "å®¢æˆ·ç«¯3çš„sshç«¯å£å·ä¸ºï¼š              $clientport3"
+				echo "å®¢æˆ·ç«¯3çš„è´¦æˆ·ä¸ºï¼š                   $clientusername3"
 			fi
 			if [ $clientcount -ge 4 ]
 			then
-				echo "¿Í»§¶Ë4µÄipÎª£º                     $clientip4"
-				echo "¿Í»§¶Ë3µÄÖ÷»úÃûÎª£º                 $clienthostname3"
-				echo "¿Í»§¶Ë4µÄssh¶Ë¿ÚºÅÎª£º              $clientport4"
-				echo "¿Í»§¶Ë4µÄÕË»§Îª£º                   $clientusername4"
+				echo "å®¢æˆ·ç«¯4çš„ipä¸ºï¼š                     $clientip4"
+				echo "å®¢æˆ·ç«¯3çš„ä¸»æœºåä¸ºï¼š                 $clienthostname3"
+				echo "å®¢æˆ·ç«¯4çš„sshç«¯å£å·ä¸ºï¼š              $clientport4"
+				echo "å®¢æˆ·ç«¯4çš„è´¦æˆ·ä¸ºï¼š                   $clientusername4"
 			fi
 			if [ $clientcount -ge 5 ]
 			then
-				echo "¿Í»§¶Ë5µÄipÎª£º                     $clientip5"
-				echo "¿Í»§¶Ë5µÄÖ÷»úÃûÎª£º                 $clienthostname5"
-				echo "¿Í»§¶Ë5µÄssh¶Ë¿ÚºÅÎª£º              $clientport5"
-				echo "¿Í»§¶Ë5µÄÕË»§Îª£º                   $clientusername5"
+				echo "å®¢æˆ·ç«¯5çš„ipä¸ºï¼š                     $clientip5"
+				echo "å®¢æˆ·ç«¯5çš„ä¸»æœºåä¸ºï¼š                 $clienthostname5"
+				echo "å®¢æˆ·ç«¯5çš„sshç«¯å£å·ä¸ºï¼š              $clientport5"
+				echo "å®¢æˆ·ç«¯5çš„è´¦æˆ·ä¸ºï¼š                   $clientusername5"
 			fi
-			read -p "ÊÇ·ñÈ·ÈÏ¿Í»§¶ËÅäÖÃ[YyNn]£º" clientpeizhiqueren
+			read -p "æ˜¯å¦ç¡®è®¤å®¢æˆ·ç«¯é…ç½®[YyNn]ï¼š" clientpeizhiqueren
 		done
 		if [ $clientpeizhiqueren = y ] || [ $clientpeizhiqueren = Y ]
 		then
@@ -3220,7 +3215,7 @@ client()
 			then
 				if [ $clientcount -ge 1 ]
 				then
-					log4s info "¿ªÊ¼×¼±¸¿Í»§¶Ë1µÄ°²×°½Å±¾"
+					log4s info "å¼€å§‹å‡†å¤‡å®¢æˆ·ç«¯1çš„å®‰è£…è„šæœ¬"
 					echo "$clientip1     $clienthostname1" >> /etc/hosts
 					echo "$clienthostname1" >> /etc/hosts.equiv
 					rm -rf /tmp/tempIFX12.sh
@@ -3241,18 +3236,18 @@ client()
 					xiugai "^clientport=XXXXXX"										"clientport=$clientport1"
 					xiugai "^clientusername=XXXXXX"								"clientusername=$clientusername1"
 					cp /tmp/tempIFX12.sh /tmp/scptempdir/$jiaobenming
-					log4s info "×¼±¸Íê³É"
-					log4s info "¿ªÊ¼¿½±´°²×°½Å±¾µ½$clientip1"
+					log4s info "å‡†å¤‡å®Œæˆ"
+					log4s info "å¼€å§‹æ‹·è´å®‰è£…è„šæœ¬åˆ°$clientip1"
 					scp -oPort=$clientport1 -r /tmp/scptempdir/* root@$clientip1:/tmp/
-					log4s info "¿ªÊ¼Ô¶³ÌÖ´ĞĞ°²×°½Å±¾"
+					log4s info "å¼€å§‹è¿œç¨‹æ‰§è¡Œå®‰è£…è„šæœ¬"
 					ssh -oPort=$clientport1 root@$clientip1 "cd /tmp;nohup sh ./$jiaobenming client >/tmp/anzhuang.log 2>&1 &"
 					#su - informix -c ". ./.bash_profile;echo 'grant dba to $clientusername1'|dbaccess sysmater"
-					log4s info "ĞèÒªÕë¶ÔÄÄ¸ö¿â½øĞĞÊÚÈ¨£¬Çëdbaccess¶ÔÓ¦¿âÖĞÖ´ĞĞgrant dba to ÕË»§Ãû"
-					log4s info "´ı¿Í»§¶ËÖ÷»úµÄ/tmp/anzhuang.logÖĞÌáÊ¾°²×°Íê³É¼´¿ÉÊ¹ÓÃ"
+					log4s info "éœ€è¦é’ˆå¯¹å“ªä¸ªåº“è¿›è¡Œæˆæƒï¼Œè¯·dbaccesså¯¹åº”åº“ä¸­æ‰§è¡Œgrant dba to è´¦æˆ·å"
+					log4s info "å¾…å®¢æˆ·ç«¯ä¸»æœºçš„/tmp/anzhuang.logä¸­æç¤ºå®‰è£…å®Œæˆå³å¯ä½¿ç”¨"
 				fi
 				if [ $clientcount -ge 2 ]
 				then
-					log4s info "¿ªÊ¼×¼±¸¿Í»§¶Ë2µÄ°²×°½Å±¾"
+					log4s info "å¼€å§‹å‡†å¤‡å®¢æˆ·ç«¯2çš„å®‰è£…è„šæœ¬"
 					echo "$clientip2     $clienthostname2" >> /etc/hosts
 					echo "$clienthostname2" >> /etc/hosts.equiv
 					rm -rf /tmp/tempIFX12.sh
@@ -3271,18 +3266,18 @@ client()
 					xiugai "^clientport=XXXXXX"										"clientport=$clientport2"
 					xiugai "^clientusername=XXXXXX"								"clientusername=$clientusername2"
 					cp /tmp/tempIFX12.sh /tmp/scptempdir/$jiaobenming
-					log4s info "×¼±¸Íê³É"
-					log4s info "¿ªÊ¼¿½±´°²×°½Å±¾µ½$clientip2"
+					log4s info "å‡†å¤‡å®Œæˆ"
+					log4s info "å¼€å§‹æ‹·è´å®‰è£…è„šæœ¬åˆ°$clientip2"
 					scp -oPort=$clientport2 -r /tmp/scptempdir/* root@$clientip2:/tmp/
-					log4s info "¿ªÊ¼Ô¶³ÌÖ´ĞĞ°²×°½Å±¾"
+					log4s info "å¼€å§‹è¿œç¨‹æ‰§è¡Œå®‰è£…è„šæœ¬"
 					ssh -oPort=$clientport2 root@$clientip2 "cd /tmp;nohup sh ./$jiaobenming client >/tmp/anzhuang.log 2>&1 &"
 					#su - informix -c ". ./.bash_profile;echo 'grant dba to $clientusername2'|dbaccess sysmater"
-					log4s info "ĞèÒªÕë¶ÔÄÄ¸ö¿â½øĞĞÊÚÈ¨£¬Çëdbaccess¶ÔÓ¦¿âÖĞÖ´ĞĞgrant dba to ÕË»§Ãû"
-					log4s info "´ı¿Í»§¶ËÖ÷»úµÄ/tmp/anzhuang.logÖĞÌáÊ¾°²×°Íê³É¼´¿ÉÊ¹ÓÃ"
+					log4s info "éœ€è¦é’ˆå¯¹å“ªä¸ªåº“è¿›è¡Œæˆæƒï¼Œè¯·dbaccesså¯¹åº”åº“ä¸­æ‰§è¡Œgrant dba to è´¦æˆ·å"
+					log4s info "å¾…å®¢æˆ·ç«¯ä¸»æœºçš„/tmp/anzhuang.logä¸­æç¤ºå®‰è£…å®Œæˆå³å¯ä½¿ç”¨"
 				fi
 				if [ $clientcount -ge 3 ]
 				then
-					log4s info "¿ªÊ¼×¼±¸¿Í»§¶Ë3µÄ°²×°½Å±¾"
+					log4s info "å¼€å§‹å‡†å¤‡å®¢æˆ·ç«¯3çš„å®‰è£…è„šæœ¬"
 					echo "$clientip3     $clienthostname3" >> /etc/hosts
 					echo "$clienthostname3" >> /etc/hosts.equiv
 					rm -rf /tmp/tempIFX12.sh
@@ -3301,18 +3296,18 @@ client()
 					xiugai "^clientport=XXXXXX"									"clientport=$clientport3"
 					xiugai "^clientusername=XXXXXX"							"clientusername=$clientusername3"
 					cp /tmp/tempIFX12.sh /tmp/scptempdir/$jiaobenming
-					log4s info "×¼±¸Íê³É"
-					log4s info "¿ªÊ¼¿½±´°²×°½Å±¾µ½$clientip3"
+					log4s info "å‡†å¤‡å®Œæˆ"
+					log4s info "å¼€å§‹æ‹·è´å®‰è£…è„šæœ¬åˆ°$clientip3"
 					scp -oPort=$clientport3 -r /tmp/scptempdir/* root@$clientip3:/tmp/
-					log4s info "¿ªÊ¼Ô¶³ÌÖ´ĞĞ°²×°½Å±¾"
+					log4s info "å¼€å§‹è¿œç¨‹æ‰§è¡Œå®‰è£…è„šæœ¬"
 					ssh -oPort=$clientport3 root@$clientip3 "cd /tmp;nohup sh ./$jiaobenming client >/tmp/anzhuang.log 2>&1 &"
 					#su - informix -c ". ./.bash_profile;echo 'grant dba to $clientusername3'|dbaccess sysmater"
-					log4s info "ĞèÒªÕë¶ÔÄÄ¸ö¿â½øĞĞÊÚÈ¨£¬Çëdbaccess¶ÔÓ¦¿âÖĞÖ´ĞĞgrant dba to ÕË»§Ãû"
-					log4s info "´ı¿Í»§¶ËÖ÷»úµÄ/tmp/anzhuang.logÖĞÌáÊ¾°²×°Íê³É¼´¿ÉÊ¹ÓÃ"
+					log4s info "éœ€è¦é’ˆå¯¹å“ªä¸ªåº“è¿›è¡Œæˆæƒï¼Œè¯·dbaccesså¯¹åº”åº“ä¸­æ‰§è¡Œgrant dba to è´¦æˆ·å"
+					log4s info "å¾…å®¢æˆ·ç«¯ä¸»æœºçš„/tmp/anzhuang.logä¸­æç¤ºå®‰è£…å®Œæˆå³å¯ä½¿ç”¨"
 				fi
 				if [ $clientcount -ge 4 ]
 				then
-					log4s info "¿ªÊ¼×¼±¸¿Í»§¶Ë4µÄ°²×°½Å±¾"
+					log4s info "å¼€å§‹å‡†å¤‡å®¢æˆ·ç«¯4çš„å®‰è£…è„šæœ¬"
 					echo "$clientip4     $clienthostname4" >> /etc/hosts
 					echo "$clienthostname4" >> /etc/hosts.equiv
 					rm -rf /tmp/tempIFX12.sh
@@ -3331,18 +3326,18 @@ client()
 					xiugai "^clientport=XXXXXX"									"clientport=$clientport4"
 					xiugai "^clientusername=XXXXXX"							"clientusername=$clientusername4"
 					cp /tmp/tempIFX12.sh /tmp/scptempdir/$jiaobenming
-					log4s info "×¼±¸Íê³É"
-					log4s info "¿ªÊ¼¿½±´°²×°½Å±¾µ½$clientip4"
+					log4s info "å‡†å¤‡å®Œæˆ"
+					log4s info "å¼€å§‹æ‹·è´å®‰è£…è„šæœ¬åˆ°$clientip4"
 					scp -oPort=$clientport4 -r /tmp/scptempdir/* root@$clientip4:/tmp/
-					log4s info "¿ªÊ¼Ô¶³ÌÖ´ĞĞ°²×°½Å±¾"
+					log4s info "å¼€å§‹è¿œç¨‹æ‰§è¡Œå®‰è£…è„šæœ¬"
 					ssh -oPort=$clientport4 root@$clientip4 "cd /tmp;nohup sh ./$jiaobenming client >/tmp/anzhuang.log 2>&1 &"
 					#su - informix -c ". ./.bash_profile;echo 'grant dba to $clientusername4'|dbaccess sysmater"
-					log4s info "ĞèÒªÕë¶ÔÄÄ¸ö¿â½øĞĞÊÚÈ¨£¬Çëdbaccess¶ÔÓ¦¿âÖĞÖ´ĞĞgrant dba to ÕË»§Ãû"
-					log4s info "´ı¿Í»§¶ËÖ÷»úµÄ/tmp/anzhuang.logÖĞÌáÊ¾°²×°Íê³É¼´¿ÉÊ¹ÓÃ"
+					log4s info "éœ€è¦é’ˆå¯¹å“ªä¸ªåº“è¿›è¡Œæˆæƒï¼Œè¯·dbaccesså¯¹åº”åº“ä¸­æ‰§è¡Œgrant dba to è´¦æˆ·å"
+					log4s info "å¾…å®¢æˆ·ç«¯ä¸»æœºçš„/tmp/anzhuang.logä¸­æç¤ºå®‰è£…å®Œæˆå³å¯ä½¿ç”¨"
 				fi
 				if [ $clientcount -ge 5 ]
 				then
-					log4s info "¿ªÊ¼×¼±¸¿Í»§¶Ë1µÄ°²×°½Å±¾"
+					log4s info "å¼€å§‹å‡†å¤‡å®¢æˆ·ç«¯1çš„å®‰è£…è„šæœ¬"
 					echo "$clientip5     $clienthostname5" >> /etc/hosts
 					echo "$clienthostname5" >> /etc/hosts.equiv
 					rm -rf /tmp/tempIFX12.sh
@@ -3361,83 +3356,85 @@ client()
 					xiugai "^clientport=XXXXXX"									"clientport=$clientport5"
 					xiugai "^clientusername=XXXXXX"							"clientusername=$clientusername5"
 					cp /tmp/tempIFX12.sh /tmp/scptempdir/$jiaobenming
-					log4s info "×¼±¸Íê³É"
-					log4s info "¿ªÊ¼¿½±´°²×°½Å±¾µ½$clientip1"
+					log4s info "å‡†å¤‡å®Œæˆ"
+					log4s info "å¼€å§‹æ‹·è´å®‰è£…è„šæœ¬åˆ°$clientip1"
 					scp -oPort=$clientport5 -r /tmp/scptempdir/* root@$clientip5:/tmp/
-					log4s info "¿ªÊ¼Ô¶³ÌÖ´ĞĞ°²×°½Å±¾"
+					log4s info "å¼€å§‹è¿œç¨‹æ‰§è¡Œå®‰è£…è„šæœ¬"
 					ssh -oPort=$clientport5 root@$clientip5 "cd /tmp;nohup sh ./$jiaobenming client >/tmp/anzhuang.log 2>&1 &"
 					#su - informix -c ". ./.bash_profile;echo 'grant dba to $clientusername5'|dbaccess sysmater"
-					log4s info "ĞèÒªÕë¶ÔÄÄ¸ö¿â½øĞĞÊÚÈ¨£¬Çëdbaccess¶ÔÓ¦¿âÖĞÖ´ĞĞgrant dba to ÕË»§Ãû"
-					log4s info "´ı¿Í»§¶ËÖ÷»úµÄ/tmp/anzhuang.logÖĞÌáÊ¾°²×°Íê³É¼´¿ÉÊ¹ÓÃ"
+					log4s info "éœ€è¦é’ˆå¯¹å“ªä¸ªåº“è¿›è¡Œæˆæƒï¼Œè¯·dbaccesså¯¹åº”åº“ä¸­æ‰§è¡Œgrant dba to è´¦æˆ·å"
+					log4s info "å¾…å®¢æˆ·ç«¯ä¸»æœºçš„/tmp/anzhuang.logä¸­æç¤ºå®‰è£…å®Œæˆå³å¯ä½¿ç”¨"
 				fi
 				mv /tmp/scptempdir/$anzhuangbao /tmp/
-				log4s info "¿Í»§¶ËÒÑ¾­¿ªÊ¼°²×°£¬ÇëµÈ´ı"
+				log4s info "å®¢æˆ·ç«¯å·²ç»å¼€å§‹å®‰è£…ï¼Œè¯·ç­‰å¾…"
 				exit 0;
 			fi
-			#X$isserver=XserverµÄif½áÊø
+			#X$isserver=Xserverçš„ifç»“æŸ
 			if [ X$isserver=Xclient ]
 			then
 				CheckP;
 				if [ ! -d $idshome ]
 				then
-					log4s info "´´½¨°²×°Ä¿Â¼"
 					mkdir $idshome
+					log4s info "åˆ›å»ºå®‰è£…ç›®å½•"
+					chown informix:informix $idshome
+					chown 777 $idshome
 				fi
 				peizhi=$idshome/etc/$ONCONFIG
 				wai=`whoami`
 				if [ X$wai != Xroot ]
 				then
-				log4s error "ÇëÊ¹ÓÃrootÕË»§½øĞĞ°²×°"
+				log4s error "è¯·ä½¿ç”¨rootè´¦æˆ·è¿›è¡Œå®‰è£…"
 				exit 1;
 				fi
 				if [ X$X86 != Xx86_64 ]
 				then
-					log4s error "ÏµÍ³Îª32Î»°æ±¾£¬ÔİÊ±²»Ö§³Ö"
+					log4s error "ç³»ç»Ÿä¸º32ä½ç‰ˆæœ¬ï¼Œæš‚æ—¶ä¸æ”¯æŒ"
 					exit 1;
 				fi
 				if [ ! -f /tmp/$jiaobenming ]
 				then
-					log4s error "Çë½«±¾½Å±¾·ÅÔÚ/tmpÎÄ¼ş¼ĞÏÂ"
+					log4s error "è¯·å°†æœ¬è„šæœ¬æ”¾åœ¨/tmpæ–‡ä»¶å¤¹ä¸‹"
 					exit 1;
 				fi
 				if [ ! -f /tmp/$anzhuangbao ]
 				then
-					log4s error "Çë½«$anzhuangbao·Åµ½/tmpÏÂ";
+					log4s error "è¯·å°†$anzhuangbaoæ”¾åˆ°/tmpä¸‹";
 					exit 1;
 				fi
 				FILEsize=`stat -c %s /tmp/$anzhuangbao`
 				if [ X$FILEsize != X$filesize ]
 				then
-					log4s error "ÎÄ¼ş´óĞ¡²»ÕıÈ·£¬ÇëºË¶ÔºóÔÙ½øĞĞ£¬´óĞ¡Ó¦Îª${filesize}×Ö½Ú";
+					log4s error "æ–‡ä»¶å¤§å°ä¸æ­£ç¡®ï¼Œè¯·æ ¸å¯¹åå†è¿›è¡Œï¼Œå¤§å°åº”ä¸º${filesize}å­—èŠ‚";
 					exit 1;
 				fi
-				if [ $tXTBB -lt 5009 ] || [ $tXTBB -ge 7006 ]
+				if [ $tXTBB -lt 5009 ] || [ $tXTBB -ge 7906 ]
 				then
-					log4s error "ÏµÍ³°æ±¾Ôİ²»Ö§³Ö£¬ÇëÁªÏµ½Å±¾¿ª·¢ÈËÔ±"
+					log4s error "ç³»ç»Ÿç‰ˆæœ¬æš‚ä¸æ”¯æŒï¼Œè¯·è”ç³»è„šæœ¬å¼€å‘äººå‘˜"
 					exit 1;
 				fi
 				if [ ! -f $alreadyornolog ]
 				then
 					touch $alreadyornolog
-					log4s info "´´½¨Êı¾İ¿â±àÒë±êÊ¶ÎÄ¼ş$alreadyornolog"
+					log4s info "åˆ›å»ºæ•°æ®åº“ç¼–è¯‘æ ‡è¯†æ–‡ä»¶$alreadyornolog"
 					initflag=0
 				else
-					log4s info "°²×°±êÊ¶ÎÄ¼ş´æÔÚ"
+					log4s info "å®‰è£…æ ‡è¯†æ–‡ä»¶å­˜åœ¨"
 					initflag=`grep "alreadyinstall informix" $alreadyornolog|wc -l|awk '{print $1}'`
 				fi
 				if [ $initflag = 0 ]
 				then
-					#ÓÃ»§ÊÇ·ñ´æÔÚ£¬Èç¹û²»´æÔÚ¾Í½¨Á¢
-					log4s info "°²×°±êÊ¶ÎÄ¼şÖĞ²»´æÔÚ°²×°±êÊ¶"
+					#ç”¨æˆ·æ˜¯å¦å­˜åœ¨ï¼Œå¦‚æœä¸å­˜åœ¨å°±å»ºç«‹
+					log4s info "å®‰è£…æ ‡è¯†æ–‡ä»¶ä¸­ä¸å­˜åœ¨å®‰è£…æ ‡è¯†"
 					userexistflag=`grep informix /etc/passwd|wc -l|awk '{print $1}'`
 					if [ X$userexistflag != X1 ]
 					then
-						#linux°²×°²½Öè
+						#linuxå®‰è£…æ­¥éª¤
 						if [ X$XITONG = XLINUX ]
 						then
-							log4s info "½¨Á¢ÓÃ»§×é"
+							log4s info "å»ºç«‹ç”¨æˆ·ç»„"
 							groupadd informix;
-							log4s info "½¨Á¢ÓÃ»§"
+							log4s info "å»ºç«‹ç”¨æˆ·"
 							useradd -g informix -d $informixhome informix;
 							chown informix:informix $idshome
 							chmod 770 $idshome
@@ -3446,7 +3443,7 @@ EBupt!@#456
 EBupt!@#456
 EOF
 							fi
-							#AIX°²×°²½Öè
+							#AIXå®‰è£…æ­¥éª¤
 							if [ X$XITONG = XAIX ]
 							then
 								mkgroup informix;
@@ -3457,18 +3454,18 @@ EBupt!@#456
 EOF
 							fi
 						fi
-						#[ X$userexistflag != X1 ]µÄif½áÊø
+						#[ X$userexistflag != X1 ]çš„ifç»“æŸ
 						chown informix:informix $idshome
 						chmod 775 $idshome
 						INFORMIXDIR=$idshome
 						export INFORMIXDIR
-						log4s info "ÒÆ¶¯°²×°°üµ½°²×°Ä¿Â¼"
+						log4s info "ç§»åŠ¨å®‰è£…åŒ…åˆ°å®‰è£…ç›®å½•"
 						mv $anzhuangbao $idshome/
 						cd $idshome;
-						log4s info "½âÑ¹°²×°°ü"
+						log4s info "è§£å‹å®‰è£…åŒ…"
 						tar -xvf  $idshome/$anzhuangbao -C $idshome/
 						mv $idshome/$anzhuangbao /tmp
-						log4s info "¿ªÊ¼×Ô¶¯±àÒëÊı¾İ¿â"
+						log4s info "å¼€å§‹è‡ªåŠ¨ç¼–è¯‘æ•°æ®åº“"
 						$idshome/ids_install <<EOF
 
 1
@@ -3489,7 +3486,7 @@ EOF
 						then
 							bashprofile=".profile"
 						fi
-						#Ğ´ÈëinformixÕË»§»·¾³±äÁ¿
+						#å†™å…¥informixè´¦æˆ·ç¯å¢ƒå˜é‡
 						echo "LANG=$LANG:zh_CN.UTF8:zh_CN.GB18030" >> /home/informix/$bashprofile
 						echo "INFORMIXDIR=$idshome" >> /home/informix/$bashprofile
 						echo "PATH=\$PATH:\$INFORMIXDIR/bin:\$INFORMIXDIR/lib/esql" >> /home/informix/$bashprofile
@@ -3510,27 +3507,27 @@ EOF
 						echo "INFORMIXCONRETRY=1" >> /home/$clientusername/$bashprofile
 						echo "export INFORMIXCONTIME INFORMIXCONRETRY " >> /home/$clientusername/$bashprofile
 						
-						log4s info "Ğ´Èë.rhostsÎÄ¼ş£¬Èç¹ûÓĞĞèÒªÇë×Ô¼ºĞŞ¸Ä.rhostÎÄ¼ş£¬Ä¬ÈÏÎª+"
+						log4s info "å†™å…¥.rhostsæ–‡ä»¶ï¼Œå¦‚æœæœ‰éœ€è¦è¯·è‡ªå·±ä¿®æ”¹.rhostæ–‡ä»¶ï¼Œé»˜è®¤ä¸º+"
 						echo '+' > /home/informix/.rhosts
 						chown informix:informix /home/informix/.rhosts
 						chmod 660 /home/informix/.rhosts
 						
-						log4s info "Ğ´ÈësqlhostsÎÄ¼ş"
+						log4s info "å†™å…¥sqlhostsæ–‡ä»¶"
 						echo "$client_pri_serverservername     onsoctcp     $client_pri_serverip     $client_pri_serverport" >> $idshome/etc/sqlhosts
 						echo "$client_sec_serverservername     onsoctcp     $client_sec_serverip     $client_sec_serverport" >> $idshome/etc/sqlhosts
 						chown informix:informix $idshome/etc/sqlhosts
 						chown informix:informix $idshome/etc/*
 						chmod a+r $idshome/etc/sqlhosts
 				fi
-				#$initflag = 0µÄif½áÊø
+				#$initflag = 0çš„ifç»“æŸ
 			fi
-			#X$isserver=XclientµÄif½áÊø
-			log4s info "¿Í»§¶Ë°²×°Íê³É"
+			#X$isserver=Xclientçš„ifç»“æŸ
+			log4s info "å®¢æˆ·ç«¯å®‰è£…å®Œæˆ"
 		fi
-		#[ $clientpeizhiqueren = y ] || [ $clientpeizhiqueren = Y ]µÄif½áÊø
+		#[ $clientpeizhiqueren = y ] || [ $clientpeizhiqueren = Y ]çš„ifç»“æŸ
 		exit 0
 	fi
-	#X$hdrflag = XclientµÄif½áÊø
+	#X$hdrflag = Xclientçš„ifç»“æŸ
 }
 
 hdr()
@@ -3539,37 +3536,37 @@ hdr()
 	hdfflag=pri
 	if [ $wai1 != informix ]
 	then
-		echo "ÇëÓÃinformixÕË»§Æô¶¯"
+		echo "è¯·ç”¨informixè´¦æˆ·å¯åŠ¨"
 		exit 0;
 	fi
 	onmode -ky;
 	oninit;
-	log4s info "¿ªÊ¼Áã±¸²¢»Ö¸´±¸¿â"
+	log4s info "å¼€å§‹é›¶å¤‡å¹¶æ¢å¤å¤‡åº“"
 	ontape -t STDIO -s -L 0 -F|rsh $secip "cd /home/informix;. ./.bash_profile ; ontape -t STDIO -p";
 	ontaperesult=`echo $?`
 	if [ $ontaperesult = 0 ]
 	then
-		log4s info "Áã±¸»Ö¸´Íê³É"
+		log4s info "é›¶å¤‡æ¢å¤å®Œæˆ"
 	else
-		log4s error "Áã±¸»Ö¸´Ê§°Ü£¬Çë¸ù¾İ±¨´í½øĞĞºË²é£¬ĞŞ¸´ÎÊÌâºó£¬Ê¹ÓÃÃüÁîÈçÏÂ½øĞĞÁã±¸»Ö¸´£¬Ö®ºóÖØĞÂÉèÖÃÖ÷±¸×´Ì¬"
+		log4s error "é›¶å¤‡æ¢å¤å¤±è´¥ï¼Œè¯·æ ¹æ®æŠ¥é”™è¿›è¡Œæ ¸æŸ¥ï¼Œä¿®å¤é—®é¢˜åï¼Œä½¿ç”¨å‘½ä»¤å¦‚ä¸‹è¿›è¡Œé›¶å¤‡æ¢å¤ï¼Œä¹‹åé‡æ–°è®¾ç½®ä¸»å¤‡çŠ¶æ€"
 		log4s error "ontape -t STDIO -s -L 0 -F|rsh $secip \"cd /home/informix;. ./.bash_profile ; ontape -t STDIO -p\";"
 		exit 1;
 	fi
 	sleep 5;
-	log4s info "¿ªÊ¼ÉèÖÃÖ÷±¸¿â×´Ì¬"
+	log4s info "å¼€å§‹è®¾ç½®ä¸»å¤‡åº“çŠ¶æ€"
 	onmode -d primary $secINFORMIXSERVER;
 	rsh $secip "cd /home/informix;. ./.bash_profile ; onmode -d secondary $priINFORMIXSERVER";
 	sleep 1;
-	log4s info "HDR´î½¨Íê³É£¬Çë¹Û²ìÖ÷±¸»ú×´Ì¬"
+	log4s info "HDRæ­å»ºå®Œæˆï¼Œè¯·è§‚å¯Ÿä¸»å¤‡æœºçŠ¶æ€"
 	while true
 	do
 	zhubeihdrokle=`echo "beijikaishihuifu"|nc $secip $tongxinduankou2`
 		if [ X$zhubeihdrokle = Xbeijidengdaihuifu ]
 		then
-			log4s info "±¸»ú»Ö¸´rshµÈÉèÖÃ"
+			log4s info "å¤‡æœºæ¢å¤rshç­‰è®¾ç½®"
 			if [ X$ltapedev = Xalarmapi ]
 			then
-				log4s info "ÒòÎªÑ¡ÔñÁËÊ¹ÓÃalarmapi£¬Çë×Ô¼º¸ù¾İÊµ¼ÊÇé¿öĞŞ¸Ä$idshome/alarmAPIÏÂÏà¹ØÅäÖÃ"
+				log4s info "å› ä¸ºé€‰æ‹©äº†ä½¿ç”¨alarmapiï¼Œè¯·è‡ªå·±æ ¹æ®å®é™…æƒ…å†µä¿®æ”¹$idshome/alarmAPIä¸‹ç›¸å…³é…ç½®"
 			fi
 			break;
 		fi
@@ -3577,14 +3574,14 @@ hdr()
 	done;
 
 }
-#########################³õÊ¼»¯Çø##############
-#Ê¹ÓÃµÄÇ°ÌáÊÇÒÑ¾­ĞŞ¸ÄºÃsqlhostsÎÄ¼şºÍ/etc/hosts.*ÎÄ¼ş
+#########################åˆå§‹åŒ–åŒº##############
+#ä½¿ç”¨çš„å‰ææ˜¯å·²ç»ä¿®æ”¹å¥½sqlhostsæ–‡ä»¶å’Œ/etc/hosts.*æ–‡ä»¶
 chushihua()
 {
 	wai1=`whoami`
 	if [ $wai1 != informix ]
 	then
-		echo "ÇëÓÃinformixÕË»§Æô¶¯"
+		echo "è¯·ç”¨informixè´¦æˆ·å¯åŠ¨"
 		exit 0;
 	fi
 	chmod 775 $idshome 1>/dev/null 2>&1;
@@ -3599,7 +3596,7 @@ chushihua()
 	dengdainum=0
 	while [ $buildoknum -lt 4 ]
 	do
-		log4s info "µÈ´ıÏµÍ³¿â´´½¨Íê³É"
+		log4s info "ç­‰å¾…ç³»ç»Ÿåº“åˆ›å»ºå®Œæˆ"
 		sleep 10;
 		bulidsysmasterok=`grep "'sysmaster' database built successfully." /home/informix/online.log|wc -l|awk '{print $1}'`
 		bulidsysadminok=`grep "'sysadmin' database built successfully." /home/informix/online.log|wc -l|awk '{print $1}'`
@@ -3609,9 +3606,9 @@ chushihua()
 		let dengdainum=dengdainum+1
 		if [ $dengdainum -gt 10 ]
 		then
-			log4s info "µÈ´ıÊ±¼ä¹ı³¤£¬¿ÉÄÜÊÇÓÉÓÚÊı¾İ¿âÔÚĞéÄâ»úÉÏ°²×°ÓĞ¿ÉÄÜ³õÊ¼»¯Òì³££¬Çë¹Û²ìonline.logÈÕÖ¾"
-			log4s info "Èç¹ûÈ·¶¨sysmaster£¬sysadmin£¬sysuser£¬sysutils£¬ËÄ¸ö¿â³õÊ¼»¯Òì³££¬»òÕßÓĞÄ³¸ö¿âÃ»ÓĞ³õÊ¼»¯"
-			read -p  "ÇëÊäÈë[xiufu]" xiufuflag
+			log4s info "ç­‰å¾…æ—¶é—´è¿‡é•¿ï¼Œå¯èƒ½æ˜¯ç”±äºæ•°æ®åº“åœ¨è™šæ‹Ÿæœºä¸Šå®‰è£…æœ‰å¯èƒ½åˆå§‹åŒ–å¼‚å¸¸ï¼Œè¯·è§‚å¯Ÿonline.logæ—¥å¿—"
+			log4s info "å¦‚æœç¡®å®šsysmasterï¼Œsysadminï¼Œsysuserï¼Œsysutilsï¼Œå››ä¸ªåº“åˆå§‹åŒ–å¼‚å¸¸ï¼Œæˆ–è€…æœ‰æŸä¸ªåº“æ²¡æœ‰åˆå§‹åŒ–"
+			read -p  "è¯·è¾“å…¥[xiufu]" xiufuflag
 			if [ X$xiufuflag = Xxiufu ]
 			then
 				sh /tmp/$jiaobenming xiufu
@@ -3620,7 +3617,7 @@ chushihua()
 		fi
 	done
 	chmod a+r $idshome/etc/sqlhosts
-	log4s info "Êı¾İ¿â³õÊ¼»¯Íê³É£¬¿ªÊ¼Ôö¼Ódbs";
+	log4s info "æ•°æ®åº“åˆå§‹åŒ–å®Œæˆï¼Œå¼€å§‹å¢åŠ dbs";
 	makeonspace   tempdbs1      $idshome/dbfiles/tempdbs1       $sizetempdbs1G     c
 	makeonspace   tempdbs2      $idshome/dbfiles/tempdbs2       $sizetempdbs2G     c
 	makeonspace   logdbs        $idshome/dbfiles/logdbs1        $sizelogdbs1G      c
@@ -3655,7 +3652,7 @@ chushihua()
 	then
 		onstat -l;
 	fi
-	log4s debug "¿ªÊ¼É¾³ıÂß¼­ÈÕÖ¾"
+	log4s debug "å¼€å§‹åˆ é™¤é€»è¾‘æ—¥å¿—"
 	if [ $testflag = 1 ]
 	then
 		onstat -l;
@@ -3665,7 +3662,7 @@ y
 EOF
 	if [ $testflag = 1 ]
 	then
-		log4s debug "É¾³ıÂß¼­ÈÕÖ¾1½áÊø"
+		log4s debug "åˆ é™¤é€»è¾‘æ—¥å¿—1ç»“æŸ"
 		onstat -l;
 	fi
 	onparams -d -l 2 <<EOF
@@ -3673,7 +3670,7 @@ y
 EOF
 	if [ $testflag = 1 ]
 	then
-		log4s debug "É¾³ıÂß¼­ÈÕÖ¾2½áÊø"
+		log4s debug "åˆ é™¤é€»è¾‘æ—¥å¿—2ç»“æŸ"
 		onstat -l;
 	fi
 	onparams -d -l 3 <<EOF
@@ -3681,7 +3678,7 @@ y
 EOF
 	if [ $testflag = 1 ]
 	then
-		log4s debug "É¾³ıÂß¼­ÈÕÖ¾3½áÊø"
+		log4s debug "åˆ é™¤é€»è¾‘æ—¥å¿—3ç»“æŸ"
 		onstat -l;
 	fi
 	let Msizelogdbs1=sizelogdbs1G*1000
@@ -3698,7 +3695,7 @@ EOF
 			let tempi=tempi+1
 			ontape -s -L 0;
 		done
-		log4s debug "Ôö¼ÓÂß¼­ÈÕÖ¾½áÊø"
+		log4s debug "å¢åŠ é€»è¾‘æ—¥å¿—ç»“æŸ"
 
 		onmode -l;
 		onmode -c;
@@ -3707,7 +3704,7 @@ y
 EOF
 		if [ $testflag = 1 ]
 		then
-			log4s debug "É¾³ıÂß¼­ÈÕÖ¾4½áÊø"
+			log4s debug "åˆ é™¤é€»è¾‘æ—¥å¿—4ç»“æŸ"
 			onstat -l;
 		fi
 		onparams -d -l 5 <<EOF
@@ -3715,7 +3712,7 @@ y
 EOF
 		if [ $testflag = 1 ]
 		then
-			log4s debug "É¾³ıÂß¼­ÈÕÖ¾5½áÊø"
+			log4s debug "åˆ é™¤é€»è¾‘æ—¥å¿—5ç»“æŸ"
 			onstat -l;
 		fi
 		onparams -d -l 6 <<EOF
@@ -3723,7 +3720,7 @@ y
 EOF
 		if [ $testflag = 1 ]
 		then
-			log4s debug "É¾³ıÂß¼­ÈÕÖ¾6½áÊø"
+			log4s debug "åˆ é™¤é€»è¾‘æ—¥å¿—6ç»“æŸ"
 			onstat -l;
 		fi
 	else
@@ -3795,10 +3792,10 @@ y
 EOF
 	fi
 
-	let physize=sizephydbs1*95/100
+	let physize=sizephydbs1*75/100
 	onparams -p -s $physize -d phydbs -y;
 	ontape -s -L 0;
-	log4s info "Ö÷»ú°²×°Íê³É£ºµÈ´ı±¸»ú°²×°Íê³ÉĞÅºÅ¡£"
+	log4s info "ä¸»æœºå®‰è£…å®Œæˆï¼šç­‰å¾…å¤‡æœºå®‰è£…å®Œæˆä¿¡å·ã€‚"
 	if [ X$hdrflag != Xonly ]
 	then
 		while true
@@ -3806,7 +3803,7 @@ EOF
 			beijiqidongflag=`echo "kaishihdr"|nc $secip $tongxinduankou1`
 				if [ X$beijiqidongflag = Xsecbootok ]
 				then
-					log4s info "±¸»ú°²×°Íê³É¡£¿ªÊ¼´î½¨HDR"
+					log4s info "å¤‡æœºå®‰è£…å®Œæˆã€‚å¼€å§‹æ­å»ºHDR"
 					break;
 				fi
 			sleep 1;
@@ -3816,7 +3813,7 @@ EOF
 	if [ X$hdrflag = Xonly ]
 	then
 		onmode -m;
-		log4s info "µ¥»ú°²×°Íê³É"
+		log4s info "å•æœºå®‰è£…å®Œæˆ"
 		killall nc;
 		killall nc;
 		exit 0;
@@ -3924,7 +3921,7 @@ EOF
 		fi
 		rm -rf /tmp/tempIFX12.sh
 	else
-		echo "ĞèÒªÓÃrootÕË»§"
+		echo "éœ€è¦ç”¨rootè´¦æˆ·"
 	fi
 }
 xiufu()
@@ -3932,19 +3929,19 @@ xiufu()
 	wai2=`whoami`
 	if [ X$wai2 = Xinformix ]
 	then
-		log4s info "ĞŞ¸ÄÅäÖÃÎÄ¼şÔËĞĞ³õÊ¼»¯"
+		log4s info "ä¿®æ”¹é…ç½®æ–‡ä»¶è¿è¡Œåˆå§‹åŒ–"
 		tempanzhuangwenjian=`grep "^priONCONFIG" /tmp/tempIFX12.sh |awk -F'=' '{print $2}'`
 		peizhi=$idshome/etc/$tempanzhuangwenjian
 		tihuan "^FULL_DISK_INIT.*" "FULL_DISK_INIT  1"
-		log4s info "Í£Ö¹Êı¾İ¿â"
+		log4s info "åœæ­¢æ•°æ®åº“"
 		onmode -ky;
-		log4s info "Çå¿Õonline.log"
+		log4s info "æ¸…ç©ºonline.log"
 		>/home/informix/online.log
 		sleep 3;
-		log4s info "ÖØĞÂ³õÊ¼»¯Êı¾İ¿â"
+		log4s info "é‡æ–°åˆå§‹åŒ–æ•°æ®åº“"
 		oninit -ivy 
 	else
-		log4s error "ĞèÒªÓÃinformixÕË»§"
+		log4s error "éœ€è¦ç”¨informixè´¦æˆ·"
 		exit 1
 	fi
 }
